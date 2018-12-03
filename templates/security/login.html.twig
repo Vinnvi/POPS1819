@@ -5,20 +5,21 @@
     <div class="col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3">
         <div class="pre-panel">
             <a href="/"><img src="/images/logo_sans_texte.png" alt=""></a>
+            <h3>Pops1819</h3>
         </div>
         <div class="panel">
             <div class="panel-body">
-                <form method="post">
+                <form method="post" action="{{ path('login') }}">
                   {% if error %}
                     <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
                   {% endif %}
                   <div class="form-group">
-                    <label for="inputEmail">Adresse mail :</label>
-                    <input type="email" class="form-control" id="inputEmail" placeholder="name@example.com" required autofocus>
+                    <label for="_username">Nom d'utilisateur:</label>
+                    <input type="username" class="form-control" name="_username" id="_username" value="{{last_username}}" placeholder="name@example.com" required autofocus>
                   </div>
                   <div class="form-group">
-                    <label for="inputPassword">Mot de passe :</label>
-                    <input type="password" class="form-control" id="inputPassword" placeholder="Password" required>
+                    <label for="_password">Mot de passe :</label>
+                    <input type="password" class="form-control" id="_password"  name="_password" placeholder="Password" required>
                   </div>
                   <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 

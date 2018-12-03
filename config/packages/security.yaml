@@ -1,7 +1,13 @@
 security:
+    encoders:
+      App\Entity\Collaborateur: bcrypt
     # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
     providers:
-        in_memory: { memory: ~ }
+        my_provider:
+          entity:
+            class: App\Entity\Collaborateur
+            property: username
+
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
@@ -11,6 +17,15 @@ security:
             guard:
                 authenticators:
                     - App\Security\LoginFormAuthenticator
+            form_login:
+              login_path: login
+              check_path: login
+              provider: my_provider
+              default_target_path: app_homepage
+            logout :
+              path: /logout
+              target: /
+              invalidate_session: true
 
             # activate different ways to authenticate
 
@@ -24,4 +39,4 @@ security:
     # Note: Only the *first* access control that matches will be used
     access_control:
         # - { path: ^/admin, roles: ROLE_ADMIN }
-        # - { path: ^/profile, roles: ROLE_USER }
+         - { path: ^/home, roles: ROLE_USER }

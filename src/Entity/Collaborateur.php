@@ -30,14 +30,21 @@ class Collaborateur implements UserInterface,EquatableInterface
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $pass;
+    private $password;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
     private $username;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
     private $salt;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
     private $roles;
 
     public function getId(): ?int
@@ -69,14 +76,14 @@ class Collaborateur implements UserInterface,EquatableInterface
         return $this;
     }
 
-    public function getPass(): ?string
+    public function getPassword(): ?string
     {
-        return $this->pass;
+        return $this->password;
     }
 
-    public function setPass(string $pass): self
+    public function setPassword(string $pass): self
     {
-        $this->pass = $pass;
+        $this->password = $password;
 
         return $this;
     }
@@ -95,41 +102,50 @@ class Collaborateur implements UserInterface,EquatableInterface
 
     public function getRoles()
     {
-      return $this->roles;
+      return [
+        'ROLE_USER'
+      ];
     }
 
-  public function getPassword()
-  {
-      return $this->pass;
-  }
-
-  public function getSalt()
-  {
-      return $this->salt;
-  }
-
-  public function eraseCredentials()
-  {
-  }
-
-  public function isEqualTo(UserInterface $user)
-  {
-    if (!$user instanceof Collaborateur) {
-        return false;
+    public function setRoles(array $roles):self
+    {
+        $this->roles = $roles;
+        return $this;
     }
 
-    if ($this->password !== $user->getPassword()) {
-        return false;
+    public function getSalt()
+    {
+        return $this->salt;
     }
 
-    if ($this->salt !== $user->getSalt()) {
-        return false;
+    public function setSalt(string $salt):self
+    {
+        $this->salt = $salt;
+        return $this;
     }
 
-    if ($this->username !== $user->getUsername()) {
-        return false;
+    public function eraseCredentials()
+    {
     }
 
-    return true;
-  }
+    public function isEqualTo(UserInterface $user)
+    {
+      if (!$user instanceof Collaborateur) {
+          return false;
+      }
+
+      if ($this->password !== $user->getPassword()) {
+          return false;
+      }
+
+      if ($this->salt !== $user->getSalt()) {
+          return false;
+      }
+
+      if ($this->username !== $user->getUsername()) {
+          return false;
+      }
+
+      return true;
+    }
 }

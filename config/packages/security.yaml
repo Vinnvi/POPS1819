@@ -40,3 +40,6 @@ security:
     access_control:
         # - { path: ^/admin, roles: ROLE_ADMIN }
          - { path: ^/home, roles: ROLE_USER }
+         - { path: ^/$, roles: IS_AUTHENTICATED_ANONYMOUSLY, allow_if: "not has_role('ROLE_USER')" }
+         - { path: ^/#$, roles: IS_AUTHENTICATED_ANONYMOUSLY, allow_if: "not has_role('ROLE_USER')" }
+        # - { path: ^/, roles: ROLE_GUEST }

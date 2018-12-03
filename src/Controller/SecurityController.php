@@ -6,6 +6,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+
 use Twig\Environment;
 
 class SecurityController extends AbstractController
@@ -25,6 +27,12 @@ class SecurityController extends AbstractController
      */
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
+        //not allow logged users to go on this page
+        if ($this->container->get('security.authorization_checker')->isGranted('ROLE_USER')) {
+          return new RedirectResponse('/home');
+
+        }
+
         // get the login error if there is one
         $error = $authenticationUtils->getLastAuthenticationError();
         // last username entered by the user

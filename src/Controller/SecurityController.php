@@ -29,7 +29,7 @@ class SecurityController extends AbstractController
     {
         //not allow logged users to go on this page
         if ($this->container->get('security.authorization_checker')->isGranted('ROLE_USER')) {
-          return new RedirectResponse('/home');
+          return new RedirectResponse('/');
 
         }
 
@@ -44,8 +44,5 @@ class SecurityController extends AbstractController
     /**
      * @Route("/logout", name="logout")
      */
-    public function logout()
-    {
-
-    }
+    public function logout(){}
 }

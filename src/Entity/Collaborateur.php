@@ -47,6 +47,11 @@ class Collaborateur implements UserInterface,EquatableInterface
      */
     private $roles;
 
+    /**
+     * @ORM\Column(type="string", length=1024, nullable=true)
+     */
+    private $profile_pic_path;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -147,5 +152,17 @@ class Collaborateur implements UserInterface,EquatableInterface
       }
 
       return true;
+    }
+
+    public function getprofile_pic_path(): string
+    {
+        return $this->profile_pic_path;
+    }
+
+    public function setProfilePicPath(string $profile_pic_path): self
+    {
+        $this->profile_pic_path = $profile_pic_path;
+
+        return $this;
     }
 }

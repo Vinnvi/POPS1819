@@ -16,41 +16,26 @@
     </head>
     <body>
         {% block body %}
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-          <a class="navbar-brand" href="#">Navbar</a>
-          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-
-          <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav mr-auto">
-              <li class="nav-item active">
-                <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">Link</a>
-              </li>
-              <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  Dropdown
-                </a>
-                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                  <a class="dropdown-item" href="#">Action</a>
-                  <a class="dropdown-item" href="#">Another action</a>
-                  <div class="dropdown-divider"></div>
-                  <a class="dropdown-item" href="#">Something else here</a>
-                </div>
-              </li>
-              <li class="nav-item">
-                <form method="post" action="{{ path('logout') }}">
-                  <button type="submit" class="btn btn-primary mb-2">Se deconnecter</button>
-                </form>
-              </li>
-            </ul>
-            <form class="form-inline my-2 my-lg-0">
-              <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-              <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+        <ul id="dropdown1" class="dropdown-content">
+          <li><a href="#!">one</a></li>
+          <li><a href="#!">two</a></li>
+          <li class="divider"></li>
+          <li>
+            <form method="post" action="{{ path('logout') }}">
+              <a href="#!">Se deconnecter</a>
             </form>
+          </li>
+        </ul>
+
+        <nav class="nav-extended grey lighten-1">
+          <div class="nav-wrapper">
+            <a href="#!" class="brand-logo"><img src="images/logo.png" style="width:110px;height:50px;"></a>
+            <ul class="right hide-on-med-and-down">
+              <li><a class="dropdown-trigger" href="#!" data-target="dropdown1"><b>{{ app.user.nom}} {{ app.user.prenom}}</b>   <img src="{{app.user.profile_pic_path}}" alt="" class="circle right" style="width:60px;height:55px;"><b></a></li>
+            </ul>
+          </div>
+          <div class="nav-content">
+            <!-- onglets de l'utilisateur-->
           </div>
         </nav>
         {% endblock %}

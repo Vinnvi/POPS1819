@@ -8,7 +8,6 @@
         {% block stylesheets %}{% endblock %}
     </head>
     <body>
-        {% block body %}
         <nav class="nav-extended navbar-fixed blue lighten-4">
           <div class="nav-wrapper">
             <a href="{{ path('app_homepage') }}" class="brand-logo"><img src="images/logo.png" style="width:110px;height:45px;"></a>
@@ -38,16 +37,16 @@
           <li class="divider" tabindex="-1"></li>
           <li><a href="/logout">Deconnexion</a></li>
         </ul>
-
+        {% block body %}
 
         {% endblock %}
-        {% block javascripts %}{% endblock %}
+
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
         <script type="text/javascript" src="materialize/js/materialize.min.js"></script>
         <script>
           $('.dropdown-trigger').dropdown();
         </script>
 
-
+        {% block javascripts %}{% endblock %}
     </body>
 </html>

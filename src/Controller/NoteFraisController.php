@@ -18,6 +18,9 @@ class NoteFraisController
 
     public function index(): Response
     {
-      return new Response($this->twig->render('pages/noteFrais.html.twig'));
+      $currentMonth = date('n');
+      $currentYear = date('Y');
+      return new Response($this->twig->render('pages/noteFrais.html.twig',
+        ['currentYear' => $currentYear, 'currentMonth' => $currentMonth]));
     }
 }

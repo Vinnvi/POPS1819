@@ -22,19 +22,19 @@ class LigneDeFraisRepository extends ServiceEntityRepository
     // /**
     //  * @return LigneDeFrais[] Returns an array of LigneDeFrais objects
     //  */
-    /*
-    public function findByExampleField($value)
+
+    public function findByNoteID($NoteId)
     {
         return $this->createQueryBuilder('l')
-            ->andWhere('l.exampleField = :val')
-            ->setParameter('val', $value)
+            ->andWhere('l.Note = :val')
+            ->setParameter('val', $NoteId)
             ->orderBy('l.id', 'ASC')
-            ->setMaxResults(10)
+            ->setMaxResults(100)
             ->getQuery()
             ->getResult()
         ;
     }
-    */
+
 
     /*
     public function findOneBySomeField($value): ?LigneDeFrais

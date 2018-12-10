@@ -22,19 +22,19 @@ class NoteDeFraisRepository extends ServiceEntityRepository
     // /**
     //  * @return NoteDeFrais[] Returns an array of NoteDeFrais objects
     //  */
-    /*
-    public function findByExampleField($value)
+
+    public function findByCollaborateurId($id)
     {
         return $this->createQueryBuilder('n')
-            ->andWhere('n.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('n.id', 'ASC')
-            ->setMaxResults(10)
+            ->andWhere('n.collabo = :val')
+            ->setParameter('val', $id)
+            ->orderBy('n.mois,n.annee', 'ASC')
+            ->setMaxResults(2)
             ->getQuery()
             ->getResult()
         ;
     }
-    */
+
 
     /*
     public function findOneBySomeField($value): ?NoteDeFrais

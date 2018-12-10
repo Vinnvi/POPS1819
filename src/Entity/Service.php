@@ -21,6 +21,12 @@ class Service
      */
     private $nom;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Collaborateur")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $Chef;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -34,6 +40,18 @@ class Service
     public function setNom(string $nom): self
     {
         $this->nom = $nom;
+
+        return $this;
+    }
+
+    public function getChef(): ?Collaborateur
+    {
+        return $this->Chef;
+    }
+
+    public function setChef(?Collaborateur $Chef): self
+    {
+        $this->Chef = $Chef;
 
         return $this;
     }

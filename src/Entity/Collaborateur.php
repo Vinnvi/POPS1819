@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\EquatableInterface;
@@ -51,6 +53,22 @@ class Collaborateur implements UserInterface,EquatableInterface
      * @ORM\Column(type="string", length=1024, nullable=true)
      */
     private $profile_pic_path;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Service")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $service;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Service")
+     */
+    private $ServiceChef;
+
+    public function __construct()
+    {
+        $this->ServiceChef = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -162,6 +180,44 @@ class Collaborateur implements UserInterface,EquatableInterface
     public function setProfilePicPath(string $profile_pic_path): self
     {
         $this->profile_pic_path = $profile_pic_path;
+
+        return $this;
+    }
+
+    public function getService(): ?Service
+    {
+        return $this->service;
+    }
+
+    public function setService(?Service $service): self
+    {
+        $this->service = $service;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Service[]
+     */
+    public function getServiceChef(): Collection
+    {
+        return $this->ServiceChef;
+    }
+
+    public function addServiceChef(Service $serviceChef): self
+    {
+        if (!$this->ServiceChef->contains($serviceChef)) {
+            $this->ServiceChef[] = $serviceChef;
+        }
+
+        return $this;
+    }
+
+    public function removeServiceChef(Service $serviceChef): self
+    {
+        if ($this->ServiceChef->contains($serviceChef)) {
+            $this->ServiceChef->removeElement($serviceChef);
+        }
 
         return $this;
     }

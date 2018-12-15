@@ -58,6 +58,11 @@ class LigneDeFrais
      */
     private $Projet;
 
+    /**
+     * @ORM\Column(type="string", length=512, nullable=true)
+     */
+    private $justificatif;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -155,6 +160,18 @@ class LigneDeFrais
     public function setProjet(?Projet $Projet): self
     {
         $this->Projet = $Projet;
+
+        return $this;
+    }
+
+    public function getJustificatif(): ?string
+    {
+        return $this->justificatif;
+    }
+
+    public function setJustificatif(?string $justificatif): self
+    {
+        $this->justificatif = $justificatif;
 
         return $this;
     }

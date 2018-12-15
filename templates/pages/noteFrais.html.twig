@@ -3,16 +3,17 @@
 {% block body %}
   <ul class="collapsible">
     <li class="active">
-      <div class="collapsible-header blue lighten-2">Note de Frais de {{noteDeFrais[1].mois}} / {{noteDeFrais[1].annee}} </div>
+      <div class="collapsible-header blue lighten-2">Note de Frais de {{noteDeFrais[1].mois}} / {{noteDeFrais[1].annee}} <i class="large material-icons">expand_more</i> </div>
       <div class="collapsible-body">
         <ul class="collapsible">
+          <a class="waves-effect waves-light btn modal-trigger" href="#ajoutLigneFraisModal">Ajouter une ligne de frais <i class="material-icons right">add</i></a>
           {% for ligne in lignesDeFrais[1] %}
               <li>
                 <div class="collapsible-header"> {{ligne.intitule}} </div>
                 <div class="collapsible-body">
                   Mission : {{ligne.mission}}
                   <br>
-                  Montant : {{ligne.montant}}
+                  Montant : {{ligne.montant}} euros
                 </div>
               </li>
           {% endfor %}
@@ -20,7 +21,7 @@
       </div>
     </li>
     <li>
-      <div class="collapsible-header blue lighten-2">Note de Frais de {{noteDeFrais[0].mois}} / {{noteDeFrais[0].annee}} </div>
+      <div class="collapsible-header blue lighten-2">Note de Frais de {{noteDeFrais[0].mois}} / {{noteDeFrais[0].annee}} <i class="large material-icons">expand_more</i> </div>
       <div class="collapsible-body">
         <ul class="collapsible">
           {% for ligne in lignesDeFrais[0] %}
@@ -37,6 +38,39 @@
       </div>
     </li>
   </ul>
+
+
+
+  <!-- modal to add new lignesDeFrais -->
+  <!-- Modal Structure -->
+  <div id="ajoutLigneFraisModal" class="modal">
+    <div class="modal-content">
+      <h5>Ajout d'une ligne de frais</h5>
+      <div id="container">
+        <div class="input-field section">
+          <select>
+            {% for type in typesPaiements %}
+              <option value="{{type}}">{{type}}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="section">
+          <input type="text" class="datepicker" placeholder="date">
+        </div>
+        <div class="section">
+          <div class="input-field col s6">
+            <input placeholder="montant" id="montant" type="integer" class="validate">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <a href="#!" class="modal-close waves-effect waves-green btn-flat"><i class="material-icons left">clear</i>Annuler</a>
+      <a href="enregistrerLigneFrais()" class="modal-close waves-effect waves-green btn-flat">Enregistrer<i class="material-icons right">check</i></a>
+    </div>
+    </div>
+
+
 {% endblock %}
 
 {% block javascripts %}
@@ -45,4 +79,42 @@
     $('.collapsible').collapsible();
   });
   </script>
+
+
+  <script>
+    $(document).ready(function(){
+      $('.modal').modal();
+    });
+
+  </script>
+
+  <script>
+  $(document).ready(function(){
+    $('.datepicker').datepicker({
+      autoClose: true,
+      i18n: {months : [
+                        'Janvier',
+                        'Fevrier',
+                        'Mars',
+                        'Avril',
+                        'Mai',
+                        'Juin',
+                        'Juillet',
+                        'Aout',
+                        'Septembre',
+                        'Octobre',
+                        'Novembre',
+                        'Decembre'
+                      ]}
+    });
+  });
+
+  </script>
+
+  <script>
+    $(document).ready(function(){
+      $('select').formSelect();
+    });
+  </script>
+
 {% endblock %}

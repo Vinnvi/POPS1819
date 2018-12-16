@@ -63,6 +63,30 @@
           </div>
         </div>
       </div>
+      <div class="section">
+        <div class="file-field input-field">
+          <div class="btn">
+            <span>Justificatif</span>
+            <input type="file">
+          </div>
+          <div class="file-path-wrapper">
+            <input class="file-path validate" type="text">
+          </div>
+        </div>
+      </div>
+      <div class ="section">
+        <div class="input-field col s6">
+          <input id="mission" type="text" class="validate">
+            <label for="mission">Mission</label>
+        </div>
+        <div class="input-field section">
+          <select>
+            {% for project in projectsAvailables %}
+              <option value="{{project[0].id}}">{{project[0].nom}}</option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
     </div>
     <div class="modal-footer">
       <a href="#!" class="modal-close waves-effect waves-green btn-flat"><i class="material-icons left">clear</i>Annuler</a>

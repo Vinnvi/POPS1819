@@ -22,19 +22,19 @@ class ProjetRepository extends ServiceEntityRepository
     // /**
     //  * @return Projet[] Returns an array of Projet objects
     //  */
-    /*
-    public function findByExampleField($value)
+
+    public function findByService($serviceId)
     {
         return $this->createQueryBuilder('p')
-            ->andWhere('p.exampleField = :val')
-            ->setParameter('val', $value)
+            ->andWhere('p.Service = :val')
+            ->setParameter('val', $serviceId)
             ->orderBy('p.id', 'ASC')
-            ->setMaxResults(10)
+            ->setMaxResults(100)
             ->getQuery()
             ->getResult()
         ;
     }
-    */
+
 
     /*
     public function findOneBySomeField($value): ?Projet

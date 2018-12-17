@@ -63,6 +63,12 @@ class LigneDeFrais
      */
     private $justificatif;
 
+    public function __construct()
+    {
+      $this->statutValidation = "Non validée";
+      $this->avance = false;
+    }
+
     public function getId(): ?int
     {
         return $this->id;

@@ -35,6 +35,20 @@ class NoteDeFraisRepository extends ServiceEntityRepository
         ;
     }
 
+    public function findByMonthAndYear($month,$year)
+    {
+        return $this->createQueryBuilder('n')
+            ->andWhere('n.mois = :val')
+            ->andWhere('n.annee = :val2')
+            ->setParameter('val', $month)
+            ->setParameter('val2', $year)
+            ->orderBy('n.mois,n.annee', 'ASC')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
 
     /*
     public function findOneBySomeField($value): ?NoteDeFrais

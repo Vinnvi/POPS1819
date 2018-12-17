@@ -65,9 +65,15 @@ class Collaborateur implements UserInterface,EquatableInterface
      */
     private $ServiceChef;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Projet")
+     */
+    private $projets;
+
     public function __construct()
     {
         $this->ServiceChef = new ArrayCollection();
+        $this->projet = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -220,5 +226,13 @@ class Collaborateur implements UserInterface,EquatableInterface
         }
 
         return $this;
+    }
+
+    /**
+     * @return Collection|Projet[]
+     */
+    public function getProjets(): Collection
+    {
+        return $this->projets;
     }
 }

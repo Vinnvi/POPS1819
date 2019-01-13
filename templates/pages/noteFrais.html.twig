@@ -3,7 +3,7 @@
 {% block body %}
   <ul class="collapsible">
     <li class="active">
-      <div class="collapsible-header blue lighten-2">Note de Frais de {{noteDeFrais[1].mois}} / {{noteDeFrais[1].annee}} <i class="large material-icons">expand_more</i> </div>
+      <div class="collapsible-header blue lighten-2">Note de Frais de {{noteDeFrais[1].mois}} / {{noteDeFrais[1].annee}} <i class="large material-icons">expand_more</i> Statut de la note de frais : (statut) </div>
       <div class="collapsible-body">
         <ul class="collapsible">
           <a class="waves-effect waves-light modalAjout btn modal-trigger" data-id="{{noteDeFrais[1].mois}}/{{noteDeFrais[1].annee}}"  href="#ajoutLigneFraisModal">Ajouter une ligne de frais <i class="material-icons right">add</i></a>
@@ -11,8 +11,8 @@
               <li>
                 <div class="collapsible-header"> {{ligne.intitule}} </div>
                 <div class="collapsible-body">
-                  Mission : {{ligne.mission}},   Montant : {{ligne.montant}} euros,   date : {{ ligne.date|date("m/d/Y") }},   statut : {{ligne.statutValidation}}
-                  <button type="submit" class="btn btn-primary">Modifier</button>
+                  Mission : {{ligne.mission}},   Montant : {{ligne.montant}} euros,   date : {{ ligne.date|date("Y-m-d") }},   statut : {{ligne.statutValidation}}
+                  <a class="waves-effect waves-light modalModification btn modal-trigger" data-id="{{ligne.id}}/{{ligne.montant}}/{{ligne.intitule}}/{{ligne.mission}}/{{ligne.date|date("Y-m-d")}}"  href="#modificationLigneFraisModal">Modifier</a>
                 </div>
               </li>
           {% endfor %}
@@ -20,7 +20,7 @@
       </div>
     </li>
     <li>
-      <div class="collapsible-header blue lighten-2">Note de Frais de {{noteDeFrais[0].mois}} / {{noteDeFrais[0].annee}} <i class="large material-icons">expand_more</i> </div>
+      <div class="collapsible-header blue lighten-2">Note de Frais de {{noteDeFrais[0].mois}} / {{noteDeFrais[0].annee}} <i class="large material-icons">expand_more</i> Statut de la note de frais : (statut) </div>
       <div class="collapsible-body">
         <ul class="collapsible">
           <a class="waves-effect waves-light modalAjout btn modal-trigger" data-id="{{noteDeFrais[0].mois}}/{{noteDeFrais[0].annee}}"  href="#ajoutLigneFraisModal">Ajouter une ligne de frais <i class="material-icons right">add</i></a>
@@ -29,7 +29,7 @@
                 <div class="collapsible-header"> {{ligne.intitule}} </div>
                 <div class="collapsible-body">
                   Mission : {{ligne.mission}},   Montant : {{ligne.montant}} euros,   date : {{ ligne.date|date("m/d/Y") }},   statut : {{ligne.statutValidation}}
-                  <button type="submit" class="btn btn-primary">Modifier</button>
+                  <a class="waves-effect waves-light modalModification btn modal-trigger" data-id="{{noteDeFrais[1].mois}}/{{noteDeFrais[1].annee}}/{{ligne.montant}}/{{ligne.intitule}}/{{ligne.mission}}"  href="#modificationLigneFraisModal">Modifier</a>
                 </div>
               </li>
           {% endfor %}
@@ -64,6 +64,68 @@
           <div class="section">
             <div class="input-field">
               <input placeholder="montant" id="montant" name="montant" type="integer" class="validate">
+            </div>
+          </div>
+
+          <div class="section">
+            <div class="file-field input-field">
+              <div class="btn">
+                <span>Justificatif</span>
+                <input type="file">
+              </div>
+              <div class="file-path-wrapper">
+                <input class="file-path validate" type="text">
+              </div>
+            </div>
+          </div>
+
+          <div class ="section">
+            <div class="input-field">
+              <input name="mission" id="mission" type="text" class="validate">
+                <label for="mission">Mission</label>
+            </div>
+            <div class="input-field">
+              <select name="projet" id="projet">
+                {% for project in projectsAvailables %}
+                  <option value="{{project[0].id}}">{{project[0].nom}}</option>
+                {% endfor %}
+              </select>
+              <input type="hidden" name="moisNote" id="moisNote" value=""/>
+              <input type="hidden" name="anneeNote" id="anneeNote" value=""/>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <a href="#!" class="modal-close waves-effect waves-green btn-flat"><i class="material-icons left">clear</i>Annuler</a>
+        <button type="submit" class="btn btn-primary">Enregistrer<i class="material-icons right">check</i></button>
+      </div>
+    </form>
+  </div>
+
+  <!-- modal to modify lignesDeFrais -->
+  <div id="modificationLigneFraisModal" class="modal myModal ">
+    <form method="post" action="{{ path('ajoutLigne') }}">
+      <div class="modal-content" id="modal-content">
+        <h5>Modification d'une ligne de frais</h5>
+        <div id="container">
+          <div class="section">
+            <div class="input-field">
+              <select name="typePaiement" id="typePaiement">
+                {% for type in typesPaiements %}
+                  <option value="{{type}}">{{type}}</option>
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+
+          <div class="section">
+            <input type="text" class="datepicker" id="ligneDate" name="ligneDate" placeholder="date">
+          </div>
+
+          <div class="section">
+            <div class="input-field">
+              <input placeholder="montant" id="ligneMontant" name="ligneMontant" type="integer" class="validate">
             </div>
           </div>
 
@@ -156,6 +218,19 @@
       var date = $(this).data('id').split('/');
       $(".modal-content #moisNote").val( date[0] );
       $(".modal-content #anneeNote").val( date[1] );
+       // As pointed out in comments,
+       // it is superfluous to have to manually call the modal.
+      });
+  </script>
+
+  <script>
+    $(document).on("click", ".modalModification", function () {
+      var date = $(this).data('id').split('/');
+      $(".modal-content #ligneId").val( date[0] );
+      $(".modal-content #ligneMontant").val( date[1] );
+      $(".modal-content #ligneIntitule").val( date[2] );
+      $(".modal-content #ligneMission").val( date[3] );
+      $(".modal-content #ligneDate").val( date[4] );
        // As pointed out in comments,
        // it is superfluous to have to manually call the modal.
       });

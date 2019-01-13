@@ -70,6 +70,11 @@ class Collaborateur implements UserInterface,EquatableInterface
      */
     private $projets;
 
+    /**
+     * @ORM\Column(type="string", length=1024)
+     */
+    private $email;
+
     public function __construct()
     {
         $this->ServiceChef = new ArrayCollection();
@@ -234,5 +239,17 @@ class Collaborateur implements UserInterface,EquatableInterface
     public function getProjets(): Collection
     {
         return $this->projets;
+    }
+
+    public function getEmail(): ?string
+    {
+        return $this->email;
+    }
+
+    public function setEmail(string $email): self
+    {
+        $this->email = $email;
+
+        return $this;
     }
 }

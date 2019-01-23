@@ -35,6 +35,19 @@ class LigneDeFraisRepository extends ServiceEntityRepository
         ;
     }
 
+    // /**
+    //  * @return LigneDeFrais Returns element of LigneDeFrais objects
+    //  */
+
+    public function findOneByID($Id): ?LigneDeFrais
+    {
+        return $this->createQueryBuilder('l')
+            ->andWhere('l.Id = :val')
+            ->setParameter('val', $Id)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
 
     /*
     public function findOneBySomeField($value): ?LigneDeFrais

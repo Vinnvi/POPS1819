@@ -37,8 +37,27 @@ class NoteFraisController extends Controller
       $currentMonth = date('n');
       $currentYear = date('Y');
 
-      //recuperation des notes de frais du collaborateur
+      //recuperation des notes de frais du collaborateur trié par date la plus ancienne
       $mesNotesDeFrais = $this->repository->findByCollaborateurId($this->getUser()->getId());
+
+      //On vérifie que c'est bien les deux dernières
+      if($mesNotesDeFrais[1]->getMois() != $currentMonth){
+        //on crée une nouvelle note de frais sinon
+        $noteDeFrais = new NoteDeFrais();
+        $noteDeFrais->setMois($currentMonth);
+        $noteDeFrais->setAnnee($currentYear);
+        $noteDeFrais->setMontant(0);
+        $noteDeFrais->setStatut("En cours");
+        $noteDeFrais->setCollabo($this->getUser());
+
+        //on la sauvegarde
+        $this->getDoctrine()->getEntityManager()->persist($noteDeFrais);
+        $this->getDoctrine()->getEntityManager()->flush();
+
+        //on remplace la plus ancienne
+        $mesNotesDeFrais[0] = $mesNotesDeFrais[1];
+        $mesNotesDeFrais[1] = $noteDeFrais;
+      }
 
       //Recuperation des lignes de frais en fonction des notes
       $lignesDeFraisRepository = $this->getDoctrine()->getEntityManager()->getRepository('App\Entity\LigneDeFrais');
@@ -49,19 +68,13 @@ class NoteFraisController extends Controller
 
       //recuperation des projets de l'utilisateur
       $projetRepository = $this->getDoctrine()->getEntityManager()->getRepository('App\Entity\Projet');
-
-
       $projectsAvailables = array();
       array_push($projectsAvailables,$projetRepository->findByCollaborateurId($this->getUser()->getId()));
 
       //Recuperation des categories de paiements
       $typesPaiements = TypePaiementEnum::getAvailableTypes();
 
-      # !!!!!DEV MODE ONLY !!!!!! JUST TO SEE QUERIES RESULTS
-      #dump($this->repository->findByCollaborateurId($this->getUser()->getId()));
 
-
-      dump($projectsAvailables);
 
       return new Response($this->twig->render('pages/noteFrais.html.twig',
         ['noteDeFrais' => $mesNotesDeFrais,
@@ -71,23 +84,41 @@ class NoteFraisController extends Controller
     }
 
     /**
-     * @Route("/NoteDeFrais", name="ajoutLigne")
+     * @Route("/NoteDeFrais", name="touchLigne")
      */
-    public function ajoutLigne() : Response {
-      //prepare repository for sql requests
-      $projetRepository = $this->getDoctrine()->getEntityManager()->getRepository('App\Entity\Projet');
-      $noteRepository = $this->getDoctrine()->getEntityManager()->getRepository('App\Entity\NoteDeFrais');
+    public function touchLigne() : Response {
+      if(!isset($_POST['ligneId'])){ #Nouvelle Ligne
+        //prepare repository for sql requests
+        $projetRepository = $this->getDoctrine()->getEntityManager()->getRepository('App\Entity\Projet');
+        $noteRepository = $this->getDoctrine()->getEntityManager()->getRepository('App\Entity\NoteDeFrais');
 
-      //create new tuple and complete it
-      $ligneDeFrais = new LigneDeFrais();
-      $ligneDeFrais->setIntitule($_POST['typePaiement']);
-      $ligneDeFrais->setMission($_POST['mission']);
-      $ligneDeFrais->setMontant(floatval($_POST['montant']));
-      $ligneDeFrais->setProjet( $projetRepository->findById($_POST['projet'])[0] );
-      $ligneDeFrais->setNote($noteRepository->findByMonthAndYear($_POST['moisNote'],$_POST['anneeNote'])[0]);
-      
-      $this->getDoctrine()->getEntityManager()->persist($ligneDeFrais);
-      $this->getDoctrine()->getEntityManager()->flush();
+        //create new tuple and complete it
+        $ligneDeFrais = new LigneDeFrais();
+        $ligneDeFrais->setIntitule($_POST['typePaiement']);
+        $ligneDeFrais->setMission($_POST['mission']);
+        $ligneDeFrais->setMontant(floatval($_POST['montant']));
+        $ligneDeFrais->setProjet( $projetRepository->findById($_POST['projet'])[0]);
+        $ligneDeFrais->setNote($noteRepository->findByMonthAndYear($_POST['moisNote'],$_POST['anneeNote'])[0]);
+
+        $this->getDoctrine()->getEntityManager()->persist($ligneDeFrais);
+        $this->getDoctrine()->getEntityManager()->flush();
+      }
+      else{ #Modif ligne
+        $projetRepository = $this->getDoctrine()->getEntityManager()->getRepository('App\Entity\Projet');
+        $LigneRepository = $this->getDoctrine()->getEntityManager()->getRepository('App\Entity\LigneDeFrais');
+
+        $LignedeFraisModifiee = $LigneRepository->findById($_POST['ligneId'])[0];
+        dump($LignedeFraisModifiee);
+        $LignedeFraisModifiee->setIntitule($_POST['ligneIntitule']);
+        $LignedeFraisModifiee->setMission($_POST['ligneMission']);
+        $LignedeFraisModifiee->setMontant(floatval($_POST['ligneMontant']));
+        $LignedeFraisModifiee->setProjet( $projetRepository->findById($_POST['projet'])[0]);
+        $this->getDoctrine()->getEntityManager()->persist($LignedeFraisModifiee);
+        $this->getDoctrine()->getEntityManager()->flush();
+
+        return $this->redirectToRoute('app_noteFrais');
+      }
+
 
       return $this->redirectToRoute('app_noteFrais');
 

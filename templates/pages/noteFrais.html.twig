@@ -43,7 +43,7 @@
   <!-- modal to add new lignesDeFrais -->
   <!-- Modal Structure -->
   <div id="ajoutLigneFraisModal" class="modal myModal ">
-    <form method="post" action="{{ path('ajoutLigne') }}">
+    <form method="post" action="{{ path('touchLigne') }}">
       <div class="modal-content" id="modal-content">
         <h5>Ajout d'une ligne de frais</h5>
         <div id="container">
@@ -105,15 +105,15 @@
 
   <!-- modal to modify lignesDeFrais -->
   <div id="modificationLigneFraisModal" class="modal myModal ">
-    <form method="post" action="{{ path('ajoutLigne') }}">
+    <form method="post" action="{{ path('touchLigne') }}">
       <div class="modal-content" id="modal-content">
         <h5>Modification d'une ligne de frais</h5>
         <div id="container">
           <div class="section">
             <div class="input-field">
-              <select name="typePaiement" id="typePaiement">
+              <select name="ligneIntitule" id="ligneIntitule">
                 {% for type in typesPaiements %}
-                  <option value="{{type}}">{{type}}</option>
+                    <option value="{{type}}">{{type}}</option>
                 {% endfor %}
               </select>
             </div>
@@ -141,10 +141,9 @@
             </div>
           </div>
 
-          <div class ="section">
+          <div class="section">
             <div class="input-field">
-              <input name="mission" id="mission" type="text" class="validate">
-                <label for="mission">Mission</label>
+              <input id="ligneMission" name="ligneMission" type="text" class="validate">
             </div>
             <div class="input-field">
               <select name="projet" id="projet">
@@ -152,7 +151,7 @@
                   <option value="{{project[0].id}}">{{project[0].nom}}</option>
                 {% endfor %}
               </select>
-              <input type="hidden" name="moisNote" id="moisNote" value=""/>
+              <input type="hidden" name="ligneId" id="ligneId" value=""/>
               <input type="hidden" name="anneeNote" id="anneeNote" value=""/>
             </div>
           </div>
@@ -225,12 +224,17 @@
 
   <script>
     $(document).on("click", ".modalModification", function () {
-      var date = $(this).data('id').split('/');
-      $(".modal-content #ligneId").val( date[0] );
-      $(".modal-content #ligneMontant").val( date[1] );
-      $(".modal-content #ligneIntitule").val( date[2] );
-      $(".modal-content #ligneMission").val( date[3] );
-      $(".modal-content #ligneDate").val( date[4] );
+      var data = $(this).data('id').split('/');
+      $(".modal-content #ligneId").val( data[0] );
+      $(".modal-content #ligneMontant").val( data[1] );
+      $(".modal-content #ligneIntitule").val( data[2] );
+      $(".modal-content #ligneMission").val( data[3] );
+      $(".modal-content #ligneDate").val( data[4] );
+
+      //set selected (STILL NOT COMPLETELY WORKING YET)
+      document.getElementById('ligneIntitule').value=data[2];
+
+
        // As pointed out in comments,
        // it is superfluous to have to manually call the modal.
       });

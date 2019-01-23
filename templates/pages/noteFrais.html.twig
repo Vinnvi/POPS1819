@@ -2,40 +2,25 @@
 {% block title %}Mes notes de frais{% endblock %}
 {% block body %}
   <ul class="collapsible">
-    <li class="active">
-      <div class="collapsible-header blue lighten-2">Note de Frais de {{noteDeFrais[1].mois}} / {{noteDeFrais[1].annee}} <i class="large material-icons">expand_more</i> Statut de la note de frais : (statut) </div>
-      <div class="collapsible-body">
-        <ul class="collapsible">
-          <a class="waves-effect waves-light modalAjout btn modal-trigger" data-id="{{noteDeFrais[1].mois}}/{{noteDeFrais[1].annee}}"  href="#ajoutLigneFraisModal">Ajouter une ligne de frais <i class="material-icons right">add</i></a>
-          {% for ligne in lignesDeFrais[1] %}
-              <li>
-                <div class="collapsible-header"> {{ligne.intitule}} </div>
-                <div class="collapsible-body">
-                  Mission : {{ligne.mission}},   Montant : {{ligne.montant}} euros,   date : {{ ligne.date|date("Y-m-d") }},   statut : {{ligne.statutValidation}}
-                  <a class="waves-effect waves-light modalModification btn modal-trigger" data-id="{{ligne.id}}/{{ligne.montant}}/{{ligne.intitule}}/{{ligne.mission}}/{{ligne.date|date("Y-m-d")}}"  href="#modificationLigneFraisModal">Modifier</a>
-                </div>
-              </li>
-          {% endfor %}
-        </ul>
-      </div>
-    </li>
-    <li>
-      <div class="collapsible-header blue lighten-2">Note de Frais de {{noteDeFrais[0].mois}} / {{noteDeFrais[0].annee}} <i class="large material-icons">expand_more</i> Statut de la note de frais : (statut) </div>
-      <div class="collapsible-body">
-        <ul class="collapsible">
-          <a class="waves-effect waves-light modalAjout btn modal-trigger" data-id="{{noteDeFrais[0].mois}}/{{noteDeFrais[0].annee}}"  href="#ajoutLigneFraisModal">Ajouter une ligne de frais <i class="material-icons right">add</i></a>
-          {% for ligne in lignesDeFrais[0] %}
-              <li>
-                <div class="collapsible-header"> {{ligne.intitule}} </div>
-                <div class="collapsible-body">
-                  Mission : {{ligne.mission}},   Montant : {{ligne.montant}} euros,   date : {{ ligne.date|date("m/d/Y") }},   statut : {{ligne.statutValidation}}
-                  <a class="waves-effect waves-light modalModification btn modal-trigger" data-id="{{noteDeFrais[1].mois}}/{{noteDeFrais[1].annee}}/{{ligne.montant}}/{{ligne.intitule}}/{{ligne.mission}}"  href="#modificationLigneFraisModal">Modifier</a>
-                </div>
-              </li>
-          {% endfor %}
-        </ul>
-      </div>
-    </li>
+    {% for i in 0..1|reverse %}
+      <li>
+        <div class="collapsible-header blue lighten-2">Note de Frais de {{noteDeFrais[i].mois}} / {{noteDeFrais[i].annee}} <i class="large material-icons">expand_more</i> Statut de la note de frais : {{noteDeFrais[i].statut}} </div>
+        <div class="collapsible-body">
+          <ul class="collapsible">
+            <a class="waves-effect waves-light modalAjout btn modal-trigger" data-id="{{noteDeFrais[i].mois}}/{{noteDeFrais[i].annee}}"  href="#ajoutLigneFraisModal">Ajouter une ligne de frais <i class="material-icons right">add</i></a>
+            {% for ligne in lignesDeFrais[i] %}
+                <li>
+                  <div class="collapsible-header"> {{ligne.intitule}} </div>
+                  <div class="collapsible-body">
+                    Mission : {{ligne.mission}},   Montant : {{ligne.montant}} euros,   date : {{ ligne.date|date("Y-m-d") }},   statut : {{ligne.statutValidation}}
+                    <a class="waves-effect waves-light modalModification btn modal-trigger" data-id="{{ligne.id}}/{{ligne.montant}}/{{ligne.intitule}}/{{ligne.mission}}/{{ligne.date|date("Y-m-d")}}"  href="#modificationLigneFraisModal">Modifier</a>
+                  </div>
+                </li>
+            {% endfor %}
+          </ul>
+        </div>
+      </li>
+    {% endfor %}
   </ul>
 
 

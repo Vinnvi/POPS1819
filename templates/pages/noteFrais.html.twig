@@ -8,9 +8,11 @@
         <div class="collapsible-body">
           <ul class="collapsible">
             <a class="waves-effect waves-light modalAjout btn modal-trigger" data-id="{{noteDeFrais[i].mois}}/{{noteDeFrais[i].annee}}"  href="#ajoutLigneFraisModal">Ajouter une ligne de frais <i class="material-icons right">add</i></a>
+            <div class="right" style="padding-right: 10px;padding-top:5px" > Demandes d'avance</div>
+            <form action="#"> <!-- formulaire pour les demandes d'avance -->
             {% for ligne in lignesDeFrais[i] %}
                 <li>
-                  <div class="collapsible-header"> {{ligne.intitule}} </div>
+                  <div style="display:block" class="collapsible-header"> {{ligne.intitule}} <div class="secondary-content"> <input mdx-no-collapse class="no-collapse" type="checkbox" /><span></span> </div> </div>
                   <div class="collapsible-body">
                     Mission : {{ligne.mission}},   Montant : {{ligne.montant}} euros,   date : {{ ligne.date|date("Y-m-d") }},   statut : {{ligne.statutValidation}}
                     <a class="waves-effect waves-light modalModification btn modal-trigger" data-id="{{ligne.id}}/{{ligne.montant}}/{{ligne.intitule}}/{{ligne.mission}}/{{ligne.date|date("Y-m-d")}}"  href="#modificationLigneFraisModal">Modifier</a>
@@ -22,8 +24,6 @@
       </li>
     {% endfor %}
   </ul>
-
-
 
   <!-- modal to add new lignesDeFrais -->
   <!-- Modal Structure -->
@@ -154,9 +154,9 @@
 
 {% block javascripts %}
   <script>
-  $(document).ready(function(){
-    $('.collapsible').collapsible();
-  });
+    $(document).ready(function(){
+      $('.collapsible').collapsible();
+    });
   </script>
 
 

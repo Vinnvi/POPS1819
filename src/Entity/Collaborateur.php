@@ -136,15 +136,9 @@ class Collaborateur implements UserInterface,EquatableInterface
 
     public function getRoles()
     {
-<<<<<<< HEAD
-      return [
-        'ROLE_USER'
-      ];
-=======
         return [
             'ROLE_USER'
         ];
->>>>>>> 9114d428a9becb782e86aaf567f716f8ec27ab02
     }
 
     public function setRoles(array $roles):self

@@ -27,9 +27,9 @@
                 <div class="col s2"</div>
               </li>
               <li class="col s12 m4 l2">
-                <a class='dropdown-trigger btn btn-large' href='#' data-target='dropdown1'>
+                <a class='dropdown-trigger btn btn-large grey lighten-3 black-text' href='#' data-target='dropdown1'>
                   <i class='material-icons left'>
-                    <img src={{app.user.profile_pic_path}} style="width:30px;height:35px;">
+                    <img src={{app.user.profile_pic_path}} class="circle responsive-img" style="width:35px;height:35px;">
                   </i>
                   <b>{{app.user.nom}}</b>
                   {{app.user.prenom}}
@@ -54,7 +54,12 @@
           <li><a href="#!">Edition de profil</a></li>
           <li><a href="#!">Paramètres</a></li>
           <li class="divider" tabindex="-1"></li>
-          <li><a href="/logout">Deconnexion</a></li>
+          <li>
+            <a href="/logout">
+              <i class="material-icons prefix grey-text text-darken-4">keyboard_tab</i>
+              Deconnexion
+            </a>
+          </li>
         </ul>
         {% block body %}
 
@@ -68,7 +73,9 @@
         </script>
         
         <script>
-          $('.dropdown-trigger').dropdown();
+          $('.dropdown-trigger').dropdown({
+            coverTrigger: false
+          });
         </script>
 
         {% block javascripts %}{% endblock %}

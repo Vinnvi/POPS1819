@@ -6,8 +6,6 @@
 
 # config/routes.yaml
 
-# the "app_lucky_number" route name is not important yet
-
 login:
   path: /login
   controller: App\Controller\SecurityController::login
@@ -22,3 +20,7 @@ app_logout:
 app_noteFrais:
   path: /mesNotesDeFrais
   controller: App\Controller\NoteFraisController::index
+
+app_admin:
+  path: /admin
+  controller: App\Controller\Admin\AdminCollaborateurController::index

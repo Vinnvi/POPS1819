@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}DefaultNamePage{% endblock %}</title>
+    <link type="text/css" rel="stylesheet" href="/materialize/css/materialize.css"  media="screen,projection"/>
+    <link type="text/css" rel="stylesheet" href="/css/content.css"/>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="icon" type="image/png" href="/images/logo_sans_texte.png" />
+    {% block stylesheets %}{% endblock %}
+</head>
+<body>
+<nav class="nav-extended navbar-fixed blue lighten-4">
+    <div class="nav-wrapper">
+        <a href="{{ path('app_admin') }}" class="brand-logo"><img src="/images/logo.png" style="width:110px;height:45px;"></a>
+        <ul class="right hide-on-med-and-down">
+            <li>
+                <!-- search bar -->
+            </li>
+            <li><a class='dropdown-trigger btn btn-large' href='#' data-target='dropdown1'><b>Test</b> test</a></li>
+        </ul>
+    </div>
+</nav>
+<!-- Dropdown Structure -->
+<ul id='dropdown1' class='dropdown-content'>
+    <li><a href="#!">Edition de profil</a></li>
+    <li><a href="#!">Paramètres</a></li>
+    <li class="divider" tabindex="-1"></li>
+    <li><a href="/logout">Deconnexion</a></li>
+</ul>
+{% block body %}
+
+{% endblock %}
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script type="text/javascript" src="materialize/js/materialize.min.js"></script>
+<script>
+    $('.dropdown-trigger').dropdown();
+</script>
+
+{% block javascripts %}{% endblock %}
+</body>
+</html>

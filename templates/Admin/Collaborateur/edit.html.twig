@@ -1,0 +1,15 @@
+{% extends 'Admin/Collaborateur/index.html.twig' %}
+
+{% block title 'Edition Collaborateur' %}
+
+
+{%  block body %}
+    <div class="container mt-4">
+        <h3>Editer le collaborateur</h3>
+        {{ form_start(form) }}
+            {{ form_widget(form) }}
+        {{ form_end(form) }}
+
+    </div>
+
+{%  endblock %}

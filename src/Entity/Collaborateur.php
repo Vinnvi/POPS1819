@@ -66,7 +66,8 @@ class Collaborateur implements UserInterface,EquatableInterface
     private $ServiceChef;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Projet")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Projet",fetch="EAGER")
+     * @ORM\JoinTable(name="projet_collaborateur")
      */
     private $projets;
 
@@ -136,9 +137,7 @@ class Collaborateur implements UserInterface,EquatableInterface
 
     public function getRoles()
     {
-      return [
-        'ROLE_USER'
-      ];
+      return 'ROLE_USER';
     }
 
     public function setRoles(array $roles):self
@@ -183,7 +182,7 @@ class Collaborateur implements UserInterface,EquatableInterface
       return true;
     }
 
-    public function getprofile_pic_path(): string
+    public function getProfilePicPath(): string
     {
         return $this->profile_pic_path;
     }

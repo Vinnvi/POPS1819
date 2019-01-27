@@ -1,0 +1,26 @@
+{% extends 'Admin/Collaborateur/index.html.twig' %}
+
+{% block title 'Gestion des collaborateurs' %}
+
+{% block body %}
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Collaborateur</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+            {% for collaborateur in collaborateurs %}
+                <tr>
+                    <td>{{ collaborateur.username }}</td>
+                    <td>
+                        <a href="{{ path('admin.collaborateur.edit', {id: collaborateur.id}) }}" class="btn btn-secondary">Editer</a>
+                        <a href="{{ path('admin.collaborateur.remove', {id: collaborateur.id}) }}" class="btn red">Supprimer</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}

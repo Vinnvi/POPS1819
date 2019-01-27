@@ -10,14 +10,31 @@
         {% block stylesheets %}{% endblock %}
     </head>
     <body>
-        <nav class="nav-extended navbar-fixed blue lighten-4">
+        <nav class="nav-extended navbar-fixed grey lighten-4">
           <div class="nav-wrapper">
-            <a href="{{ path('app_homepage') }}" class="brand-logo"><img src="images/logo.png" style="width:110px;height:45px;"></a>
-            <ul class="right hide-on-med-and-down">
-              <li>
-                <!-- search bar -->
+            <ul class="hide-on-med-and-down row">
+              <li class="col s12 m4 l2">
+                <a href="{{ path('app_homepage') }}" class="brand-logo"><img src="images/logo.png" style="width:110px;height:45px;"></a>
               </li>
-              <li><a class='dropdown-trigger btn btn-large' href='#' data-target='dropdown1'><b>{{app.user.nom}}</b> {{app.user.prenom}}</a></li>
+              <!-- Barre de recherche -->
+              <li class="col s12 m4 l8">
+                <div class="col s2"></div>
+                <div class="input-field center-align col s6">
+                  <i class="material-icons prefix grey-text text-darken-4">search</i>
+                  <input id="search" type="text" class="validate">
+                  <label for="search">Rechercher un collaborateur</label>
+                </div>
+                <div class="col s2"</div>
+              </li>
+              <li class="col s12 m4 l2">
+                <a class='dropdown-trigger btn btn-large' href='#' data-target='dropdown1'>
+                  <i class='material-icons left'>
+                    <img src={{app.user.profile_pic_path}} style="width:30px;height:35px;">
+                  </i>
+                  <b>{{app.user.nom}}</b>
+                  {{app.user.prenom}}
+                </a>
+              </li>
             </ul>
           </div>
           <div class="nav-content">

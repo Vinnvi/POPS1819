@@ -137,7 +137,9 @@ class Collaborateur implements UserInterface,EquatableInterface
 
     public function getRoles()
     {
-      return 'ROLE_USER';
+        return [
+            'ROLE_USER'
+        ];
     }
 
     public function setRoles(array $roles):self
@@ -182,7 +184,7 @@ class Collaborateur implements UserInterface,EquatableInterface
       return true;
     }
 
-    public function getProfilePicPath(): string
+    public function getprofile_pic_path(): string
     {
         return $this->profile_pic_path;
     }

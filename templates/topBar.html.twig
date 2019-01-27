@@ -20,14 +20,20 @@
               <li class="col s12 m4 l8">
                 <div class="col s2"></div>
                 <div class="input-field center-align col s6">
-                  <i class="material-icons prefix">account_circle</i>
+                  <i class="material-icons prefix grey-text text-darken-4">search</i>
                   <input id="search" type="text" class="validate">
                   <label for="search">Rechercher un collaborateur</label>
                 </div>
                 <div class="col s2"</div>
               </li>
               <li class="col s12 m4 l2">
-                <a class='dropdown-trigger btn btn-large' href='#' data-target='dropdown1'><b>{{app.user.nom}}</b> {{app.user.prenom}}</a>
+                <a class='dropdown-trigger btn btn-large' href='#' data-target='dropdown1'>
+                  <i class='material-icons left'>
+                    <img src={{app.user.profile_pic_path}} style="width:30px;height:35px;">
+                  </i>
+                  <b>{{app.user.nom}}</b>
+                  {{app.user.prenom}}
+                </a>
               </li>
             </ul>
           </div>

@@ -66,8 +66,7 @@ class Collaborateur implements UserInterface,EquatableInterface
     private $ServiceChef;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Projet",fetch="EAGER")
-     * @ORM\JoinTable(name="projet_collaborateur")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Projet")
      */
     private $projets;
 

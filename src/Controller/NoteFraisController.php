@@ -2,7 +2,6 @@
 namespace App\Controller;
 
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
 use Twig\Environment;
 use App\Entity\NoteDeFrais;
 use App\Entity\TypePaiementEnum;
@@ -10,8 +9,7 @@ use App\Repository\NoteDeFraisRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use App\Entity\LigneDeFrais;
 use App\Entity\LigneDeFraisRepository;
-use App\Entity\Projet;
-use Doctrine\ORM\EntityRepository;
+use Symfony\Component\Routing\Annotation\Route;
 
 class NoteFraisController extends Controller
 {
@@ -32,10 +30,18 @@ class NoteFraisController extends Controller
       $this->repository = $repository;
     }
 
+    /**
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
     public function index(): Response
     {
       $currentMonth = date('n');
       $currentYear = date('Y');
+
+      dump("test");
 
       //recuperation des notes de frais du collaborateur trié par date la plus ancienne
       $mesNotesDeFrais = $this->repository->findByCollaborateurId($this->getUser()->getId());
@@ -84,7 +90,8 @@ class NoteFraisController extends Controller
     }
 
     /**
-     * @Route("/NoteDeFrais", name="touchLigne")
+     * @Route("/NoteDeFrais", name="ajout.ligne")
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function touchLigne() : Response {
       if(!isset($_POST['ligneId'])){ #Nouvelle Ligne

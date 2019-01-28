@@ -108,7 +108,6 @@ class NoteFraisController extends Controller
         $LigneRepository = $this->getDoctrine()->getEntityManager()->getRepository('App\Entity\LigneDeFrais');
 
         $LignedeFraisModifiee = $LigneRepository->findById($_POST['ligneId'])[0];
-        dump($LignedeFraisModifiee);
         $LignedeFraisModifiee->setIntitule($_POST['ligneIntitule']);
         $LignedeFraisModifiee->setMission($_POST['ligneMission']);
         $LignedeFraisModifiee->setMontant(floatval($_POST['ligneMontant']));

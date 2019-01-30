@@ -1,3 +1,50 @@
 {% extends 'topBar.html.twig' %}
+{% block title %}Mes notes de frais{% endblock %}
+{% block body %}
+<div class="row p-2">
+    <div class="card-panel col s8">
+        <h5>Notifications</h5>
+        <div class="divider"></div>
+        <table class="responsive-table">
+            <thead>
+            <tr>
+                <th>Catégorie</th>
+                <th>Detail</th>
+                <th>Date</th>
+            </tr>
+            </thead>
 
-{% block title %}{{app.user.nom}} {{app.user.prenom}}{% endblock %}
+            <tbody>
+            <tr>
+                <td>Alvin</td>
+                <td>Eclair</td>
+                <td>$0.87</td>
+            </tr>
+            <tr>
+                <td>Alan</td>
+                <td>Jellybean</td>
+                <td>$3.76</td>
+            </tr>
+            <tr>
+                <td>Jonathan</td>
+                <td>Lollipop</td>
+                <td>$7.00</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="col s4">
+        <div class="card-panel p-1">
+            <h5>Accès rapide</h5>
+            <div class="divider"></div>
+            6-columns (one-half)
+        </div>
+        <div class="card-panel p-1">
+            <h5>Mes missions</h5>
+            <div class="divider"></div>
+            6-columns (one-half)
+        </div>
+    </div>
+</div>
+
+{% endblock %}

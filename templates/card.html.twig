@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>{% block title %}DefaultNamePage{% endblock %}</title>
+        <link type="text/css" rel="stylesheet" href="materialize/css/materialize.css"  media="screen,projection"/>
+        <link type="text/css" rel="stylesheet" href="css/content.css"/>
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link rel="icon" type="image/png" href="images/logo_sans_texte.png" />
+        {% block stylesheets %}{% endblock %}
+    </head>
+    <body>
+        <nav class="nav-extended navbar-fixed grey lighten-4">
+          <div class="nav-wrapper">
+            <ul class="hide-on-med-and-down row">
+              <li class="col s12 m4 l2">
+                <a href="{{ path('app_homepage') }}" class="brand-logo"><img src="images/logo.png" style="width:110px;height:45px;"></a>
+              </li>
+              <!-- Barre de recherche -->
+              <li class="col s12 m4 l8">
+                <div class="col s2"></div>
+                <div class="input-field center-align col s6">
+                  <i class="material-icons prefix grey-text text-darken-4">search</i>
+                  <input id="search" type="text" class="validate">
+                  <label for="search">Rechercher un collaborateur</label>
+                </div>
+                <div class="col s2"</div>
+              </li>
+              <li class="col s12 m4 l2">
+                <a class='dropdown-trigger btn btn-large grey lighten-3 black-text' href='#' data-target='dropdown1'>
+                  <i class='material-icons left'>
+                    <img src={{app.user.profile_pic_path}} class="circle responsive-img" style="width:35px;height:35px;">
+                  </i>
+                  <b>{{app.user.nom}}</b>
+                  {{app.user.prenom}}
+                </a>
+              </li>
+            </ul>
+          </div>
+          <div class="nav-content">
+            <a class="btn-flat waves-effect waves-light btn-large" href="{{ path('app_noteFrais') }}" name="action">Mes notes de frais
+              <i class="material-icons right">book</i>
+            </a>
+            <a class="btn-flat waves-effect waves-light btn-large"  href="{{ path('app_noteFrais') }}"  name="action">Mes demandes de congés
+              <i class="material-icons right">perm_contact_calendar</i>
+            </a>
+            <button class="btn-flat waves-effect waves-light btn-large" href="{{ path('app_noteFrais') }}"  name="action">Mes demandes d'information
+              <i class="material-icons right">send</i>
+            </button>
+          </div>
+        </nav>
+        <!-- Dropdown Structure -->
+        <ul id='dropdown1' class='dropdown-content'>
+          <li><a href="#!">Edition de profil</a></li>
+          <li><a href="#!">Paramètres</a></li>
+          <li class="divider" tabindex="-1"></li>
+          <li>
+            <a href="/logout">
+              <i class="material-icons prefix grey-text text-darken-4">keyboard_tab</i>
+              Deconnexion
+            </a>
+          </li>
+        </ul>
+        {% block body %}
+
+        {% endblock %}
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script type="text/javascript" src="materialize/js/materialize.min.js"></script>
+        <script src="https://rawgit.com/aurelia-ui-toolkits/aurelia-materialize-bundles/0.20.2/config2.js"></script>
+        <script>
+          System.import('aurelia-bootstrapper');
+        </script>
+        
+        <script>
+          $('.dropdown-trigger').dropdown({
+            coverTrigger: false
+          });
+        </script>
+
+        {% block javascripts %}{% endblock %}
+    </body>
+</html>

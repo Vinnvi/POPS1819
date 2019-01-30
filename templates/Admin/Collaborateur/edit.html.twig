@@ -6,14 +6,7 @@
 {%  block body %}
     <div class="container mt-4">
         <h3>Editer le collaborateur</h3>
-        {{ form_start(form) }}
-            {{ form_row(form.nom) }}
-            {{ form_row(form.prenom) }}
-            {{ form_row(form.username) }}
-            {{ form_row(form.email) }}
-            {{ form_row(form.service, { 'attr': {'class': 'browser-default'} }) }}
-        <button class="btn btn-primary">Editer</button>
-        {{ form_end(form) }}
+        {{  include('admin/collaborateur/_form.html.twig', {form: form, button: 'Editer'}) }}
 
     </div>
 

@@ -5,6 +5,7 @@ namespace App\Form;
 use App\Entity\Collaborateur;
 use App\Entity\Service;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -18,14 +19,19 @@ class CollaborateurType extends AbstractType
             ->add('prenom')
             ->add('username')
             //->add('salt')
-            //->add('roles')
+            ->add('roles', ChoiceType::class,[
+                'choices' =>$this->getChoices(),
+            ])
             //->add('profile_pic_path')
             ->add('email')
             ->add('service', EntityType::class,[
                     'class' => Service::class,
                     'choice_label' => 'nom',
                 ])
-            //->add('ServiceChef')
+            ->add('ServiceChef', EntityType::class,[
+                'class' => Service::class,
+                'choice_label' => 'nom',
+            ])
             //->add('projets')
         ;
     }
@@ -35,6 +41,15 @@ class CollaborateurType extends AbstractType
         $resolver->setDefaults([
             'data_class' => Collaborateur::class,
         ]);
+    }
+
+    private function getChoices(){
+        $choices = Collaborateur::STATUS;
+        $output = [];
+        foreach ($choices as $k => $v){
+            $output[$v] = $k;
+        }
+        return $output;
     }
 
 }

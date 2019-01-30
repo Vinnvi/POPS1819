@@ -76,6 +76,12 @@ class Collaborateur implements UserInterface,EquatableInterface
      */
     private $email;
 
+
+    const STATUS = [
+        0 => 'Collaborateur',
+        1 => 'Chef de projet',
+    ];
+
     public function __construct()
     {
         $this->ServiceChef = new ArrayCollection();
@@ -137,12 +143,10 @@ class Collaborateur implements UserInterface,EquatableInterface
 
     public function getRoles()
     {
-        return [
-            'ROLE_USER'
-        ];
+        $this->roles;
     }
 
-    public function setRoles(array $roles):self
+    public function setRoles(string $roles):self
     {
         $this->roles = $roles;
         return $this;

@@ -1,0 +1,10 @@
+{{ form_start(form) }}
+            {{ form_row(form.nom) }}
+            {{ form_row(form.prenom) }}
+            {{ form_row(form.username) }}
+            {{ form_row(form.email) }}
+            {{ form_row(form.password)}}
+            {{ form_row(form.roles, { 'attr': {'class': 'browser-default'} }) }}
+            {{ form_row(form.service, { 'attr': {'class': 'browser-default'} }) }}
+<button class="btn btn-primary" style="margin-top: 5px">{{ button|default('Enregistrer') }}</button>
+{{ form_end(form) }}

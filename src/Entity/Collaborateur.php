@@ -122,7 +122,7 @@ class Collaborateur implements UserInterface,EquatableInterface
         return $this->password;
     }
 
-    public function setPassword(string $pass): self
+    public function setPassword(string $password): self
     {
         $this->password = $password;
 

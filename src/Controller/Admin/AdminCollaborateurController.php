@@ -56,6 +56,7 @@ class AdminCollaborateurController extends AbstractController
         if($form->isSubmitted() && $form->isValid())
         {
             $this->em->flush();
+            $this->addFlash('success','Collaborateur modifié');
             return $this->redirectToRoute('admin.collaborateur.index');
         }
 
@@ -66,12 +67,18 @@ class AdminCollaborateurController extends AbstractController
     }
 
     /**
-     * @Route("/admin/collaborateur/remove/{id}", name="admin.collaborateur.remove")
+     * @Route("/admin/collaborateur/remove/{id}", name="admin.collaborateur.remove", methods="DELETE")
+     * @param Collaborateur $collaborateur
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function remove(Collaborateur $collaborateur)
+    public function remove(Collaborateur $collaborateur, Request $request)
     {
-        return $this->index();
+        if($this->isCsrfTokenValid('delete' . $collaborateur->getId(), $request->get('_token'))){
+            $this->em->remove($collaborateur);
+            $this->em->flush();
+            $this->addFlash('success','suppression effectuée');
+            return $this->redirectToRoute('admin.collaborateur.index');
+        }
     }
 
     /**
@@ -87,6 +94,7 @@ class AdminCollaborateurController extends AbstractController
         {
             $this->em->persist($collaborateur);
             $this->em->flush();
+            $this->addFlash('success','Collaborateur ajouté');
             return $this->redirectToRoute('admin.collaborateur.index');
         }
 

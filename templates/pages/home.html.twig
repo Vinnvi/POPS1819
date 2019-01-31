@@ -5,9 +5,9 @@
     <div class="card-panel col s8">
         <h5>Notifications</h5>
         <div class="divider"></div>
-        <table class="responsive-table">
+        <table class="responsive-table highlight">
             <thead>
-            <tr>
+            <tr class="black white-text">
                 <th>Catégorie</th>
                 <th>Detail</th>
                 <th>Date</th>
@@ -30,10 +30,17 @@
                 <td>Lollipop</td>
                 <td>$7.00</td>
             </tr>
+            <!--{% for collaborateur in listeCollaborateurs %}
+                <tr>
+                    <td>{{ collaborateur }}</td>
+                    <td>Lollipop</td>
+                    <td>$7.00</td>
+                </tr>
+            {% endfor %}-->
             </tbody>
         </table>
     </div>
-    <div class="col s4">
+    <div class="col s4 h-100">
         <div class="card-panel p-1">
             <h5>Accès rapide</h5>
             <div class="divider"></div>
@@ -47,4 +54,14 @@
     </div>
 </div>
 
+{% endblock %}
+
+{% block researchBar %}
+    <script>
+        $(document).ready(function(){
+            $('input.validate').autocomplete({
+            data: {{ listeCollaborateurs|json_encode|raw }},
+            });
+        });
+    </script>
 {% endblock %}

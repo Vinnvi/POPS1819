@@ -9,7 +9,11 @@
             <div class="alert alert-success">
                 {{ message }}
             </div>
+
         {% endfor %}
+        <script>
+            window.Materialize.toast('I am a toast!', 4000);
+        </script>
         <table class="table table-striped">
             <thead>
             <tr>
@@ -38,4 +42,12 @@
         </div>
     </div>
 
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        function toast(){
+            M.toast({html: 'I am a toast!'})
+        }
+    </script>
 {% endblock %}

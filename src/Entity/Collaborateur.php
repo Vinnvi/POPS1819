@@ -86,6 +86,9 @@ class Collaborateur implements UserInterface,EquatableInterface
     {
         $this->ServiceChef = new ArrayCollection();
         $this->projet = new ArrayCollection();
+
+        $this->setRoles('Collaborateur');
+        $this->setProfilePicPath('');
     }
 
     public function getId(): ?int
@@ -143,7 +146,9 @@ class Collaborateur implements UserInterface,EquatableInterface
 
     public function getRoles()
     {
-        $this->roles;
+        return [
+            'ROLE_USER'
+        ];
     }
 
     public function setRoles(string $roles):self

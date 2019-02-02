@@ -12,6 +12,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 
 class AdminCollaborateurController extends AbstractController
@@ -48,13 +49,20 @@ class AdminCollaborateurController extends AbstractController
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function edit(Collaborateur $collaborateur, Request $request)
+    public function edit(Collaborateur $collaborateur, Request $request, UserPasswordEncoderInterface $passwordEncoder)
     {
         $form = $this->createForm(CollaborateurType::class,$collaborateur);
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid())
         {
+            $collaborateur->setPassword(
+                $passwordEncoder->encodePassword(
+                    $collaborateur,
+                    $form->get('password')->getData()
+                )
+            );
+
             $this->em->flush();
             $this->addFlash('success','Collaborateur modifié');
             return $this->redirectToRoute('admin.collaborateur.index');
@@ -84,7 +92,7 @@ class AdminCollaborateurController extends AbstractController
     /**
      * @Route("/admin/collaborateur/create" , name="admin.collaborateur.new")
      */
-    public function new(Request $request)
+    public function new(Request $request, UserPasswordEncoderInterface $passwordEncoder)
     {
         $collaborateur = new Collaborateur();
         $form = $this->createForm(CollaborateurType::class,$collaborateur);
@@ -92,6 +100,13 @@ class AdminCollaborateurController extends AbstractController
 
         if($form->isSubmitted() && $form->isValid())
         {
+            $collaborateur->setPassword(
+                $passwordEncoder->encodePassword(
+                    $collaborateur,
+                    $form->get('password')->getData()
+                )
+            );
+
             $this->em->persist($collaborateur);
             $this->em->flush();
             $this->addFlash('success','Collaborateur ajouté');

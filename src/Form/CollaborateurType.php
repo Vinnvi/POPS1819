@@ -23,9 +23,9 @@ class CollaborateurType extends AbstractType
                 'required' => true,
                 'always_empty' => false,
             ])
-            ->add('roles', ChoiceType::class,[
-                'choices' =>$this->getChoices(),
-            ])
+            //->add('roles', ChoiceType::class,[
+            //    'choices' =>$this->getChoices(),
+            //])
             //->add('profile_pic_path')
             ->add('email')
             ->add('service', EntityType::class,[

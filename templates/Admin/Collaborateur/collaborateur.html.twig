@@ -3,24 +3,51 @@
 {% block title 'Gestion des collaborateurs' %}
 
 {% block body %}
-    <table class="table table-striped">
-        <thead>
-        <tr>
-            <th>Collaborateur</th>
-            <th>Actions</th>
-        </tr>
-        </thead>
-        <tbody>
-            {% for collaborateur in collaborateurs %}
-                <tr>
-                    <td>{{ collaborateur.username }}</td>
-                    <td>
-                        <a href="{{ path('admin.collaborateur.edit', {id: collaborateur.id}) }}" class="btn btn-secondary">Editer</a>
-                        <a href="{{ path('admin.collaborateur.remove', {id: collaborateur.id}) }}" class="btn red">Supprimer</a>
-                    </td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    <div class="container mt-4">
+        <h3>Gestion des collaborateurs</h3>
+        {% for message in app.flashes('success') %}
+            <div class="alert alert-success">
+                {{ message }}
+            </div>
 
+        {% endfor %}
+        <script>
+            window.Materialize.toast('I am a toast!', 4000);
+        </script>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>Collaborateur</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+                {% for collaborateur in collaborateurs %}
+                    <tr>
+                        <td>{{ collaborateur.username }}</td>
+                        <td>
+                            <a href="{{ path('admin.collaborateur.edit', {id: collaborateur.id}) }}" class="btn btn-secondary">Editer</a>
+                            <form method="post" action="{{ path('admin.collaborateur.remove',{id: collaborateur.id}) }}" style="display: inline-block" onsubmit="return confirm('Confirmer la suppression ?')">
+                                <input type="hidden" name="_method" value="DELETE">
+                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ collaborateur.id) }}">
+                                <button class="btn red">Supprimer</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <div class="text-right">
+            <a href="{{ path('admin.collaborateur.new') }}" class="btn btn-primary">Ajouter un collaborateur</a>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        function toast(){
+            M.toast({html: 'I am a toast!'})
+        }
+    </script>
 {% endblock %}

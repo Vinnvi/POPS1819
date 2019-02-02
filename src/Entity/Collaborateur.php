@@ -76,10 +76,19 @@ class Collaborateur implements UserInterface,EquatableInterface
      */
     private $email;
 
+
+    const STATUS = [
+        0 => 'Collaborateur',
+        1 => 'Chef de projet',
+    ];
+
     public function __construct()
     {
         $this->ServiceChef = new ArrayCollection();
         $this->projet = new ArrayCollection();
+
+        $this->setRoles('Collaborateur');
+        $this->setProfilePicPath('');
     }
 
     public function getId(): ?int
@@ -116,7 +125,7 @@ class Collaborateur implements UserInterface,EquatableInterface
         return $this->password;
     }
 
-    public function setPassword(string $pass): self
+    public function setPassword(string $password): self
     {
         $this->password = $password;
 
@@ -142,7 +151,7 @@ class Collaborateur implements UserInterface,EquatableInterface
         ];
     }
 
-    public function setRoles(array $roles):self
+    public function setRoles(string $roles):self
     {
         $this->roles = $roles;
         return $this;

@@ -1,6 +1,7 @@
 <?php
 namespace App\Controller;
 
+use App\Form\LigneDeFraisFormType;
 use Symfony\Component\HttpFoundation\Response;
 use Twig\Environment;
 use App\Entity\NoteDeFrais;
@@ -9,6 +10,7 @@ use App\Repository\NoteDeFraisRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use App\Entity\LigneDeFrais;
 use App\Entity\LigneDeFraisRepository;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 class NoteFraisController extends Controller
@@ -36,7 +38,7 @@ class NoteFraisController extends Controller
      * @throws \Twig_Error_Syntax
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function index(): Response
+    public function index(Request $request): Response
     {
       $currentMonth = date('n');
       $currentYear = date('Y');
@@ -82,51 +84,27 @@ class NoteFraisController extends Controller
 
 
 
+      //Partie form
+        $maLigneDeFrais = new LigneDeFrais();
+        $form = $this->createForm(LigneDeFraisFormType::class,$maLigneDeFrais);
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid())
+        {
+
+            $this->em->persist($maLigneDeFrais);
+            $this->em->flush();
+            $this->addFlash('success','Ligne de frais ajoutée');
+            return $this->redirectToRoute('app_noteFrais');
+        }
+
+
       return new Response($this->twig->render('pages/noteFrais.html.twig',
         ['noteDeFrais' => $mesNotesDeFrais,
          'lignesDeFrais' => $lignesDeFrais,
          'typesPaiements' => $typesPaiements,
-         'projectsAvailables' => $projectsAvailables]));
-    }
-
-    /**
-     * @Route("/NoteDeFrais", name="ajout.ligne")
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
-    public function touchLigne() : Response {
-      if(!isset($_POST['ligneId'])){ #Nouvelle Ligne
-        //prepare repository for sql requests
-        $projetRepository = $this->getDoctrine()->getEntityManager()->getRepository('App\Entity\Projet');
-        $noteRepository = $this->getDoctrine()->getEntityManager()->getRepository('App\Entity\NoteDeFrais');
-
-        //create new tuple and complete it
-        $ligneDeFrais = new LigneDeFrais();
-        $ligneDeFrais->setIntitule($_POST['typePaiement']);
-        $ligneDeFrais->setMission($_POST['mission']);
-        $ligneDeFrais->setMontant(floatval($_POST['montant']));
-        $ligneDeFrais->setProjet( $projetRepository->findById($_POST['projet'])[0]);
-        $ligneDeFrais->setNote($noteRepository->findByMonthAndYear($_POST['moisNote'],$_POST['anneeNote'])[0]);
-
-        $this->getDoctrine()->getEntityManager()->persist($ligneDeFrais);
-        $this->getDoctrine()->getEntityManager()->flush();
-      }
-      else{ #Modif ligne
-        $projetRepository = $this->getDoctrine()->getEntityManager()->getRepository('App\Entity\Projet');
-        $LigneRepository = $this->getDoctrine()->getEntityManager()->getRepository('App\Entity\LigneDeFrais');
-
-        $LignedeFraisModifiee = $LigneRepository->findById($_POST['ligneId'])[0];
-        $LignedeFraisModifiee->setIntitule($_POST['ligneIntitule']);
-        $LignedeFraisModifiee->setMission($_POST['ligneMission']);
-        $LignedeFraisModifiee->setMontant(floatval($_POST['ligneMontant']));
-        $LignedeFraisModifiee->setProjet( $projetRepository->findById($_POST['projet'])[0]);
-        $this->getDoctrine()->getEntityManager()->persist($LignedeFraisModifiee);
-        $this->getDoctrine()->getEntityManager()->flush();
-
-        return $this->redirectToRoute('app_noteFrais');
-      }
-
-
-      return $this->redirectToRoute('app_noteFrais');
-
+         'projectsAvailables' => $projectsAvailables,
+         'ligneDeFrais' => $maLigneDeFrais,
+         'form' => $form->createView()]));
     }
 }

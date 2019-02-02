@@ -28,127 +28,15 @@
   <!-- modal to add new lignesDeFrais -->
   <!-- Modal Structure -->
   <div id="ajoutLigneFraisModal" class="modal myModal ">
-    <form method="post" action="{{ path('ajout.ligne') }}">
-      <div class="modal-content" id="modal-content">
-        <h5>Ajout d'une ligne de frais</h5>
-        <div id="container">
-          <div class="section">
-            <div class="input-field">
-              <select name="typePaiement" id="typePaiement">
-                {% for type in typesPaiements %}
-                  <option value="{{type}}">{{type}}</option>
-                {% endfor %}
-              </select>
-            </div>
-          </div>
-
-          <div class="section">
-            <input type="text" class="datepicker" placeholder="date">
-          </div>
-
-          <div class="section">
-            <div class="input-field">
-              <input placeholder="montant" id="montant" name="montant" type="integer" class="validate">
-            </div>
-          </div>
-
-          <div class="section">
-            <div class="file-field input-field">
-              <div class="btn">
-                <span>Justificatif</span>
-                <input type="file">
-              </div>
-              <div class="file-path-wrapper">
-                <input class="file-path validate" type="text">
-              </div>
-            </div>
-          </div>
-
-          <div class ="section">
-            <div class="input-field">
-              <input name="mission" id="mission" type="text" class="validate">
-                <label for="mission">Mission</label>
-            </div>
-            <div class="input-field">
-              <select name="projet" id="projet">
-                {% for project in projectsAvailables %}
-                  <option value="{{project[0].id}}">{{project[0].nom}}</option>
-                {% endfor %}
-              </select>
-              <input type="hidden" name="moisNote" id="moisNote" value=""/>
-              <input type="hidden" name="anneeNote" id="anneeNote" value=""/>
-            </div>
-          </div>
-        </div>
+      <h4>Ajout d'une ligne de frais</h4>
+      <div class="container mt-4">
+          {{ form_start(form) }}
+          {{ form_row(form.intitule) }}
+          {{ form_row(form.mission) }}
+          {{ form_row(form.montant) }}
+          {{ form_end(form) }}
       </div>
-      <div class="modal-footer">
-        <a href="#!" class="modal-close waves-effect waves-green btn-flat"><i class="material-icons left">clear</i>Annuler</a>
-        <button type="submit" class="btn btn-primary">Enregistrer<i class="material-icons right">check</i></button>
-      </div>
-    </form>
   </div>
-
-  <!-- modal to modify lignesDeFrais -->
-  <div id="modificationLigneFraisModal" class="modal myModal ">
-    <form method="post" action="{{ path('ajout.ligne') }}">
-      <div class="modal-content" id="modal-content">
-        <h5>Modification d'une ligne de frais</h5>
-        <div id="container">
-          <div class="section">
-            <div class="input-field">
-              <select name="ligneIntitule" id="ligneIntitule">
-                {% for type in typesPaiements %}
-                    <option value="{{type}}">{{type}}</option>
-                {% endfor %}
-              </select>
-            </div>
-          </div>
-
-          <div class="section">
-            <input type="text" class="datepicker" id="ligneDate" name="ligneDate" placeholder="date">
-          </div>
-
-          <div class="section">
-            <div class="input-field">
-              <input placeholder="montant" id="ligneMontant" name="ligneMontant" type="integer" class="validate">
-            </div>
-          </div>
-
-          <div class="section">
-            <div class="file-field input-field">
-              <div class="btn">
-                <span>Justificatif</span>
-                <input type="file">
-              </div>
-              <div class="file-path-wrapper">
-                <input class="file-path validate" type="text">
-              </div>
-            </div>
-          </div>
-
-          <div class="section">
-            <div class="input-field">
-              <input id="ligneMission" name="ligneMission" type="text" class="validate">
-            </div>
-            <div class="input-field">
-              <select name="projet" id="projet">
-                {% for project in projectsAvailables %}
-                  <option value="{{project[0].id}}">{{project[0].nom}}</option>
-                {% endfor %}
-              </select>
-              <input type="hidden" name="ligneId" id="ligneId" value=""/>
-              <input type="hidden" name="anneeNote" id="anneeNote" value=""/>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <a href="#!" class="modal-close waves-effect waves-green btn-flat"><i class="material-icons left">clear</i>Annuler</a>
-        <button type="submit" class="btn btn-primary">Enregistrer<i class="material-icons right">check</i></button>
-      </div>
-    </form>
-  </div>
-
 
 {% endblock %}
 

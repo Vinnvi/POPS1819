@@ -7,13 +7,14 @@ use Twig\Environment;
 use App\Entity\NoteDeFrais;
 use App\Entity\TypePaiementEnum;
 use App\Repository\NoteDeFraisRepository;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Doctrine\Common\Persistence\ObjectManager;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use App\Entity\LigneDeFrais;
 use App\Entity\LigneDeFraisRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
-class NoteFraisController extends Controller
+class NoteFraisController extends AbstractController
 {
     /**
     * @var Environment
@@ -25,14 +26,21 @@ class NoteFraisController extends Controller
      */
     private $repository;
 
+    /**
+     * @var ObjectManager
+     */
+    private $em;
 
-    public function __construct(Environment $twig,NoteDeFraisRepository $repository)
+
+    public function __construct(Environment $twig,NoteDeFraisRepository $repository,ObjectManager $em)
     {
       $this->twig = $twig;
       $this->repository = $repository;
+      $this->em = $em;
     }
 
     /**
+     * @Route("/mesNotesDeFrais", name="index")
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
@@ -91,6 +99,11 @@ class NoteFraisController extends Controller
 
         if($form->isSubmitted() && $form->isValid())
         {
+            //Put noteDeFrais
+            $noteRepository = $this->getDoctrine()->getEntityManager()->getRepository('App\Entity\NoteDeFrais');
+            dump($request->get('moisNote'));
+            dump($request->get('anneeNote'));
+            $maLigneDeFrais->setNote($noteRepository->findByMonthAndYear($request->get('moisNote'),$request->get('anneeNote'),$this->getUser()->getId())[0]);
 
             $this->em->persist($maLigneDeFrais);
             $this->em->flush();
@@ -101,7 +114,7 @@ class NoteFraisController extends Controller
 
       return new Response($this->twig->render('pages/noteFrais.html.twig',
         ['noteDeFrais' => $mesNotesDeFrais,
-         'lignesDeFrais' => $lignesDeFrais,
+         'mesLignesDeFrais' => $lignesDeFrais,
          'typesPaiements' => $typesPaiements,
          'projectsAvailables' => $projectsAvailables,
          'ligneDeFrais' => $maLigneDeFrais,

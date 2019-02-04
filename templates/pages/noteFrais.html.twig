@@ -9,8 +9,7 @@
           <ul class="collapsible">
             <a class="waves-effect waves-light modalAjout btn modal-trigger" data-id="{{noteDeFrais[i].mois}}/{{noteDeFrais[i].annee}}"  href="#ajoutLigneFraisModal">Ajouter une ligne de frais <i class="material-icons right">add</i></a>
             <div class="right" style="padding-right: 10px;padding-top:5px" > Demandes d'avance</div>
-            <form action="#"> <!-- formulaire pour les demandes d'avance -->
-            {% for ligne in lignesDeFrais[i] %}
+            {% for ligne in mesLignesDeFrais[i] %}
                 <li>
                   <div style="display:block" class="collapsible-header"> {{ligne.intitule}} <div class="secondary-content"> <input mdx-no-collapse class="no-collapse" type="checkbox" /><span></span> </div> </div>
                   <div class="collapsible-body">
@@ -27,13 +26,20 @@
 
   <!-- modal to add new lignesDeFrais -->
   <!-- Modal Structure -->
-  <div id="ajoutLigneFraisModal" class="modal myModal ">
+  <div id="ajoutLigneFraisModal" class="modal myModal">
       <h4>Ajout d'une ligne de frais</h4>
       <div class="container mt-4">
           {{ form_start(form) }}
-          {{ form_row(form.intitule) }}
-          {{ form_row(form.mission) }}
-          {{ form_row(form.montant) }}
+              {{ form_row(form.intitule) }}
+              {{ form_row(form.mission) }}
+              {{ form_row(form.montant) }}
+              {{ form_row(form.date, { 'attr': {'class': 'browser-default'} }) }}
+              {{ form_row(form.Projet) }}
+              <input type="hidden" name="moisNote" id="moisNote">
+              <input type="hidden" name="anneeNote" id="anneeNote">
+              <div style="  text-align: right">
+                  <button class="btn btn-primary" style="margin-top: 5px">Enregistrer</button>
+              </div>
           {{ form_end(form) }}
       </div>
   </div>
@@ -52,7 +58,6 @@
     $(document).ready(function(){
       $('.modal').modal();
     });
-
   </script>
 
   <script>
@@ -60,20 +65,6 @@
     $('.datepicker').datepicker({
       autoClose: true,
       format: 'yyyy-mm-dd',
-      i18n: {months : [
-                        'Janvier',
-                        'Fevrier',
-                        'Mars',
-                        'Avril',
-                        'Mai',
-                        'Juin',
-                        'Juillet',
-                        'Aout',
-                        'Septembre',
-                        'Octobre',
-                        'Novembre',
-                        'Decembre'
-                      ]}
     });
   });
 
@@ -84,33 +75,14 @@
       $('select').formSelect();
     });
   </script>
-
-  <script>
-    $(document).on("click", ".modalAjout", function () {
-      var date = $(this).data('id').split('/');
-      $(".modal-content #moisNote").val( date[0] );
-      $(".modal-content #anneeNote").val( date[1] );
-       // As pointed out in comments,
-       // it is superfluous to have to manually call the modal.
-      });
-  </script>
-
-  <script>
-    $(document).on("click", ".modalModification", function () {
-      var data = $(this).data('id').split('/');
-      $(".modal-content #ligneId").val( data[0] );
-      $(".modal-content #ligneMontant").val( data[1] );
-      $(".modal-content #ligneIntitule").val( data[2] );
-      $(".modal-content #ligneMission").val( data[3] );
-      $(".modal-content #ligneDate").val( data[4] );
-
-      //set selected (STILL NOT COMPLETELY WORKING YET)
-      document.getElementById('ligneIntitule').value=data[2];
+    <script>
+        $(document).on("click", ".modalAjout", function () {
+            var date = $(this).data('id').split('/');
+            document.getElementById('moisNote').value = date[0];
+            document.getElementById('anneeNote').value = date[1];
+        });
+    </script>
 
 
-       // As pointed out in comments,
-       // it is superfluous to have to manually call the modal.
-      });
-  </script>
 
 {% endblock %}

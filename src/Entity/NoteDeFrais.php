@@ -42,6 +42,16 @@ class NoteDeFrais
      */
     private $collabo;
 
+    public function __construct($mois, $annee, $collabo)
+    {
+        $this->setMontant(0);
+        $this->setStatut("En cours");
+        $this->setMois($mois);
+        $this->setAnnee($annee);
+        $this->setCollabo($collabo);
+
+    }
+
     public function getId(): ?int
     {
         return $this->id;

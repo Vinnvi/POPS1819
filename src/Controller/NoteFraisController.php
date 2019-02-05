@@ -51,28 +51,27 @@ class NoteFraisController extends AbstractController
       $currentMonth = date('n');
       $currentYear = date('Y');
 
-      dump("test");
-
       //recuperation des notes de frais du collaborateur trié par date la plus ancienne
       $mesNotesDeFrais = $this->repository->findByCollaborateurId($this->getUser()->getId());
+
+
       
       //On vérifie que c'est bien les deux dernières
-      if($mesNotesDeFrais[0]->getMois() != $currentMonth){
+      if($mesNotesDeFrais == null or $mesNotesDeFrais[0]->getMois() != $currentMonth){
         //on crée une nouvelle note de frais sinon
-        $noteDeFrais = new NoteDeFrais();
-        $noteDeFrais->setMois($currentMonth);
-        $noteDeFrais->setAnnee($currentYear);
-        $noteDeFrais->setMontant(0);
-        $noteDeFrais->setStatut("En cours");
-        $noteDeFrais->setCollabo($this->getUser());
+        $noteDeFrais = new NoteDeFrais($currentMonth,$currentYear,$this->getUser());
 
         //on la sauvegarde
         $this->getDoctrine()->getEntityManager()->persist($noteDeFrais);
         $this->getDoctrine()->getEntityManager()->flush();
 
         //on remplace la plus ancienne
-        $mesNotesDeFrais[0] = $mesNotesDeFrais[1];
-        $mesNotesDeFrais[1] = $noteDeFrais;
+        if(count($mesNotesDeFrais) > 1){
+          $temp = $mesNotesDeFrais[0];
+          $mesNotesDeFrais[0] = $mesNotesDeFrais[1];
+          $mesNotesDeFrais[1] = $temp;
+        }
+
       }
 
       //Recuperation des lignes de frais en fonction des notes
@@ -89,7 +88,6 @@ class NoteFraisController extends AbstractController
 
       //Recuperation des categories de paiements
       $typesPaiements = TypePaiementEnum::getAvailableTypes();
-
 
 
       //Partie form

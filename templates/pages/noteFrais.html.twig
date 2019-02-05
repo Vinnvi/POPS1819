@@ -2,12 +2,13 @@
 {% block title %}Mes notes de frais{% endblock %}
 {% block body %}
   <ul class="collapsible">
-    {% for i in 0..1|reverse %}
+    {% set i = 0 %}
+    {% for note in noteDeFrais%}
       <li>
-        <div class="collapsible-header blue lighten-2">Note de Frais de {{noteDeFrais[i].mois}} / {{noteDeFrais[i].annee}} <i class="large material-icons">expand_more</i> Statut de la note de frais : {{noteDeFrais[i].statut}} </div>
+        <div class="collapsible-header blue lighten-2">Note de Frais de {{note.mois}} / {{note.annee}} <i class="large material-icons">expand_more</i> Statut de la note de frais : {{noteDeFrais[i].statut}} </div>
         <div class="collapsible-body">
           <ul class="collapsible">
-            <a class="waves-effect waves-light modalAjout btn modal-trigger" data-id="{{noteDeFrais[i].mois}}/{{noteDeFrais[i].annee}}"  href="#ajoutLigneFraisModal">Ajouter une ligne de frais <i class="material-icons right">add</i></a>
+            <a class="waves-effect waves-light modalAjout btn modal-trigger" data-id="{{note.mois}}/{{note.annee}}"  href="#ajoutLigneFraisModal">Ajouter une ligne de frais <i class="material-icons right">add</i></a>
             <div class="right" style="padding-right: 10px;padding-top:5px" > Demandes d'avance</div>
             {% for ligne in mesLignesDeFrais[i] %}
                 <li>
@@ -21,6 +22,7 @@
           </ul>
         </div>
       </li>
+    {% set i = 1 %}
     {% endfor %}
   </ul>
 

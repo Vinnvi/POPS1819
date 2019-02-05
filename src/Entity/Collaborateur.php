@@ -203,6 +203,10 @@ class Collaborateur implements UserInterface,EquatableInterface
 
     public function getBackground_pic_path(): string
     {
+        if($this->background_pic_path === NULL)
+        {
+          return "images/backgroundProfil.png";
+        }
         return $this->background_pic_path;
     }
 

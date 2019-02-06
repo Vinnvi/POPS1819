@@ -5,7 +5,7 @@
     <div class="card-panel col s8">
         <h5>Notifications</h5>
         <div class="divider"></div>
-        <table class="responsive-table highlight">
+        <table class="responsive-table">
             <thead>
             <tr class="black white-text">
                 <th>Catégorie</th>
@@ -15,41 +15,55 @@
             </thead>
 
             <tbody>
-            <tr>
-                <td>Alvin</td>
-                <td>Eclair</td>
-                <td>$0.87</td>
-            </tr>
-            <tr>
-                <td>Alan</td>
-                <td>Jellybean</td>
-                <td>$3.76</td>
-            </tr>
-            <tr>
-                <td>Jonathan</td>
-                <td>Lollipop</td>
-                <td>$7.00</td>
-            </tr>
-            <!--{% for collaborateur in listeCollaborateurs %}
-                <tr>
-                    <td>{{ collaborateur }}</td>
-                    <td>Lollipop</td>
-                    <td>$7.00</td>
+            {% for notification in notifications %}
+                <tr class="
+                    {% if notification.getStatut() == "OK" %}
+                        green lighten-4
+                    {% elseif notification.getStatut() == "ACTION_NECESSAIRE" %}
+                        red lighten-4
+                    {% endif %}
+                ">
+                    <td>{{ notification.getCategorie() }}</td>
+                    <td>{{ notification.getDescription() }}</td>
+                    {% if notification.getDate()|date('d') == currentDate[0] and notification.getDate()|date('m') == currentDate[1] and notification.getDate()|date('Y') == currentDate[2] %}
+                        <td>{{ notification.getDate()|date('H:i') }}</td>
+                    {% else %}
+                        <td>{{ notification.getDate()|date('d/m/Y') }}</td>
+                    {% endif %}
                 </tr>
-            {% endfor %}-->
+            {% endfor %}
             </tbody>
         </table>
     </div>
     <div class="col s4 h-100">
         <div class="card-panel p-1">
+            
             <h5>Accès rapide</h5>
             <div class="divider"></div>
-            6-columns (one-half)
+            {% for note in notes_de_frais %}
+                <a href="{{path('app_noteFrais')}}">
+                    <div class="card grey darken-1">
+                        <div class="card-content white-text">
+                        <span class="card-title">Note de frais du {% if note.getMois() < 10 %}0{% endif %}{{ note.getMois() }}/{{ note.getAnnee() }}</span>
+                        <i>{{ note.getStatut() }}</i>
+                        </div>
+                    </div>
+                </a>
+            {% endfor %}
+            <a class="waves-effect waves-light btn">Faire une demande de congés</a>
         </div>
         <div class="card-panel p-1">
             <h5>Mes missions</h5>
             <div class="divider"></div>
-            6-columns (one-half)
+            {% for mission in missions %}
+                <div class="card grey darken-1">
+                    <div class="card-content white-text">
+                    <span class="card-title">{{ mission.getNom() }}</span>
+                    <i>{{ mission.getDateDebut()|date('d/m/Y') }} - {{ mission.getDateFin()|date('d/m/Y') }}</i>
+                    </div>
+                </div>
+            {% endfor %}
+            <a class="waves-effect waves-light btn">Accèder à toutes mes missions</a>
         </div>
     </div>
 </div>
@@ -65,3 +79,4 @@
         });
     </script>
 {% endblock %}
+

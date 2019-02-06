@@ -3,10 +3,10 @@
     <head>
         <meta charset="UTF-8">
         <title>{% block title %}DefaultNamePage{% endblock %}</title>
-        <link type="text/css" rel="stylesheet" href="/materialize/css/materialize.css"  media="screen,projection"/>
-        <link type="text/css" rel="stylesheet" href="/css/content.css"/>
+        <link type="text/css" rel="stylesheet" href="materialize/css/materialize.css"  media="screen,projection"/>
+        <link type="text/css" rel="stylesheet" href="css/content.css"/>
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-        <link rel="icon" type="image/png" href="/images/logo_sans_texte.png" />
+        <link rel="icon" type="image/png" href="images/logo_sans_texte.png" />
         {% block stylesheets %}{% endblock %}
     </head>
     <body>
@@ -14,7 +14,7 @@
           <div class="nav-wrapper">
             <ul class="hide-on-med-and-down row">
               <li class="col s12 m4 l2">
-                <a href="{{ path('app_homepage') }}" class="brand-logo"><img src="/images/logo.png" style="width:110px;height:45px;"></a>
+                <a href="{{ path('app_homepage') }}" class="brand-logo"><img src="images/logo.png" style="width:110px;height:45px;"></a>
               </li>
               <!-- Barre de recherche -->
               <li class="col s12 m4 l8">
@@ -24,13 +24,12 @@
                   <input id="search" type="text" class="validate">
                   <label for="search">Rechercher un collaborateur</label>
                 </div>
-                <div class="col s2"></div>
+                <div class="col s2"</div>
               </li>
-                
               <li class="col s12 m4 l2">
                 <a class='dropdown-trigger btn btn-large grey lighten-3 black-text' href='#' data-target='dropdown1'>
                   <i class='material-icons left'>
-                    <img src={{app.user.profile_pic_path}} class="circle responsive-img" style="width:35px;height:35px;"/>
+                    <img src={{app.user.profile_pic_path}} class="circle responsive-img" style="width:35px;height:35px;">
                   </i>
                   <b>{{app.user.nom}}</b>
                   {{app.user.prenom}}
@@ -66,23 +65,19 @@
 
         {% endblock %}
 
-        {% block javascripts %}
-          <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-          <script type="text/javascript" src="materialize/js/materialize.min.js"></script>
-          <script src="https://rawgit.com/aurelia-ui-toolkits/aurelia-materialize-bundles/0.20.2/config2.js"></script>
-          <script>
-            System.import('aurelia-bootstrapper');
-          </script>
-          
-          <script>
-            $('.dropdown-trigger').dropdown({
-              coverTrigger: false
-            });
-          </script>
-        {% endblock %}
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script type="text/javascript" src="materialize/js/materialize.min.js"></script>
+        <script src="https://rawgit.com/aurelia-ui-toolkits/aurelia-materialize-bundles/0.20.2/config2.js"></script>
+        <script>
+          System.import('aurelia-bootstrapper');
+        </script>
+        
+        <script>
+          $('.dropdown-trigger').dropdown({
+            coverTrigger: false
+          });
+        </script>
 
-
-        {% block researchBar %}
-        {% endblock %}
+        {% block javascripts %}{% endblock %}
     </body>
 </html>

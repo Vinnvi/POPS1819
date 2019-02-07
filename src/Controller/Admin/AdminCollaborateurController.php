@@ -91,6 +91,7 @@ class AdminCollaborateurController extends AbstractController
 
     /**
      * @Route("/admin/collaborateur/create" , name="admin.collaborateur.new")
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function new(Request $request, UserPasswordEncoderInterface $passwordEncoder)
     {

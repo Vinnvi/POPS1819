@@ -36,13 +36,15 @@ class NoteDeFraisRepository extends ServiceEntityRepository
         ;
     }
 
-    public function findByMonthAndYear($month,$year)
+    public function findByMonthAndYear($month,$year,$collaboId)
     {
         return $this->createQueryBuilder('n')
             ->andWhere('n.mois = :val')
             ->andWhere('n.annee = :val2')
+            ->andWhere('n.collabo = :val3')
             ->setParameter('val', $month)
             ->setParameter('val2', $year)
+            ->setParameter('val3', $collaboId)
             ->orderBy('n.mois,n.annee', 'ASC')
             ->setMaxResults(1)
             ->getQuery()

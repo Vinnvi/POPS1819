@@ -82,13 +82,18 @@ class Collaborateur implements UserInterface,EquatableInterface
         1 => 'Chef de projet',
     ];
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Notification", mappedBy="collaborateur")
+     */
+    private $notifications;
+
     public function __construct()
     {
         $this->ServiceChef = new ArrayCollection();
         $this->projet = new ArrayCollection();
-
         $this->setRoles('Collaborateur');
         $this->setProfilePicPath('');
+        $this->notifications = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -259,6 +264,37 @@ class Collaborateur implements UserInterface,EquatableInterface
     public function setEmail(string $email): self
     {
         $this->email = $email;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Notification[]
+     */
+    public function getNotifications(): Collection
+    {
+        return $this->notifications;
+    }
+
+    public function addNotification(Notification $notification): self
+    {
+        if (!$this->notifications->contains($notification)) {
+            $this->notifications[] = $notification;
+            $notification->setCollaborateur($this);
+        }
+
+        return $this;
+    }
+
+    public function removeNotification(Notification $notification): self
+    {
+        if ($this->notifications->contains($notification)) {
+            $this->notifications->removeElement($notification);
+            // set the owning side to null (unless already changed)
+            if ($notification->getCollaborateur() === $this) {
+                $notification->setCollaborateur(null);
+            }
+        }
 
         return $this;
     }

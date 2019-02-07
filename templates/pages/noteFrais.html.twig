@@ -43,7 +43,7 @@
                   <div id="container">
                       <div class="section">
                           <div class="input-field">
-                              <select name="ligneIntitul" id="ligneIntitul">
+                              <select name="ligneIntitule" id="ligneIntitule">
                                   {% for type in typesPaiements %}
                                       <option value="{{type}}">{{type}}</option>
                                   {% endfor %}
@@ -156,7 +156,7 @@
             var data = $(this).data('id').split('/');
             $(".modal-content #ligneId").val( data[0] );
             $(".modal-content #ligneMontant").val( data[1] );
-            $(".modal-content #ligneIntitul").val( data[2] );
+            //$(".modal-content #ligneIntitule").val( data[2] );
             $(".modal-content #ligneMission").val( data[3] );
             $(".modal-content #ligneDate").val( data[4] );
         });

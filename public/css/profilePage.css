@@ -8,6 +8,17 @@ body {
   margin-left: 3%;
 }
 
+#bigTitle{
+  color: #004d99;
+  font-weight: 700;
+  font-size: 40px;
+}
+
+#normalTitle{
+  font-weight: 400;
+  font-size: 30px;
+}
+
 #debutProfil{
   width : 100%;
 }

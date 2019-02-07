@@ -62,32 +62,34 @@
             <div id="panel-profil" class="col s6 offset-s3 m6 offset-m3 push-s3">
               <div id = "infosUser" class="center-align card-panel">
                 <div id ="debutProfil" class="row">
-                  <h4 class="header">Vos Informations</h4>
+                  <h4 id="bigTitle" class="header">Vos Informations</h4>
                 </div>
-                <form class="login-form" method="post" action="{{ path('login') }}">
-                  <div class="row">
-                    <h5 id="subtitle" align="left">Personnaliser votre profil</h5>
-                    <form action="#">
-                      <div id="fileField" class="file-field input-field">
-                        <div class="btn">
-                          <span>File</span>
-                          <input type="file">
-                        </div>
-                        <div class="file-path-wrapper">
-                          <input class="file-path validate" type="text" placeholder="Photo de profil">
-                        </div>
+                <div class="row">
+                  <h5 id="normalTitle" align="left">Personnaliser votre profil</h5>
+                  <form method="post" action="{{path('login')}}" enctype="multipart/form-data">
+                    <div id="fileField" class="file-field input-field">
+                      <div class="btn">
+                        <span>File</span>
+                        <input type="file" name="profilePicToUpload">
                       </div>
-                      <div id="fileField" class="file-field input-field">
-                        <div class="btn">
-                          <span>File</span>
-                          <input type="file">
-                        </div>
-                        <div class="file-path-wrapper">
-                          <input class="file-path validate" type="text" placeholder="Fond d'écran de profil">
-                        </div>
+                      <div class="file-path-wrapper">
+                        <input class="file-path validate" type="text" placeholder="Photo de profil">
                       </div>
-                    </form>
-                    <h5 id="subtitle" align="left">Modifier vos informations</h5>
+                    </div>
+                  </form>
+                  <form method="post" action="{{path('login')}}" enctype="multipart/form-data">
+                    <div id="fileField" class="file-field input-field">
+                      <div class="btn">
+                        <span>File</span>
+                        <input type="file">
+                      </div>
+                      <div class="file-path-wrapper">
+                        <input class="file-path validate" type="text" placeholder="Fond d'écran de profil">
+                      </div>
+                    </div>
+                  </form>
+                    <form class="login-form" method="post" action="{{ path('login') }}">
+                    <h5 id="normalTitle" align="left">Modifier vos informations</h5>
                     <div class="row">
                       <div class="input-field col s8">
                         <i class="material-icons prefix">account_circle</i>

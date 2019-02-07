@@ -1,10 +1,16 @@
 {% extends 'topBar.html.twig' %}
 {% block title %}Mes notes de frais{% endblock %}
 {% block body %}
+<div class="container mt-10">
   <ul class="collapsible">
     {% set i = 0 %}
+      {% set test = "Hello world" %}
     {% for note in noteDeFrais%}
-      <li>
+      {% if(i == 0) %}
+      <li class="active">
+      {% else %}
+          <li>
+      {% endif %}
         <div class="collapsible-header blue lighten-2">Note de Frais de {{note.mois}} / {{note.annee}} <i class="large material-icons">expand_more</i> Statut de la note de frais : {{noteDeFrais[i].statut}} </div>
         <div class="collapsible-body">
           <ul class="collapsible">
@@ -25,26 +31,87 @@
     {% set i = 1 %}
     {% endfor %}
   </ul>
+</div>
 
   <!-- modal to add new lignesDeFrais -->
   <!-- Modal Structure -->
-  <div id="ajoutLigneFraisModal" class="modal myModal">
-      <h4>Ajout d'une ligne de frais</h4>
+  <div id="modificationLigneFraisModal" class="modal myModal">
       <div class="container mt-4">
-          {{ form_start(form) }}
-              {{ form_row(form.intitule) }}
-              {{ form_row(form.mission) }}
-              {{ form_row(form.montant) }}
-              {{ form_row(form.date, { 'attr': {'class': 'browser-default'} }) }}
-              {{ form_row(form.Projet) }}
-              <input type="hidden" name="moisNote" id="moisNote">
-              <input type="hidden" name="anneeNote" id="anneeNote">
-              <div style="  text-align: right">
-                  <button class="btn btn-primary" style="margin-top: 5px">Enregistrer</button>
+          <form method="post" action="{{ path('modif.ligne') }}">
+              <div class="modal-content" id="modal-content">
+                  <h5>Modification d'une ligne de frais</h5>
+                  <div id="container">
+                      <div class="section">
+                          <div class="input-field">
+                              <select name="ligneIntitul" id="ligneIntitul">
+                                  {% for type in typesPaiements %}
+                                      <option value="{{type}}">{{type}}</option>
+                                  {% endfor %}
+                              </select>
+                          </div>
+                      </div>
+                      <div class="section">
+                          <input type="text" class="datepicker" id="ligneDate" name="ligneDate">
+                      </div>
+
+                      <div class="section">
+                          <div class="input-field">
+                              <input placeholder="montant" id="ligneMontant" name="ligneMontant" type="integer" class="validate">
+                          </div>
+                      </div>
+
+                      <div class="section">
+                          <div class="file-field input-field">
+                              <div class="btn">
+                                  <span>Justificatif</span>
+                                  <input type="file">
+                              </div>
+                              <div class="file-path-wrapper">
+                                  <input class="file-path validate" type="text">
+                              </div>
+                          </div>
+                      </div>
+
+                      <div class="section">
+                          <div class="input-field">
+                              <input id="ligneMission" name="ligneMission" type="text" class="validate">
+                          </div>
+                          <div class="input-field">
+                              <select name="projet" id="projet">
+                                  {% for project in projectsAvailables %}
+                                      <option value="{{project[0].id}}">{{project[0].nom}}</option>
+                                  {% endfor %}
+                              </select>
+                              <input type="hidden" name="ligneId" id="ligneId" value=""/>
+                          </div>
+                      </div>
+                  </div>
               </div>
-          {{ form_end(form) }}
+              <div class="modal-footer">
+                  <a href="#!" class="modal-close waves-effect waves-green btn-flat"><i class="material-icons left">clear</i>Annuler</a>
+                  <button type="submit" class="btn btn-primary">Enregistrer<i class="material-icons right">check</i></button>
+              </div>
+          </form>
       </div>
   </div>
+
+    <div id="ajoutLigneFraisModal" class="modal myModal">
+        <h4>Ajout d'une ligne de frais</h4>
+        <div class="container mt-4">
+            {{ form_start(form) }}
+            {{ form_row(form.intitule) }}
+            {{ form_row(form.mission) }}
+            {{ form_row(form.montant) }}
+            {{ form_row(form.date, { 'attr': {'class': 'browser-default'} }) }}
+            {{ form_row(form.Projet) }}
+            <input type="hidden" name="moisNote" id="moisNote">
+            <input type="hidden" name="anneeNote" id="anneeNote">
+            <div style="  text-align: right">
+                <button class="btn btn-primary" style="margin-top: 5px">Enregistrer</button>
+            </div>
+            {{ form_end(form) }}
+        </div>
+    </div>
 
 {% endblock %}
 
@@ -84,7 +151,14 @@
             document.getElementById('anneeNote').value = date[1];
         });
     </script>
-
-
-
+    <script>
+        $(document).on("click", ".modalModification", function () {
+            var data = $(this).data('id').split('/');
+            $(".modal-content #ligneId").val( data[0] );
+            $(".modal-content #ligneMontant").val( data[1] );
+            $(".modal-content #ligneIntitul").val( data[2] );
+            $(".modal-content #ligneMission").val( data[3] );
+            $(".modal-content #ligneDate").val( data[4] );
+        });
+    </script>
 {% endblock %}

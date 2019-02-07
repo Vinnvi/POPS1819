@@ -90,7 +90,7 @@ class NoteFraisController extends AbstractController
       $typesPaiements = TypePaiementEnum::getAvailableTypes();
 
 
-      //Partie form
+      //Partie form creation
         $maLigneDeFrais = new LigneDeFrais();
         $form = $this->createForm(LigneDeFraisFormType::class,$maLigneDeFrais);
         $form->handleRequest($request);
@@ -109,13 +109,34 @@ class NoteFraisController extends AbstractController
             return $this->redirectToRoute('app_noteFrais');
         }
 
-
       return new Response($this->twig->render('pages/noteFrais.html.twig',
         ['noteDeFrais' => $mesNotesDeFrais,
          'mesLignesDeFrais' => $lignesDeFrais,
          'typesPaiements' => $typesPaiements,
          'projectsAvailables' => $projectsAvailables,
          'ligneDeFrais' => $maLigneDeFrais,
-         'form' => $form->createView()]));
+         'form' => $form->createView(),]));
     }
+
+    /**
+     * @Route("/mesNotesDeFrais/remove", name="modif.ligne")
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function touchLigne() : Response {
+        $projetRepository = $this->getDoctrine()->getEntityManager()->getRepository('App\Entity\Projet');
+        $LigneRepository = $this->getDoctrine()->getEntityManager()->getRepository('App\Entity\LigneDeFrais');
+
+        $LignedeFraisModifiee = $LigneRepository->findById($_POST['ligneId'])[0];
+        $LignedeFraisModifiee->setIntitule($_POST['ligneIntitul']);
+        $LignedeFraisModifiee->setMission($_POST['ligneMission']);
+        $LignedeFraisModifiee->setMontant(floatval($_POST['ligneMontant']));
+        $LignedeFraisModifiee->setProjet( $projetRepository->findById($_POST['projet'])[0]);
+        $this->getDoctrine()->getEntityManager()->persist($LignedeFraisModifiee);
+        $this->getDoctrine()->getEntityManager()->flush();
+
+        return $this->redirectToRoute('app_noteFrais');
+
+    }
+
+
 }

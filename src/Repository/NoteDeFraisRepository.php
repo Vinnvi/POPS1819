@@ -19,10 +19,10 @@ class NoteDeFraisRepository extends ServiceEntityRepository
         parent::__construct($registry, NoteDeFrais::class);
     }
 
+
     // /**
     //  * @return NoteDeFrais[] Returns an array of NoteDeFrais objects
     //  */
-
     public function findByCollaborateurId($id)
     {
         return $this->createQueryBuilder('n')
@@ -47,6 +47,17 @@ class NoteDeFraisRepository extends ServiceEntityRepository
             ->setParameter('val3', $collaboId)
             ->orderBy('n.mois,n.annee', 'ASC')
             ->setMaxResults(1)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    public function findEnAttente()
+    {
+        return $this->createQueryBuilder('n')
+            ->andWhere('n.statut = :val')
+            ->setParameter('val', "En attente")
+            ->orderBy('n.id')
             ->getQuery()
             ->getResult()
         ;

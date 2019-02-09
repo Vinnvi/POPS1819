@@ -3,11 +3,13 @@
 namespace App\Controller;
 
 
+use PhpParser\Node\Expr\Array_;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Twig\Environment;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
+use App\Repository\NoteDeFraisRepository;
 
 class GestionNotesFraisController extends AbstractController
 {
@@ -39,6 +41,13 @@ class GestionNotesFraisController extends AbstractController
      */
     public function index(): Response
     {
-        return new Response($this->twig->render('pages/gestionNotesFrais.html.twig'));
+        $notesRepository = $this->getDoctrine()->getEntityManager()->getRepository('App\Entity\NoteDeFrais');
+        $notesDeFrais = $notesRepository->findEnAttente();
+        dump($notesDeFrais);
+
+        return $this->render('pages/gestionNotesFrais.html.twig',
+            [
+                'notesDeFrais' => $notesDeFrais
+            ]);
     }
 }

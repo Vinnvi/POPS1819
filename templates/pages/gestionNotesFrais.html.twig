@@ -1,5 +1,48 @@
 {% extends 'topBar.html.twig' %}
 {% block title %}Gestion Notes Frais{% endblock %}
 {% block body %}
+        <div class="row">
+            <form action="#">
+            <div class="col s12 m6 l6">
+                <ul class="collection with-header">
+                    <li class="collection-header"><h5>Notes en attente</h5></li>
+                    {% for note in notesDeFrais %}
+                        <li class="collection-item">
+                            <div>
+                                Note de frais de <b>{{ note.collabo.nom }}</b> {{ note.collabo.prenom }} du {{ note.mois }} {{ note.annee }}
+                                <div class="secondary-content"><label><input onchange="toggleCheckbox(this)" type="checkbox" /><span></span></label></div>
+                            </div></li>
+                    {% endfor %}
+                    <li class="collection-item"><div class="secondary-content"><button id="id1" class="btn waves-effect waves-light">Valider</button></div></li>
+                    </ul>
+            </div>
+            </form>
+        </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        let nombreElements = 0;
+
+        document.getElementById("id1").disabled = true;
+
+        function toggleCheckbox(element)
+        {
+            if(element.checked){
+                nombreElements += 1;
+                if(nombreElements > 0){
+                    document.getElementById("id1").disabled = false;
+                }
+                document.getElementById("id1").firstChild.data = "Valider "+nombreElements+" note(s)";
+            }
+            else{
+                nombreElements -= 1;
+                if(nombreElements == 0){
+                    document.getElementById("id1").disabled = true;
+                }
+                document.getElementById("id1").firstChild.data = "Valider "+nombreElements+" note(s)";
+            }
+        }
+    </script>
 
 {% endblock %}

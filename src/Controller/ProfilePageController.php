@@ -5,10 +5,10 @@ use Symfony\Component\HttpFoundation\Response;
 use Twig\Environment;
 use App\Entity\ProfilePage;
 use App\Repository\ProfilePageRepository;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
-class ProfilePageController extends Controller
+class ProfilePageController extends AbstractController
 {
     /**
     * @var Environment
@@ -34,45 +34,94 @@ class ProfilePageController extends Controller
     }
 
     /**
-    * @Route("/profile", name="change.profilePicture")
-    * //return \Symfony\Component\HttpFoundation\Response
+    * @Route("/profileChangePict", name="change.profilePicture")
+    * @return \Symfony\Component\HttpFoundation\Response
     */
-    /*
-    public function changeProfilPicture() : Response {
-      if (isset($_POST["profilePicToUpload"])){
-        return $this->redirectToRoute('app_profile');
-      }
-      else
-      {
-        $projetRepository = $this->getDoctrine()->getEntityManager()->getRepository('App\Entity\Projet');
-        $ProfileRepository = $this->getDoctrine()->getEntityManager()->getRepository('App\Entity\ProfilePage');
-
-        $LignedeFraisModifiee = $ProfileRepository->findById($_POST['ligneId'])[0];
-
+    public function changeProfilePicture() : Response {
+      /* verification file */
+      if(isset($_FILES['profilePicToUpload'])){
+        $errors= array();
         $target_dir = "images/profile_pics/";
+        //$file_name = basename($_FILES['profilePicToUpload']['name']);
         $target_file = $target_dir . basename($_FILES["profilePicToUpload"]["name"]);
-        $uploadOk = 1;
-        $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
-        // Check file size
-        if ($_FILES["profilePicToUpload"]["size"] > 500000) {
-          echo "Sorry, your file is too large.";
-          $uploadOk = 0;
-        }
-        // Check if $uploadOk is set to 0 by an error
-        if ($uploadOk == 0) {
-          echo "Sorry, your file was not uploaded.";
-        // if everything is ok, try to upload file
-        }
-        else {
-          if (move_uploaded_file($_FILES["profilePicToUpload"]["tmp_name"], $target_file)) {
-            echo "The file ". basename( $_FILES["profilePicToUpload"]["name"]). " has been uploaded.";
-          }
-          else {
-            echo "Sorry, there was an error uploading your file.";
-          }
-        }
-        return $this->redirectToRoute('app_profile');
-      }
-    }*/
+        $file_size = $_FILES['profilePicToUpload']['size'];
+        $file_tmp = $_FILES['profilePicToUpload']['tmp_name'];
+        $file_type = $_FILES['profilePicToUpload']['type'];
+        $tmp = explode('.',$_FILES['profilePicToUpload']['name']);
+        $file_ext = strtolower(end($tmp));
 
+         $extensions= array("jpeg","jpg","png");
+         if(in_array($file_ext,$extensions)=== false){
+            $errors[]="extension not allowed, please choose a JPEG or PNG file.";
+         }
+         if($file_size > 2097152) {
+            $errors[]='File size must be excately 2 MB';
+         }
+         /* picture is valid, we can update it */
+         if(empty($errors)==true) {
+            //prepare repository for sql requests
+            $projetRepository = $this->getDoctrine()->getManager()->getRepository('App\Entity\Projet');
+            $noteRepository = $this->getDoctrine()->getManager()->getRepository('App\Entity\NoteDeFrais');
+            //move file in our folder
+            move_uploaded_file($file_tmp,$target_file);
+            //update databse
+            $collaborateur = $this->getDoctrine()->getManager()->getRepository('App\Entity\Collaborateur');
+            $collaborateur = $collaborateur->findById($this->getUser()->getId());
+            $collaborateur[0]->setProfilePicPath($target_file);
+            $this->getDoctrine()->getEntityManager()->persist($collaborateur[0]);
+            $this->getDoctrine()->getEntityManager()->flush();
+            echo "Success";
+         }else{
+            print_r($errors);
+         }
+      }
+      if(isset($_FILES['bgProfilePicToUpload'])){
+        $errorsBg= array();
+        $target_dir = "images/profile_pics/";
+        //$file_name = basename($_FILES['profilePicToUpload']['name']);
+        $target_file = $target_dir . basename($_FILES["bgProfilePicToUpload"]["name"]);
+        $file_name = $_FILES['bgProfilePicToUpload']['name'];
+        $file_size = $_FILES['bgProfilePicToUpload']['size'];
+        $file_tmp = $_FILES['bgProfilePicToUpload']['tmp_name'];
+        $file_type = $_FILES['bgProfilePicToUpload']['type'];
+        $tmp = explode('.',$_FILES['bgProfilePicToUpload']['name']);
+        $file_ext = strtolower(end($tmp));
+
+         $extensions= array('jpeg','jpg','png');
+         if(in_array($file_ext,$extensions)=== false){
+            $errorsBg[]="extension not allowed, please choose a JPEG or PNG file.";
+         }
+         if($file_size > 2097152) {
+            $errorsBg[]='File size must be excately 2 MB';
+         }
+         /* picture is valid, we can update it */
+         if(empty($errorsBg)==true) {
+            //prepare repository for sql requests
+            $projetRepository = $this->getDoctrine()->getEntityManager()->getRepository('App\Entity\Projet');
+            $noteRepository = $this->getDoctrine()->getEntityManager()->getRepository('App\Entity\NoteDeFrais');
+            //move file in our folder
+            move_uploaded_file($file_tmp,$target_file);
+            //update databse
+            $collaborateur = $this->getDoctrine()->getManager()->getRepository('App\Entity\Collaborateur');
+            $collaborateur = $collaborateur->findById($this->getUser()->getId());
+            $collaborateur[0]->setBackgroundPicPath($target_file);
+            $this->getDoctrine()->getEntityManager()->persist($collaborateur[0]);
+            $this->getDoctrine()->getEntityManager()->flush();
+            echo "Success";
+         }else{
+            print_r($errorsBg);
+         }
+      }
+      return $this->redirectToRoute('app_profile');
+    }
+    /**
+    * @Route("/profileChangeInfos", name="change.infosProfile")
+    * @return \Symfony\Component\HttpFoundation\Response
+    */
+    public function changeInfosProfile() : Response {
+      
+
+
+      return $this->redirectToRoute('app_profile');
+    }
 }

@@ -59,9 +59,6 @@ class ProfilePageController extends AbstractController
          }
          /* picture is valid, we can update it */
          if(empty($errors)==true) {
-            //prepare repository for sql requests
-            $projetRepository = $this->getDoctrine()->getManager()->getRepository('App\Entity\Projet');
-            $noteRepository = $this->getDoctrine()->getManager()->getRepository('App\Entity\NoteDeFrais');
             //move file in our folder
             move_uploaded_file($file_tmp,$target_file);
             //update databse
@@ -96,9 +93,6 @@ class ProfilePageController extends AbstractController
          }
          /* picture is valid, we can update it */
          if(empty($errorsBg)==true) {
-            //prepare repository for sql requests
-            $projetRepository = $this->getDoctrine()->getEntityManager()->getRepository('App\Entity\Projet');
-            $noteRepository = $this->getDoctrine()->getEntityManager()->getRepository('App\Entity\NoteDeFrais');
             //move file in our folder
             move_uploaded_file($file_tmp,$target_file);
             //update databse
@@ -119,7 +113,22 @@ class ProfilePageController extends AbstractController
     * @return \Symfony\Component\HttpFoundation\Response
     */
     public function changeInfosProfile() : Response {
-      
+      dump('hum');
+      print_r("checkHEre");
+      //get current collaborateur
+      $collaborateur = $this->getDoctrine()->getManager()->getRepository('App\Entity\Collaborateur');
+      $collaborateur = $collaborateur->findById($this->getUser()->getId());
+      if(isset($_POST['mail']))
+      {
+        dump('check');
+        $collaborateur[0]->setEmail($_POST['mail']);
+        $this->getDoctrine()->getEntityManager()->persist($collaborateur[0]);
+        $this->getDoctrine()->getEntityManager()->flush();
+        dump('ohlala');
+      }
+      else{
+        dump('noooo');
+      }
 
 
       return $this->redirectToRoute('app_profile');

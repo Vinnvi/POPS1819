@@ -77,6 +77,21 @@ class ProjetRepository extends ServiceEntityRepository
         ;
     }
 
+    public function findLast3EmergencyProjectByCollaboId($id)
+    {
+        return $this->createQueryBuilder('p')
+            ->innerJoin('p.collabos', 'c')
+            ->where('c.id = :collabo_id')
+            ->setParameter('collabo_id', $id)
+            ->andWhere('p.DateFin >= :current_date')
+            ->setParameter('current_date', date('H:i:s \O\n Y-m-d'))
+            ->orderBy('p.DateFin', 'ASC')
+            ->setMaxResults(3)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
 
     /*
     public function findOneBySomeField($value): ?Projet

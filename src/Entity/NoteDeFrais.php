@@ -42,6 +42,17 @@ class NoteDeFrais
      */
     private $collabo;
 
+    const STATUS = [
+        0 => 'En cours',
+        1 => 'En attente chef',
+        2 => 'validee chef',
+        3 => 'refusee chef',
+        4 => 'En attente compta',
+        5 => 'validee compta',
+        6 => 'valideeExceptJustificatif',
+        7 => 'refusee compta',
+    ];
+
     public function __construct($mois, $annee, $collabo)
     {
         $this->setMontant(0);
@@ -113,6 +124,18 @@ class NoteDeFrais
     public function setCollabo(?Collaborateur $collabo): self
     {
         $this->collabo = $collabo;
+
+        return $this;
+    }
+
+    public function getLastModif(): ?\DateTimeInterface
+    {
+        return $this->lastModif;
+    }
+
+    public function setLastModif(?\DateTimeInterface $lastModif): self
+    {
+        $this->lastModif = $lastModif;
 
         return $this;
     }

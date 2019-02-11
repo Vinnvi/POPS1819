@@ -42,7 +42,7 @@ class LigneDeFraisRepository extends ServiceEntityRepository
     public function findOneByID($Id): ?LigneDeFrais
     {
         return $this->createQueryBuilder('l')
-            ->andWhere('l.Id = :val')
+            ->andWhere('l.id = :val')
             ->setParameter('val', $Id)
             ->getQuery()
             ->getOneOrNullResult()

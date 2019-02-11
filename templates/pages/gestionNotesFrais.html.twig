@@ -9,7 +9,7 @@
                     {% for note in notesDeFrais %}
                         <li class="collection-item">
                             <div>
-                                Note de frais de <b>{{ note.collabo.nom }}</b> {{ note.collabo.prenom }} du {{ note.mois }} {{ note.annee }}
+                                Note de frais de <b>{{ note.collabo.nom }}</b> {{ note.collabo.prenom }} du {{ note.mois }} {{ note.annee }} <a href="{{ path('gestionNotes.details', {id: note.id}) }}">(voir détails)</a>
                                 <div class="secondary-content"><label><input onchange="toggleCheckbox(this)" type="checkbox" /><span></span></label></div>
                             </div></li>
                     {% endfor %}

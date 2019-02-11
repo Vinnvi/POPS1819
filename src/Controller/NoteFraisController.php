@@ -54,8 +54,6 @@ class NoteFraisController extends AbstractController
       //recuperation des notes de frais du collaborateur trié par date la plus ancienne
       $mesNotesDeFrais = $this->repository->findByCollaborateurId($this->getUser()->getId());
 
-
-      
       //On vérifie que c'est bien les deux dernières
       if($mesNotesDeFrais == null or $mesNotesDeFrais[0]->getMois() != $currentMonth){
         //on crée une nouvelle note de frais sinon

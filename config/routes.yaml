@@ -29,5 +29,6 @@ app_admin:
   path: /admin
   controller: App\Controller\Admin\AdminCollaborateurController::index
 
-
-
+app_profile:
+  path: /profile
+  controller: App\Controller\ProfilePageController::index

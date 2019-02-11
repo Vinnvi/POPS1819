@@ -1,3 +1,35 @@
+html,
+body {
+  height: 100%;
+  background-image: url("/images/background_login.png");
+}
+
+#rowButton{
+  margin-top : 0;
+}
+
+#rowInfos{
+  margin-bottom : 0;
+}
+#fileField{
+  margin-left: 3%;
+}
+
+#bigTitle{
+  color: #004d99;
+  font-weight: 700;
+  font-size: 40px;
+}
+
+#normalTitle{
+  font-weight: 430;
+  font-size: 30px;
+}
+
+#debutProfil{
+  width : 100%;
+}
+
 .container {
     padding: 0 0.5rem;
     margin: 0 auto;

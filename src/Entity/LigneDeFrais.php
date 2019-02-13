@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use Doctrine\DBAL\Types\DateType;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -63,9 +64,26 @@ class LigneDeFrais
      */
     private $justificatif;
 
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $lastModif;
+
+    const STATUS = [
+        0 => 'En cours',
+        1 => 'En attente chef',
+        2 => 'validee chef',
+        3 => 'refusee chef',
+        4 => 'En attente compta',
+        5 => 'validee compta',
+        6 => 'valideeExceptJustificatif',
+        7 => 'refusee compta',
+    ];
+
     public function __construct()
     {
       $this->statutValidation = "Non validée";
+      $this->lastModif = new \DateTime();
       $this->avance = false;
     }
 
@@ -178,6 +196,18 @@ class LigneDeFrais
     public function setJustificatif(?string $justificatif): self
     {
         $this->justificatif = $justificatif;
+
+        return $this;
+    }
+
+    public function getLastModif(): ?\DateTimeInterface
+    {
+        return $this->lastModif;
+    }
+
+    public function setLastModif(?\DateTimeInterface $lastModif): self
+    {
+        $this->lastModif = $lastModif;
 
         return $this;
     }

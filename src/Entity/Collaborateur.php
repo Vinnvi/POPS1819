@@ -55,8 +55,13 @@ class Collaborateur implements UserInterface,EquatableInterface
     private $profile_pic_path;
 
     /**
+     * @ORM\Column(type="string", length=1024, nullable=true)
+     */
+    private $background_pic_path;
+
+    /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Service")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true)
      */
     private $service;
 
@@ -67,7 +72,6 @@ class Collaborateur implements UserInterface,EquatableInterface
 
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\Projet",fetch="EAGER")
-     * @ORM\JoinTable(name="projet_collaborateur")
      */
     private $projets;
 
@@ -206,6 +210,22 @@ class Collaborateur implements UserInterface,EquatableInterface
     public function setProfilePicPath(string $profile_pic_path): self
     {
         $this->profile_pic_path = $profile_pic_path;
+
+        return $this;
+    }
+
+    public function getBackground_pic_path(): string
+    {
+        if($this->background_pic_path === NULL)
+        {
+          return "images/backgroundProfil.png";
+        }
+        return $this->background_pic_path;
+    }
+
+    public function setBackgroundPicPath(string $background_pic_path): self
+    {
+        $this->background_pic_path = $background_pic_path;
 
         return $this;
     }

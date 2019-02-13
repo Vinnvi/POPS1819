@@ -22,7 +22,7 @@ final class Version20190211145507 extends AbstractMigration
     {
         // this down() migration is auto-generated, please modify it to your needs
 		$this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
-		$this->addSql('ALTER TABLE collaborateur DROP background_pic_path);
+		$this->addSql('ALTER TABLE collaborateur DROP background_pic_path');
 
     }
 }

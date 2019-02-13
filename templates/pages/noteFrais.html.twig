@@ -79,7 +79,9 @@
                           <div class="input-field">
                               <select name="projet" id="projet">
                                   {% for project in projectsAvailables %}
+                                      {% if project != null %}
                                       <option value="{{project[0].id}}">{{project[0].nom}}</option>
+                                      {% endif %}
                                   {% endfor %}
                               </select>
                               <input type="hidden" name="ligneId" id="ligneId" value=""/>

@@ -45,9 +45,15 @@
             <a class="btn-flat waves-effect waves-light btn-large"  href="{{ path('app_noteFrais') }}"  name="action">Mes demandes de congés
               <i class="material-icons right">perm_contact_calendar</i>
             </a>
-            <button class="btn-flat waves-effect waves-light btn-large" href="{{ path('app_noteFrais') }}"  name="action">Mes demandes d'information
+            <a class="btn-flat waves-effect waves-light btn-large" href="{{ path('app_noteFrais') }}"  name="action">Mes demandes d'information
               <i class="material-icons right">send</i>
-            </button>
+            </a>
+              {% if app.user.service.nom == "RH" %}
+              <a class="btn-flat waves-effect waves-light btn-large" href="{{ path('app_gestionNotesFrais') }}"  name="action">Gestion Notes de frais
+                  <i class="material-icons right">send</i>
+              </a>
+              {% endif %}
+
           </div>
         </nav>
         <!-- Dropdown Structure -->
@@ -65,8 +71,6 @@
         {% block body %}
 
         {% endblock %}
-
-
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
         <script type="text/javascript" src="materialize/js/materialize.min.js"></script>
         <script src="https://rawgit.com/aurelia-ui-toolkits/aurelia-materialize-bundles/0.20.2/config2.js"></script>

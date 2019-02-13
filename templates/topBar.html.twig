@@ -48,9 +48,19 @@
             <button class="btn-flat waves-effect waves-light btn-large" href="{{ path('app_noteFrais') }}"  name="action">Mes demandes d'information
               <i class="material-icons right">send</i>
             </button>
-            {% if app.user.service.nom == "Ressources Humaines" %}
+            {% if app.user.service.id == 1 or app.user.roles[0] == 'Chef de service' %}
               <button class="btn-flat waves-effect waves-light btn-large" href="{{ path('app_noteFrais') }}"  name="action">Gestion des congés
                 <i class="material-icons right">beach_access</i>
+              </button>
+            {% endif %}
+            {% if app.user.service.id == 2 or app.user.roles[0] == 'Chef de service'%}
+              <button class="btn-flat waves-effect waves-light btn-large" href="{{ path('app_noteFrais') }}"  name="action">Gestion des notes de frais
+                <i class="material-icons right">local_atm</i>
+              </button>
+            {% endif %}
+            {% if app.user.roles[0] == 'Chef de service' %}
+              <button class="btn-flat waves-effect waves-light btn-large" href="{{ path('app_noteFrais') }}"  name="action">Gestion des missions
+                <i class="material-icons right">people</i>
               </button>
             {% endif %}
           </div>

@@ -47,4 +47,15 @@ class ServiceRepository extends ServiceEntityRepository
         ;
     }
     */
+
+    /*public function findServiceByCollaboId($id)
+    {
+        return $this->createQueryBuilder('service')
+            ->innerJoin('service', '')
+            ->where('l.collaborateur_id = :collabo_id')
+            ->setParameter('collabo_id', $id)
+            ->getQuery()
+            ->getResult()
+        ;
+    }*/
 }

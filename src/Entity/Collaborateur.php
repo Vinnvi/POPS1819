@@ -79,7 +79,7 @@ class Collaborateur implements UserInterface,EquatableInterface
 
     const STATUS = [
         0 => 'Collaborateur',
-        1 => 'Chef de projet',
+        1 => 'Chef de service',
     ];
 
     /**
@@ -152,7 +152,7 @@ class Collaborateur implements UserInterface,EquatableInterface
     public function getRoles()
     {
         return [
-            'ROLE_USER'
+            $this->roles
         ];
     }
 

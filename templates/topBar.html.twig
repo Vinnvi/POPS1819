@@ -42,10 +42,10 @@
             <a class="btn-flat waves-effect waves-light btn-large" href="{{ path('app_noteFrais') }}" name="action">Mes notes de frais
               <i class="material-icons right">book</i>
             </a>
-            <a class="btn-flat waves-effect waves-light btn-large"  href="{{ path('app_noteFrais') }}"  name="action">Mes demandes de congés
+            <a class="btn-flat waves-effect waves-light btn-large"  href="{{ path('app_homepage') }}"  name="action">Mes demandes de congés
               <i class="material-icons right">perm_contact_calendar</i>
             </a>
-            <button class="btn-flat waves-effect waves-light btn-large" href="{{ path('app_noteFrais') }}"  name="action">Mes demandes d'information
+            <button class="btn-flat waves-effect waves-light btn-large" href="{{ path('app_homepage') }}"  name="action">Mes demandes d'information
               <i class="material-icons right">send</i>
             </button>
             {% if app.user.service.id == 1 or app.user.roles[0] == 'Chef de service' %}
@@ -54,12 +54,12 @@
               </button>
             {% endif %}
             {% if app.user.service.id == 2 or app.user.roles[0] == 'Chef de service'%}
-              <button class="btn-flat waves-effect waves-light btn-large" href="{{ path('app_noteFrais') }}"  name="action">Gestion des notes de frais
+              <button class="btn-flat waves-effect waves-light btn-large" href="{{ path('app_gestionNotesFrais') }}"  name="action">Gestion des notes de frais
                 <i class="material-icons right">local_atm</i>
               </button>
             {% endif %}
             {% if app.user.roles[0] == 'Chef de service' %}
-              <button class="btn-flat waves-effect waves-light btn-large" href="{{ path('app_noteFrais') }}"  name="action">Gestion des missions
+              <button class="btn-flat waves-effect waves-light btn-large" href="{{ path('app_homepage') }}"  name="action">Gestion des missions
                 <i class="material-icons right">people</i>
               </button>
             {% endif %}

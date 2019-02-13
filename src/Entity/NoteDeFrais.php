@@ -42,6 +42,11 @@ class NoteDeFrais
      */
     private $collabo;
 
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $lastModif;
+
     const STATUS = [
         0 => 'En cours',
         1 => 'En attente chef',
@@ -60,6 +65,7 @@ class NoteDeFrais
         $this->setMois($mois);
         $this->setAnnee($annee);
         $this->setCollabo($collabo);
+        $this->lastModif = new \DateTime();
 
     }
 

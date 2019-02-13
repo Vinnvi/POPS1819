@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use Doctrine\DBAL\Types\DateType;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -63,6 +64,11 @@ class LigneDeFrais
      */
     private $justificatif;
 
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $lastModif;
+
     const STATUS = [
         0 => 'En cours',
         1 => 'En attente chef',
@@ -77,6 +83,7 @@ class LigneDeFrais
     public function __construct()
     {
       $this->statutValidation = "Non validée";
+      $this->lastModif = new \DateTime();
       $this->avance = false;
     }
 

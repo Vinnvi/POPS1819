@@ -71,7 +71,8 @@ class GestionNotesFraisController extends AbstractController
 
     /**
      * @Route("/gestionNotesDeFrais/validationDetails/", name="validation.lignes.details")
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     * @throws \Exception
      */
     public function validationDemandesLigne()
     {
@@ -88,6 +89,7 @@ class GestionNotesFraisController extends AbstractController
                 else{
                     $LigneDeFrais->setStatutValidation(LigneDeFrais::STATUS[5]);
                 }
+                $LigneDeFrais->setLastModif(new \DateTime());
             }
         }
         //Validation ou non de la note
@@ -100,6 +102,7 @@ class GestionNotesFraisController extends AbstractController
             else{
                 $notesDeFrais->setStatut(NoteDeFrais::STATUS[7]);
             }
+            $notesDeFrais->setLastModif(new \DateTime());
         }
 
         $this->em->flush();

@@ -56,7 +56,7 @@ class Collaborateur implements UserInterface,EquatableInterface
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Service")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true)
      */
     private $service;
 
@@ -67,7 +67,6 @@ class Collaborateur implements UserInterface,EquatableInterface
 
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\Projet",fetch="EAGER")
-     * @ORM\JoinTable(name="projet_collaborateur")
      */
     private $projets;
 

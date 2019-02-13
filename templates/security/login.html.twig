@@ -8,6 +8,7 @@
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <!--Import materialize.css-->
   <link type="text/css" rel="stylesheet" href="materialize/css/materialize.min.css"  media="screen,projection"/>
+  <link rel="stylesheet" type="text/css" href="/css/loader.css">
   {% endblock %}
 </head>
 {% endblock %}
@@ -29,14 +30,14 @@
           {% if error %}
             <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
           {% endif %}
-          <div class="row margin">
-            <div class="input-field col s12">
+          <div id="rowLogin" class="row">
+            <div id="rowLogin" class="input-field col s12">
               <i class="material-icons prefix">account_circle</i>
               <input type="text" class="form-control" id="_username" name="_username" value="{{last_username}}" required autofocus>
               <label for="_username" class="center-align">Username</label>
             </div>
           </div>
-          <div class="row margin">
+          <div id="rowLogin" class="row">
             <div class="input-field col s12">
               <i class="material-icons prefix">lock</i>
               <input type="password" class="form-control" id="_password"  name="_password" required>
@@ -53,12 +54,12 @@
           -->
           <div class="row">
             <div class="input-field col s12">
-              <button type="submit" class="btn waves-effect waves-light col s12">SE CONNECTER</a>
+              <button type="submit" class="btn waves-effect waves-light col s12">SE CONNECTER</button>
             </div>
           </div>
           <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
-          <div class="row">
-            <div class="input-field col s12 m12 l12">
+          <div id="rowLogin" class="row">
+            <div id="rowLogin" class="input-field col s12 m12 l12">
                 <p class="margin right-align medium-small"><a href="page-forgot-password.html">Mot de Passe oublié ?</a></p>
             </div>
           </div>
@@ -66,7 +67,13 @@
       </div>
     </div>
   </div>
-  <script type="text/javascript" src="materialize/js/materialize.min.js"></script>
 </body>
 
+{% endblock %}
+
+{% block javascripts %}
+  <script type="text/javascript" src="materialize/js/materialize.min.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.9.1.min.js"><\/script>')</script>
+  <script src="js/main.js"></script>
 {% endblock %}

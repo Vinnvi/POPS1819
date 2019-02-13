@@ -1,11 +1,11 @@
 <?php
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Twig\Environment;
 
-class HomeController extends Controller
+class HomeController extends AbstractController
 {
     /**
     * @var Environment

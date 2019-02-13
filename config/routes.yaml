@@ -36,7 +36,3 @@ app_admin:
 app_profile:
   path: /profile
   controller: App\Controller\ProfilePageController::index
-
-
-
-

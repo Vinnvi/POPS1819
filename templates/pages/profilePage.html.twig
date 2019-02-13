@@ -3,11 +3,22 @@
 <head>
 
   {% block stylesheets %}
+    <script src="js/vendor/modernizr-2.6.2.min.js"></script>
     <link rel="stylesheet" type="text/css" href="/css/profilePage.css">
+    <link rel="stylesheet" type="text/css" href="/css/loader.css">
   {% endblock %}
 </head>
 {% endblock %}
 {% block body %}
+<body>
+<!-- Start Page Loading -->
+<div id="loader-wrapper">
+  <div id="loader"></div>
+  <div class="loader-section section-left"></div>
+  <div class="loader-section section-right"></div>
+</div>
+<!-- End Page Loading -->
+
 <div id="main">
   <div class="wrapper">
     <section id="content">
@@ -37,11 +48,6 @@
                   <h4 class="card-title grey-text text-darken-4"><font size="5" color="#3498DB">{{app.user.email}}</font></h4>
                   <p class="medium-small grey-text">email</p>
                 </div>
-                <div class="col s2 center-align">
-                  <a class="btn-floating activator waves-effect waves-light darken-2 right">
-                    <i class="mdi-action-perm-identity"></i>
-                  </a>
-                </div>
               </div>
             </div>
             <div class="card-reveal" style="display: none; transform: translateY(0px);">
@@ -53,34 +59,90 @@
               <p>I am a very simple card. I am good at containing small bits of information. I am convenient because I require little markup to use effectively.</p>
 
               <p><i class="mdi-action-perm-phone-msg cyan-text text-darken-2"></i> +1 (612) 222 8989</p>
-              <p><i class="mdi-communication-email cyan-text text-darken-2"></i> mail@domain.com</p>
+              <p><i class="mdi-communication-email cyan-text text-darken-2"></i> {{app.user.email}}</p>
               <p><i class="mdi-social-cake cyan-text text-darken-2"></i> 18th June 1990</p>
               <p><i class="mdi-device-airplanemode-on cyan-text text-darken-2"></i> BAR - AUS</p>
             </div>
           </div>
-          <div id="profile-page-content" class="row">
-            <div class="row">
-              <form class="col s12">
-                <div class="row">
-                  <div class="input-field col s6">
-                    <i class="material-icons prefix">account_circle</i>
-                    <input value= {{app.user.password}} id="icon_prefix" type="text" class="validate">
-                    <label for="icon_prefix">First Name</label>
-                  </div>
+          <div id="loader-wrapper">
+            <div id="loader"></div>
+            <div class="loader-section section-left"></div>
+            <div class="loader-section section-right"></div>
+          </div>
+          <div class="row">
+            <div id="panel-profil" class="col s6 offset-s3 m6 offset-m3 push-s3">
+              <div id = "infosUser" class="center-align card-panel">
+                <div id ="debutProfil" class="row">
+                  <h4 id="bigTitle" class="header">Vos Informations</h4>
                 </div>
                 <div class="row">
-                  <div class="input-field col s6">
-                    <i class="material-icons prefix">phone</i>
-                    <input value= {{app.user.email}} id="icon_telephone" type="tel" class="validate">
-                    <label for="icon_mail">email</label>
-                  </div>
+                  <h5 id="normalTitle" align="left">Personnaliser votre profil</h5>
+                  <form method="POST" action="{{path('change.profilePicture')}}" enctype="multipart/form-data">
+                    <div id="fileField" class="file-field input-field">
+                      <div class="btn">
+                        <span>File</span>
+                        <input id="inputFile" type="file" name="profilePicToUpload">
+                      </div>
+                      <div class="file-path-wrapper">
+                        <input class="file-path validate" type="text" placeholder="Photo de profil">
+                      </div>
+                    </div>
+                    <div id="fileField" class="file-field input-field">
+                      <div class="btn">
+                        <span>File</span>
+                        <input type="file" name="bgProfilePicToUpload">
+                      </div>
+                      <div class="file-path-wrapper">
+                        <input class="file-path validate" type="text" placeholder="Fond d'écran de profil">
+                      </div>
+                    </div>
+                    <div id = "rowInfos" class="col s6 m6 row">
+                      <div id="rowButton" class="input-field col s12 push-s6">
+                        <button id="buttonFile" type="submit" formmethod="post" class="btn waves-effect waves-light col s12">UPDATE</button>
+                      </div>
+                    </div>
+                  </form>
                 </div>
-              </form>
+                  <div class="row">
+                    <form class="infos form" method="post" action="{{ path('change.infosProfile') }}">
+                    <h5 id="normalTitle" align="left">Modifier vos informations</h5>
+                    <div id = "rowInfos" class="row">
+                      <div class="input-field col s8">
+                        <i class="material-icons prefix">account_circle</i>
+                        <input name="password" value="" id="icon_prefix" type="text" class="validate">
+                        <label for="icon_prefix">Mot de Passe</label>
+                      </div>
+                    </div>
+                    <div id = "rowInfos" class="row">
+                      <div class="input-field col s8">
+                        <i class="material-icons prefix">email</i>
+                        <input name="mail" id="icon_mail" type="email" class="validate" value= {{app.user.email}}>
+                        <label for="icon_mail">Email</label>
+                      </div>
+                    </div>
+                    <div id = "rowInfos" class="row">
+                      <div class="input-field col s8">
+                        <i class="material-icons prefix">phone</i>
+                        <input name="phone" value= " " id="icon_telephone" type="tel" class="validate">
+                        <label for="icon_telephone">Téléphone</label>
+                      </div>
+                    </div>
+                    <div id = "rowInfos" class="col s6 m6 row">
+                      <div id="rowButton" class="input-field col s12 push-s6">
+                        <button type="submit" formmethod="post" class="btn waves-effect waves-light col s12">UPDATE</button>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </section>
   </div>
 </div>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+	<script>window.jQuery || document.write('<script src="js/vendor/jquery-1.9.1.min.js"><\/script>')</script>
+	<script src="js/main.js"></script>
+</body>
 {% endblock %}

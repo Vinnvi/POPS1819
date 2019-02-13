@@ -5,7 +5,6 @@ body {
   background-image: url("/images/background_login.png");
   font-family: "Open Sans", sans-serif
 }
-
 form p:last-child {
     margin-bottom: 0;
 }
@@ -17,4 +16,8 @@ form p:last-child {
 }
 div {
     display: block;
+}
+#rowLogin{
+  margin-top:0;
+  margin-bottom : 0;
 }

@@ -1,0 +1,49 @@
+{% extends 'topBar.html.twig' %}
+{% block title %}Detail Note de Frais{% endblock %}
+{% block body %}
+    <div class="container">
+        <div class="col l8 m12 s12 push-l2">
+            <h5>Détails de la note de frais {{ noteDeFrais.collabo.nom }} {{ noteDeFrais.collabo.prenom }} du {{ noteDeFrais.mois }} {{ noteDeFrais.annee }}</h5>
+            <form method="post" action="{{ path('validation.lignes.details') }}">
+            <table class="responsive-table striped">
+                <thead>
+                <tr>
+                    <th>Intitule</th>
+                    <th>date</th>
+                    <th>Statut</th>
+                    <th>Montant</th>
+                    <th>Refus</th>
+                    <th>Acceptation</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                    {% for ligne in ligneDeFrais %}
+                        <tr>
+                                <td>{{ ligne.intitule }}</td>
+                                <td>{{ ligne.date|date("d/m/Y") }}</td>
+                                <td>{{ ligne.statutValidation }}</td>
+                                <td>{{ ligne.montant }}€</td>
+
+                                <td><label><input name="{{ ligne.id }}" onclick="enable()" value="refus" type="radio"/><span></span></label></td>
+                                <td><label><input name="{{ ligne.id }}" onclick="enable()" value="accept" type="radio" /><span></span></label></td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <input type="hidden" id="id" name="id" value="{{ noteDeFrais.id }}"/>
+            <div class="secondary-content"><button id="id1" disabled="disabled" class="btn waves-effect waves-light">Valider</button></div>
+            </form>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        function enable(){
+            document.getElementById("id1").disabled = false;
+        }
+    </script>
+
+{% endblock %}

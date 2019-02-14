@@ -5,7 +5,7 @@
     <div class="card-panel col s8">
         <h5>Notifications</h5>
         <div class="divider"></div>
-        <table class="responsive-table">
+        <table class="highlight">
             <thead>
             <tr class="black white-text">
                 <th>Catégorie</th>
@@ -18,13 +18,31 @@
             {% dump notifications %}
             {% for notification in notifications %}
                     <tr class="
-                        {% if notification.getStatut() == "OK" %}
-                            green lighten-4
-                        {% elseif notification.getStatut() == "ACTION_NECESSAIRE" %}
-                            red lighten-4
-                        {% endif %}
-                        {% if not notification.getPersonnel() %}red-text{% endif %}
-                    " data-href="{{path('app_noteFrais')}}">
+                            {% if notification.getStatut() == "OK" %}
+                                green lighten-4
+                            {% elseif notification.getStatut() == "ACTION_NECESSAIRE" %}
+                                red lighten-4
+                            {% endif %}
+                            {% if not notification.getPersonnel() %}red-text{% endif %}"
+                            
+                                {% if notification.getCategorie() == "Note de frais" and notification.getPersonnel() %}
+                                    onclick="window.location='{{path('app_noteFrais')}}';"
+                                {% elseif notification.getCategorie() == "Note de frais" %}
+                                    onclick="window.location='{{path('app_gestionNotesFrais')}}';"
+                                {% elseif notification.getCategorie() == "D. de congés" and notification.getPersonnel() %}
+                                    onclick="window.location='{{path('app_homepage')}}';"
+                                {% elseif notification.getCategorie() == "D. de congés" %}
+                                    onclick="window.location='{{path('app_homepage')}}';"
+                                {% elseif notification.getCategorie() == "D. d\'informationMission" and notification.getPersonnel() %}
+                                    onclick="window.location='{{path('app_homepage')}}';"
+                                {% elseif notification.getCategorie() == "D. d\'informationMission" %}
+                                    onclick="window.location='{{path('app_homepage')}}';"
+                                {% elseif notification.getCategorie() == "Mission" and notification.getPersonnel() %}
+                                    onclick="window.location='{{path('app_homepage')}}';"
+                                {% elseif notification.getCategorie() == "Mission" %}
+                                    onclick="window.location='{{path('app_homepage')}}';"
+                                {% endif %}
+                            >
                         <td>
                             {% if not notification.getVu() %}<b>{% endif %}
                             {{ notification.getCategorie() }}
@@ -102,14 +120,10 @@
 
 {% block tabNotifications %}
 <script>
-    $(function(){
-      $(document).on('click', '[data-href]', function () {
-        var url = $(this).data('href');
-        if (url && url.length > 0) {
-            document.location.href = url;
-            return false;
-        }
-      });
+    jQuery(document).ready(function($) {
+        $(".clickable-row").click(function() {
+            window.location = $(this).data("href");
+        });
     });
 </script>
 {% endblock %}

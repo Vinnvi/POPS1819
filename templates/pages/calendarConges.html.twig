@@ -1,6 +1,5 @@
 {% extends 'topBar.html.twig' %}
 {% block head %}
-<head>
   {% block javascripts %}
     <script src="js/vendor/modernizr-2.6.2.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js" type="text/javascript"></script>
@@ -13,20 +12,18 @@
   {% block stylesheets %}
     <link rel="stylesheet" type="text/css" href="/css/calendarConges.css">
     <link rel="stylesheet" type="text/css" href="/css/loader.css">
-    <link href="js/plugins/chartist-js/chartist.min.css" type="text/css" rel="stylesheet" media="screen,projection">
-    <link rel="stylesheet" href="js/plugins/fullcalendar/css/fullcalendar.min.css" type="text/css" media="screen,projection">
+    <link href="js/plugins/chartist-js/chartist.min.css" type="text/css" rel="stylesheet">
+    <link rel="stylesheet" href="js/plugins/fullcalendar/css/fullcalendar.min.css" type="text/css">
   {% endblock %}
-</head>
 {% endblock %}
 {% block body %}
-<body>
   <div id="main">
     <div class="wrapper">
       <section id="content">
         <!--start container-->
         <div class="container">
           <div class="section">
-            <div class="divider"></div>
+            <!-- Page entiere -->
             <div id="full-calendar">
               <div class="row">
                 <!-- Left part -->
@@ -436,46 +433,72 @@
                       </div>
                     </div>
                   </div>
-                  <!-- Table donnees -->
-                  <div id="rowTable" class="row">
+                  <div id="rowTable">
                     <table class="striped">
-                    <thead>
-                      <tr>
-                        <th data-field="id">Nom</th>
-                        <th data-field="name">Date Début</th>
-                        <th data-field="price">Date Fin</th>
-                        <th data-field="price">Statut</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>Valérie Guimard</td>
-                        <td>08.12.18 matin</td>
-                        <td>09.12.18 soir</td>
-                        <td>Validé</td>
-                      </tr>
-                    </tbody>
-                  </table>
+                      <thead>
+                        <tr>
+                          <th data-field="id">Nom</th>
+                          <th data-field="name">Date Début</th>
+                          <th data-field="price">Date Fin</th>
+                          <th data-field="price">Statut</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>Valérie Guimard</td>
+                          <td>08.12.18 matin</td>
+                          <td>09.12.18 soir</td>
+                          <td>Validé</td>
+                        </tr>
+                      </tbody>
+                    </table>
                   </div>
                 </div>
+                <!-- Table donnees -->
                 <!-- Right part -->
-                <div id="rightPart" class="col s12 m3 l3"
+                <div id="rightPart" class="col s12 m3 l3">
                   <div class="row">
                     <div id="rttPart" class="col s1 m1 l1">
-                      <h5 class="header"><font color="black">RTT :</font></h5>
+                      <h5 class="header">RTT :</h5>
                       <h10 class="header"> 50 </h10>
                       <h6 class="header"> jours restants </h6>
                     </div>
                     <div class="col s1 m1 l1">
                       <div class="row">
-                        <h5 class="header"><font color="black">Congés Payés :</font></h5>
+                        <h5 class="header">Congés Payés :</h5>
                       </div>
                     </div>
                   </div>
                   <div class="row">
-                    <div class="input-field col s12 m3 l3">
+                    <div class="input-field col s12 m12 l12">
                       <button type="submit" class="btn waves-effect waves-light col s12">Demander un congé</button>
                     </div>
+                  </div>
+                  <div class="row">
+                    <table id="data-table-row-grouping" class="display dataTable" cellspacing="0" width="100%" role="grid" aria-describedby="data-table-row-grouping_info" style="width: 100%;">
+                      <thead>
+                          <tr role="row">
+                            <th class="sorting" tabindex="0" aria-controls="data-table-row-grouping" rowspan="1" colspan="1" aria-label="Name: activate to sort column ascending" style="width: 49px;">Type</th>
+                            <th class="sorting" tabindex="0" aria-controls="data-table-row-grouping" rowspan="1" colspan="1" aria-label="Start date: activate to sort column ascending" style="width: 59px;">Du-</th>
+                            <th class="sorting" tabindex="0" aria-controls="data-table-row-grouping" rowspan="1" colspan="1" aria-label="Start date: activate to sort column ascending" style="width: 59px;">Au-</th>
+                            <th class="sorting" tabindex="0" aria-controls="data-table-row-grouping" rowspan="1" colspan="1" aria-label="Position: activate to sort column ascending" style="width: 52px;">Statut</th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                        <tr role="row" class="odd">
+                          <td>RTT</td>
+                          <td>08.10.18</td>
+                          <td>10.10.18</td>
+                          <td>En cours</td>
+                        </tr>
+                        <tr role="row" class="even">
+                          <td>C.P.</td>
+                          <td>18.10.18</td>
+                          <td>23.10.18</td>
+                          <td>Validé</td>
+                        </tr>
+                      </tbody>
+                    </table>
                   </div>
                 </div>
               </div>
@@ -486,8 +509,7 @@
         <!--end container-->
       </section>
       <!-- END CONTENT -->
-      </div>
-      <!-- END WRAPPER -->
     </div>
-  </body>
-  {% endblock %}
+    <!-- END WRAPPER -->
+  </div>
+{% endblock %}

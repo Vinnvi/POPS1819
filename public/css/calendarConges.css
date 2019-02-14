@@ -8,8 +8,15 @@ body {
     max-width: 100% !important;
     width: 98%;
 }
+table, th, td {
+  border: 1px solid white;
+  text-align: center;
+}
+#data-table-row-grouping{
+  margin-left : 3%;
+}
 #rightPart{
-  background-color: #EFF2F4;
+  color: white;
   text-align: center;
 }
 #rttPart{

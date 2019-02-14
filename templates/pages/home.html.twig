@@ -30,17 +30,17 @@
                                 {% elseif notification.getCategorie() == "Note de frais" %}
                                     onclick="window.location='{{path('app_gestionNotesFrais')}}';"
                                 {% elseif notification.getCategorie() == "D. de congés" and notification.getPersonnel() %}
-                                    onclick="window.location='{{path('app_homepage')}}';"
+                                    onclick="window.location='{{path('app_demandesDeConges')}}';"
                                 {% elseif notification.getCategorie() == "D. de congés" %}
-                                    onclick="window.location='{{path('app_homepage')}}';"
+                                    onclick="window.location='{{path('app_gestionDemandesDeConges')}}';"
                                 {% elseif notification.getCategorie() == "D. d\'informationMission" and notification.getPersonnel() %}
-                                    onclick="window.location='{{path('app_homepage')}}';"
+                                    onclick="window.location='{{path('app_demandesDInformation')}}';"
                                 {% elseif notification.getCategorie() == "D. d\'informationMission" %}
-                                    onclick="window.location='{{path('app_homepage')}}';"
+                                    onclick="window.location='{{path('app_gestionDemandesDInformation')}}';"
                                 {% elseif notification.getCategorie() == "Mission" and notification.getPersonnel() %}
-                                    onclick="window.location='{{path('app_homepage')}}';"
+                                    onclick="window.location='{{path('app_missions')}}';"
                                 {% elseif notification.getCategorie() == "Mission" %}
-                                    onclick="window.location='{{path('app_homepage')}}';"
+                                    onclick="window.location='{{path('app_gestionMissions')}}';"
                                 {% endif %}
                             >
                         <td>

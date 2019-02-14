@@ -51,10 +51,10 @@ class HomeController extends AbstractController
       // FIN DATE ACTUELLE
 
       // CODE SERVICE
-      $service = $this->getDoctrine()->getEntityManager()->getRepository('App\Entity\Service')->findBy(
+      $service = null;$this->getDoctrine()->getEntityManager()->getRepository('App\Entity\Service')->findBy(
         array('id' => $this->getUser()->getService()->getId())
       );
-      $chefTab = $this->getDoctrine()->getEntityManager()->getRepository('App\Entity\Service')->findBy(
+      $chefTab = null;$this->getDoctrine()->getEntityManager()->getRepository('App\Entity\Service')->findBy(
         array('id' => $this->getUser()->getService()->getId())
       );
       // FIN

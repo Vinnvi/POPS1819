@@ -25,9 +25,29 @@ app_gestionNotesFrais:
   path: /gestionNotesFrais
   controller: App\Controller\GestionNotesFraisController::index
 
-#app_noteFrais:
-#  path: /profile
-#  controller: App\Controller\profile::index
+app_demandesDeConges:
+  path: /mesDemandesDeConges
+  controller: App\Controller\GestionNotesFraisController::index
+
+app_gestionDemandesDeConges:
+  path: /gestionDemandesDeConges
+  controller: App\Controller\GestionNotesFraisController::index
+
+app_demandesDInformation:
+  path: /mesDemandesDInformation
+  controller: App\Controller\GestionNotesFraisController::index
+
+app_gestionDemandesDInformation:
+  path: /gestionDemandesDInformation
+  controller: App\Controller\GestionNotesFraisController::index
+
+app_missions:
+  path: /mesMissions
+  controller: App\Controller\GestionNotesFraisController::index
+
+app_gestionMissions:
+  path: /gestionMissions
+  controller: App\Controller\GestionNotesFraisController::index
 
 app_admin:
   path: /admin

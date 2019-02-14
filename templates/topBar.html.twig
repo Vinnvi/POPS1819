@@ -42,31 +42,31 @@
             <a class="btn-flat waves-effect waves-light btn-large" href="{{ path('app_noteFrais') }}" name="action">Mes notes de frais
               <i class="material-icons right">book</i>
             </a>
-            <a class="btn-flat waves-effect waves-light btn-large"  href="{{ path('app_homepage') }}"  name="action">Mes demandes de congés
+            <a class="btn-flat waves-effect waves-light btn-large"  href="{{ path('app_demandesDeConges') }}"  name="action">Mes demandes de congés
               <i class="material-icons right">perm_contact_calendar</i>
             </a>
-            <button class="btn-flat waves-effect waves-light btn-large" href="{{ path('app_homepage') }}"  name="action">Mes demandes d'information
+            <a class="btn-flat waves-effect waves-light btn-large" href="{{ path('app_demandesDInformation') }}"  name="action">Mes demandes d'information
               <i class="material-icons right">send</i>
-            </button>
+            </a>
             {% if app.user.service.id == 1 or app.user.roles[0] == 'Chef de service' %}
-              <button class="btn-flat waves-effect waves-light btn-large" href="{{ path('app_noteFrais') }}"  name="action">Gestion des congés
+              <a class="btn-flat waves-effect waves-light btn-large" href="{{ path('app_gestionDemandesDeConges') }}"  name="action">Gestion des congés
                 <i class="material-icons right">beach_access</i>
-              </button>
+              </a>
             {% endif %}
             {% if app.user.service.id == 2 or app.user.roles[0] == 'Chef de service'%}
-              <button class="btn-flat waves-effect waves-light btn-large" href="{{ path('app_gestionNotesFrais') }}"  name="action">Gestion des notes de frais
+              <a class="btn-flat waves-effect waves-light btn-large" href="{{ path('app_gestionNotesFrais') }}"  name="action">Gestion des notes de frais
                 <i class="material-icons right">local_atm</i>
-              </button>
+              </a>
             {% endif %}
             {% if app.user.service.id == 1 %}
-              <button class="btn-flat waves-effect waves-light btn-large" href="{{ path('app_homepage') }}"  name="action">Gestion des D. d'information
+              <a class="btn-flat waves-effect waves-light btn-large" href="{{ path('app_gestionDemandesDInformation') }}"  name="action">Gestion des D. d'information
                 <i class="material-icons right">assignment</i>
-              </button>
+              </a>
             {% endif %}
             {% if app.user.roles[0] == 'Chef de service' %}
-              <button class="btn-flat waves-effect waves-light btn-large" href="{{ path('app_homepage') }}"  name="action">Gestion des missions
+              <a class="btn-flat waves-effect waves-light btn-large" href="{{ path('app_gestionMissions') }}"  name="action">Gestion des missions
                 <i class="material-icons right">people</i>
-              </button>
+              </a>
             {% endif %}
           </div>
         </nav>

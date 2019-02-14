@@ -12,6 +12,10 @@ table, th, td {
   border: 1px solid white;
   text-align: center;
 }
+#rowTable{
+  margin-top : 4%;
+  background-color: transparent !important;
+}
 #data-table-row-grouping{
   margin-left : 3%;
 }
@@ -40,7 +44,7 @@ table, th, td {
     border: none;
 }
 #mainCalendar{
-  background-color: #ffffff;
+  color: #ffffff;
 }
 h4.header {
     font-size: 1.4rem;

@@ -1,0 +1,61 @@
+body {
+    background-image: url("/images/background_login.png");
+}
+
+.container {
+    padding: 0 0.5rem;
+    margin: 0 auto;
+    max-width: 100% !important;
+    width: 98%;
+}
+#rightPart{
+  background-color: #EFF2F4;
+  text-align: center;
+}
+#rttPart{
+  width : 50%;
+}
+#full-calendar {
+    /* padding-top: 30px;  */
+}
+#content .container .row {
+    margin-bottom: 0;
+}
+#external-events {
+    /* padding-top: 50px; */
+}
+#external-events .fc-event {
+    color: #fff;
+    text-decoration: none;
+    padding: 5px;
+    margin-bottom: 10px;
+    cursor: all-scroll;
+    border: none;
+}
+#mainCalendar{
+  background-color: #ffffff;
+}
+h4.header {
+    font-size: 1.4rem;
+    font-weight: 400;
+    text-transform: uppercase;
+    line-height: 2.508rem;
+    margin: 1.14rem 0 0.912rem 0;
+}
+h5.header {
+    font-size: 1rem;
+    font-weight: 400;
+    text-transform: uppercase;
+    line-height: 1.508rem;
+}
+h6.header {
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.508rem;
+}
+h10.header {
+    font-size: 3rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    line-height: 1.508rem;
+}

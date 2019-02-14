@@ -1,222 +1,493 @@
 {% extends 'topBar.html.twig' %}
 {% block head %}
 <head>
-
-  {% block stylesheets %}
+  {% block javascripts %}
     <script src="js/vendor/modernizr-2.6.2.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js" type="text/javascript"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js" type="text/javascript"></script>
+    <script src="js/plugins/chartist-js/chartist.min.js" type="text/javascript" ></script>
+    <script src='js/plugins/fullcalendar/lib/moment.min.js' type="text/javascript"></script>
+    <script src='js/plugins/fullcalendar/js/fullcalendar.min.js' type="text/javascript"></script>
+    <script src="js/plugins/fullcalendar/fullcalendar-script.js" type="text/javascript"></script>
+  {% endblock %}
+  {% block stylesheets %}
     <link rel="stylesheet" type="text/css" href="/css/calendarConges.css">
     <link rel="stylesheet" type="text/css" href="/css/loader.css">
-    <link href="js/plugins/fullcalendar/css/fullcalendar.min.css" type="text/css" rel="stylesheet" media="screen,projection">
     <link href="js/plugins/chartist-js/chartist.min.css" type="text/css" rel="stylesheet" media="screen,projection">
+    <link rel="stylesheet" href="js/plugins/fullcalendar/css/fullcalendar.min.css" type="text/css" media="screen,projection">
   {% endblock %}
 </head>
 {% endblock %}
 {% block body %}
 <body>
-<!-- Start Page Loading -->
-<div id="loader-wrapper">
-  <div id="loader"></div>
-  <div class="loader-section section-left"></div>
-  <div class="loader-section section-right"></div>
-</div>
-<!-- End Page Loading -->
-<div id="main">
-  <div class="wrapper">
-    <section id="content">
-      <!--start container-->
-      <div class="container">
-        <div class="section">
-          <p class="caption">FullCalendar is a jQuery plugin that provides a full-sized, drag &amp; drop event calendar like the one below. It uses AJAX to fetch events on-the-fly and is easily configured to use your own feed format. It is visually customizable with a rich API.</p>
-          <div class="divider"></div>
-          <div id="full-calendar">
-            <div class="row">
-              <div class="col s12 m4 l3">
-                <div id="external-events">
-                  <h4 class="header">Draggable Events</h4>
-                  <div class="fc-event cyan ui-draggable ui-draggable-handle">March Invoices</div>
-                  <div class="fc-event teal ui-draggable ui-draggable-handle">Call Emy</div>
-                  <div class="fc-event cyan darken-1 ui-draggable ui-draggable-handle">Dinner with Team</div>
-                  <div class="fc-event cyan accent-4 ui-draggable ui-draggable-handle">Meeting with Support Team</div>
-                  <div class="fc-event teal accent-4 ui-draggable ui-draggable-handle">Meeting with Sales Team</div>
-                  <div class="fc-event light-blue accent-3 ui-draggable ui-draggable-handle">Design an iOS App</div>
-                  <div class="fc-event light-blue accent-4 ui-draggable ui-draggable-handle">Company Party</div>
-                  <p>
-                    <input type="checkbox" id="drop-remove">
-                    <label for="drop-remove">remove after drop</label>
-                  </p>
+  <div id="main">
+    <div class="wrapper">
+      <section id="content">
+        <!--start container-->
+        <div class="container">
+          <div class="section">
+            <div class="divider"></div>
+            <div id="full-calendar">
+              <div class="row">
+                <!-- Left part -->
+                <div class="col s12 m3 l2">
+                  <div id="external-events">
+                    <h4 class="header"><font color="white">Draggable Events</font></h4>
+                    <div class="fc-event cyan ui-draggable ui-draggable-handle">March Invoices</div>
+                    <div class="fc-event teal ui-draggable ui-draggable-handle">Call Emy</div>
+                    <div class="fc-event cyan darken-1 ui-draggable ui-draggable-handle">Dinner with Team</div>
+                    <div class="fc-event cyan accent-4 ui-draggable ui-draggable-handle">Meeting with Support Team</div>
+                    <div class="fc-event teal accent-4 ui-draggable ui-draggable-handle">Meeting with Sales Team</div>
+                    <div class="fc-event light-blue accent-3 ui-draggable ui-draggable-handle">Design an iOS App</div>
+                    <div class="fc-event light-blue accent-4 ui-draggable ui-draggable-handle">Company Party</div>
+                    <p>
+                      <input type="checkbox" id="drop-remove">
+                      <label for="drop-remove">remove after drop</label>
+                    </p>
+                  </div>
+                </div>
+                <!-- Calendrier -->
+                <div id="mainCalendar" class="col s12 m6 l7">
+                  <div id="calendar" class="fc fc-ltr fc-unthemed">
+                    <div class="fc-toolbar">
+                      <div class="fc-left">
+                        <div class="fc-button-group">
+                          <button type="button" class="fc-prev-button fc-button fc-state-default fc-corner-left">
+                            <span class="fc-icon fc-icon-left-single-arrow"></span>
+                          </button>
+                          <button type="button" class="fc-next-button fc-button fc-state-default fc-corner-right">
+                            <span class="fc-icon fc-icon-right-single-arrow"></span>
+                          </button>
+                        </div>
+                        <button type="button" class="fc-today-button fc-button fc-state-default fc-corner-left fc-corner-right">today</button>
+                      </div>
+                      <div class="fc-right">
+                        <div class="fc-button-group">
+                          <button type="button" class="fc-month-button fc-button fc-state-default fc-corner-left fc-state-active">month</button>
+                          <button type="button" class="fc-basicWeek-button fc-button fc-state-default">week</button>
+                          <button type="button" class="fc-basicDay-button fc-button fc-state-default fc-corner-right">day</button>
+                        </div>
+                      </div>
+                      <div class="fc-center">
+                        <h2>May 2015</h2>
+                      </div>
+                      <div class="fc-clear"></div>
+                    </div>
+                    <div class="fc-view-container" style="">
+                      <div class="fc-view fc-month-view fc-basic-view" style="">
+                        <table>
+                          <thead class="fc-head">
+                            <tr>
+                              <td class="fc-widget-header">
+                                <div class="fc-row fc-widget-header" style="">
+                                  <table>
+                                    <thead>
+                                      <tr>
+                                        <th class="fc-day-header fc-widget-header fc-sun">Sun</th>
+                                        <th class="fc-day-header fc-widget-header fc-mon">Mon</th>
+                                        <th class="fc-day-header fc-widget-header fc-tue">Tue</th>
+                                        <th class="fc-day-header fc-widget-header fc-wed">Wed</th>
+                                        <th class="fc-day-header fc-widget-header fc-thu">Thu</th>
+                                        <th class="fc-day-header fc-widget-header fc-fri">Fri</th>
+                                        <th class="fc-day-header fc-widget-header fc-sat">Sat</th>
+                                      </tr>
+                                    </thead>
+                                  </table>
+                                </div>
+                              </td>
+                            </tr>
+                          </thead>
+                          <tbody class="fc-body">
+                            <tr>
+                              <td class="fc-widget-content">
+                                <div class="fc-day-grid-container" style="">
+                                  <div class="fc-day-grid">
+                                    <div class="fc-row fc-week fc-widget-content fc-rigid" style="height: 65px;">
+                                      <div class="fc-bg">
+                                        <table>
+                                          <tbody>
+                                            <tr>
+                                              <td class="fc-day fc-widget-content fc-sun fc-other-month fc-past" data-date="2015-04-26">
+                                              </td>
+                                              <td class="fc-day fc-widget-content fc-mon fc-other-month fc-past" data-date="2015-04-27">
+                                              </td>
+                                              <td class="fc-day fc-widget-content fc-tue fc-other-month fc-past" data-date="2015-04-28"></td>
+                                              <td class="fc-day fc-widget-content fc-wed fc-other-month fc-past" data-date="2015-04-29"></td>
+                                              <td class="fc-day fc-widget-content fc-thu fc-other-month fc-past" data-date="2015-04-30"></td>
+                                              <td class="fc-day fc-widget-content fc-fri fc-past" data-date="2015-05-01"></td>
+                                              <td class="fc-day fc-widget-content fc-sat fc-past" data-date="2015-05-02"></td>
+                                            </tr>
+                                          </tbody>
+                                        </table>
+                                      </div>
+                                      <div class="fc-content-skeleton">
+                                        <table>
+                                          <thead>
+                                            <tr>
+                                              <td class="fc-day-number fc-sun fc-other-month fc-past" data-date="2015-04-26">26</td>
+                                              <td class="fc-day-number fc-mon fc-other-month fc-past" data-date="2015-04-27">27</td>
+                                              <td class="fc-day-number fc-tue fc-other-month fc-past" data-date="2015-04-28">28</td>
+                                              <td class="fc-day-number fc-wed fc-other-month fc-past" data-date="2015-04-29">29</td>
+                                              <td class="fc-day-number fc-thu fc-other-month fc-past" data-date="2015-04-30">30</td>
+                                              <td class="fc-day-number fc-fri fc-past" data-date="2015-05-01">1</td>
+                                              <td class="fc-day-number fc-sat fc-past" data-date="2015-05-02">2</td>
+                                            </tr>
+                                          </thead>
+                                          <tbody>
+                                            <tr>
+                                              <td></td>
+                                              <td></td>
+                                              <td></td>
+                                              <td></td>
+                                              <td></td>
+                                              <td class="fc-event-container">
+                                                <a class="fc-day-grid-event fc-h-event fc-event fc-start fc-end fc-draggable fc-resizable" style="background-color:#9c27b0;border-color:#9c27b0">
+                                                  <div class="fc-content"> <span class="fc-title">All Day Event</span></div>
+                                                  <div class="fc-resizer fc-end-resizer"></div>
+                                                </a>
+                                              </td>
+                                              <td></td>
+                                            </tr>
+                                          </tbody>
+                                        </table>
+                                      </div>
+                                    </div>
+                                    <div class="fc-row fc-week fc-widget-content fc-rigid" style="height: 65px;">
+                                      <div class="fc-bg">
+                                        <table>
+                                          <tbody>
+                                            <tr>
+                                              <td class="fc-day fc-widget-content fc-sun fc-past" data-date="2015-05-03"></td>
+                                              <td class="fc-day fc-widget-content fc-mon fc-past" data-date="2015-05-04"></td>
+                                              <td class="fc-day fc-widget-content fc-tue fc-past" data-date="2015-05-05"></td>
+                                              <td class="fc-day fc-widget-content fc-wed fc-past" data-date="2015-05-06"></td>
+                                              <td class="fc-day fc-widget-content fc-thu fc-past" data-date="2015-05-07"></td>
+                                              <td class="fc-day fc-widget-content fc-fri fc-past" data-date="2015-05-08"></td>
+                                              <td class="fc-day fc-widget-content fc-sat fc-past" data-date="2015-05-09"></td>
+                                            </tr>
+                                          </tbody>
+                                        </table>
+                                      </div>
+                                      <div class="fc-content-skeleton">
+                                        <table>
+                                          <thead>
+                                            <tr>
+                                              <td class="fc-day-number fc-sun fc-past" data-date="2015-05-03">3</td>
+                                              <td class="fc-day-number fc-mon fc-past" data-date="2015-05-04">4</td>
+                                              <td class="fc-day-number fc-tue fc-past" data-date="2015-05-05">5</td>
+                                              <td class="fc-day-number fc-wed fc-past" data-date="2015-05-06">6</td>
+                                              <td class="fc-day-number fc-thu fc-past" data-date="2015-05-07">7</td>
+                                              <td class="fc-day-number fc-fri fc-past" data-date="2015-05-08">8</td>
+                                              <td class="fc-day-number fc-sat fc-past" data-date="2015-05-09">9</td>
+                                            </tr>
+                                          </thead>
+                                          <tbody>
+                                            <tr>
+                                              <td class="fc-event-container" colspan="2">
+                                                <a class="fc-day-grid-event fc-h-event fc-event fc-start fc-end fc-draggable" style="background-color:#01579b;border-color:#01579b">
+                                                  <div class="fc-content"><span class="fc-time">12a</span> <span class="fc-title">Conference</span></div>
+                                                </a>
+                                              </td>
+                                              <td rowspan="2"></td>
+                                              <td rowspan="2"></td>
+                                              <td class="fc-event-container" colspan="3">
+                                                <a class="fc-day-grid-event fc-h-event fc-event fc-start fc-end fc-draggable fc-resizable" style="background-color:#e91e63;border-color:#e91e63">
+                                                  <div class="fc-content"> <span class="fc-title">Long Event</span></div>
+                                                  <div class="fc-resizer fc-end-resizer"></div>
+                                                </a>
+                                              </td>
+                                            </tr>
+                                            <tr class="">
+                                              <td></td>
+                                              <td></td>
+                                              <td></td>
+                                              <td></td>
+                                              <td class="fc-event-container">
+                                                <a class="fc-day-grid-event fc-h-event fc-event fc-start fc-end fc-draggable" style="background-color:#ff1744;border-color:#ff1744">
+                                                  <div class="fc-content"><span class="fc-time">4p</span> <span class="fc-title">Repeating Event</span></div>
+                                                </a>
+                                              </td>
+                                            </tr>
+                                          </tbody>
+                                        </table>
+                                      </div>
+                                    </div>
+                                    <div class="fc-row fc-week fc-widget-content fc-rigid" style="height: 65px;">
+                                      <div class="fc-bg">
+                                        <table>
+                                          <tbody>
+                                            <tr>
+                                              <td class="fc-day fc-widget-content fc-sun fc-past" data-date="2015-05-10"></td>
+                                              <td class="fc-day fc-widget-content fc-mon fc-past" data-date="2015-05-11"></td>
+                                              <td class="fc-day fc-widget-content fc-tue fc-past" data-date="2015-05-12"></td>
+                                              <td class="fc-day fc-widget-content fc-wed fc-past" data-date="2015-05-13"></td>
+                                              <td class="fc-day fc-widget-content fc-thu fc-past" data-date="2015-05-14"></td>
+                                              <td class="fc-day fc-widget-content fc-fri fc-past" data-date="2015-05-15"></td>
+                                              <td class="fc-day fc-widget-content fc-sat fc-past" data-date="2015-05-16"></td>
+                                            </tr>
+                                          </tbody>
+                                        </table>
+                                      </div>
+                                      <div class="fc-content-skeleton">
+                                        <table>
+                                          <thead>
+                                            <tr>
+                                              <td class="fc-day-number fc-sun fc-past" data-date="2015-05-10">10</td>
+                                              <td class="fc-day-number fc-mon fc-past" data-date="2015-05-11">11</td>
+                                              <td class="fc-day-number fc-tue fc-past" data-date="2015-05-12">12</td>
+                                              <td class="fc-day-number fc-wed fc-past" data-date="2015-05-13">13</td>
+                                              <td class="fc-day-number fc-thu fc-past" data-date="2015-05-14">14</td>
+                                              <td class="fc-day-number fc-fri fc-past" data-date="2015-05-15">15</td>
+                                              <td class="fc-day-number fc-sat fc-past" data-date="2015-05-16">16</td>
+                                            </tr>
+                                          </thead>
+                                          <tbody>
+                                            <tr>
+                                              <td rowspan="5"></td>
+                                              <td rowspan="5"></td>
+                                              <td class="fc-event-container">
+                                                <a class="fc-day-grid-event fc-h-event fc-event fc-start fc-end fc-draggable" style="background-color:#2196f3;border-color:#2196f3">
+                                                  <div class="fc-content"><span class="fc-time">10:30a</span> <span class="fc-title">Meeting</span></div>
+                                                </a>
+                                              </td>
+                                              <td class="fc-event-container" rowspan="5">
+                                                <a class="fc-day-grid-event fc-h-event fc-event fc-start fc-end fc-draggable" style="background-color:#00bcd4;border-color:#00bcd4">
+                                                  <div class="fc-content"><span class="fc-time">7a</span> <span class="fc-title">Birthday Party</span></div>
+                                                </a>
+                                              </td>
+                                              <td rowspan="5"></td>
+                                              <td rowspan="5"></td>
+                                              <td class="fc-event-container" rowspan="5">
+                                                <a class="fc-day-grid-event fc-h-event fc-event fc-start fc-end fc-draggable" style="background-color:#aa00ff;border-color:#aa00ff">
+                                                  <div class="fc-content"><span class="fc-time">4p</span> <span class="fc-title">Repeating Event</span></div>
+                                                </a>
+                                              </td>
+                                            </tr>
+                                            <tr class="">
+                                              <td class="fc-event-container fc-limited">
+                                                <a class="fc-day-grid-event fc-h-event fc-event fc-start fc-end fc-draggable" style="background-color:#ff5722;border-color:#ff5722">
+                                                  <div class="fc-content"><span class="fc-time">12p</span> <span class="fc-title">Lunch</span></div>
+                                                </a>
+                                              </td>
+                                              <td class="fc-more-cell" rowspan="1">
+                                                <div><a class="fc-more">+4 more</a></div>
+                                              </td>
+                                            </tr>
+                                            <tr class="fc-limited">
+                                              <td class="fc-event-container">
+                                                <a class="fc-day-grid-event fc-h-event fc-event fc-start fc-end fc-draggable" style="background-color:#4caf50;border-color:#4caf50">
+                                                  <div class="fc-content"><span class="fc-time">2:30p</span> <span class="fc-title">Meeting</span></div>
+                                                </a>
+                                              </td>
+                                            </tr>
+                                            <tr class="fc-limited">
+                                              <td class="fc-event-container">
+                                                <a class="fc-day-grid-event fc-h-event fc-event fc-start fc-end fc-draggable" style="background-color:#03a9f4;border-color:#03a9f4">
+                                                  <div class="fc-content"><span class="fc-time">5:30p</span> <span class="fc-title">Happy Hour</span></div>
+                                                </a>
+                                              </td>
+                                            </tr>
+                                            <tr class="fc-limited">
+                                              <td class="fc-event-container">
+                                                <a class="fc-day-grid-event fc-h-event fc-event fc-start fc-end fc-draggable" style="background-color:#009688;border-color:#009688">
+                                                  <div class="fc-content"><span class="fc-time">8p</span> <span class="fc-title">Dinner</span></div>
+                                                </a>
+                                              </td>
+                                            </tr>
+                                          </tbody>
+                                        </table>
+                                      </div>
+                                    </div>
+                                    <div class="fc-row fc-week fc-widget-content fc-rigid" style="height: 65px;">
+                                      <div class="fc-bg">
+                                        <table>
+                                          <tbody>
+                                            <tr>
+                                              <td class="fc-day fc-widget-content fc-sun fc-past" data-date="2015-05-17"></td>
+                                              <td class="fc-day fc-widget-content fc-mon fc-past" data-date="2015-05-18"></td>
+                                              <td class="fc-day fc-widget-content fc-tue fc-past" data-date="2015-05-19"></td>
+                                              <td class="fc-day fc-widget-content fc-wed fc-past" data-date="2015-05-20"></td>
+                                              <td class="fc-day fc-widget-content fc-thu fc-past" data-date="2015-05-21"></td>
+                                              <td class="fc-day fc-widget-content fc-fri fc-past" data-date="2015-05-22"></td>
+                                              <td class="fc-day fc-widget-content fc-sat fc-past" data-date="2015-05-23"></td>
+                                            </tr>
+                                          </tbody>
+                                        </table>
+                                      </div>
+                                      <div class="fc-content-skeleton">
+                                        <table>
+                                          <thead>
+                                            <tr>
+                                              <td class="fc-day-number fc-sun fc-past" data-date="2015-05-17">17</td>
+                                              <td class="fc-day-number fc-mon fc-past" data-date="2015-05-18">18</td>
+                                              <td class="fc-day-number fc-tue fc-past" data-date="2015-05-19">19</td>
+                                              <td class="fc-day-number fc-wed fc-past" data-date="2015-05-20">20</td>
+                                              <td class="fc-day-number fc-thu fc-past" data-date="2015-05-21">21</td>
+                                              <td class="fc-day-number fc-fri fc-past" data-date="2015-05-22">22</td>
+                                              <td class="fc-day-number fc-sat fc-past" data-date="2015-05-23">23</td>
+                                            </tr>
+                                          </thead>
+                                          <tbody>
+                                            <tr>
+                                              <td></td>
+                                              <td></td>
+                                              <td></td>
+                                              <td></td>
+                                              <td></td>
+                                              <td></td>
+                                              <td></td>
+                                            </tr>
+                                          </tbody>
+                                        </table>
+                                      </div>
+                                    </div>
+                                    <div class="fc-row fc-week fc-widget-content fc-rigid" style="height: 65px;">
+                                      <div class="fc-bg">
+                                        <table>
+                                          <tbody>
+                                            <tr>
+                                              <td class="fc-day fc-widget-content fc-sun fc-past" data-date="2015-05-24"></td>
+                                              <td class="fc-day fc-widget-content fc-mon fc-past" data-date="2015-05-25"></td>
+                                              <td class="fc-day fc-widget-content fc-tue fc-past" data-date="2015-05-26"></td>
+                                              <td class="fc-day fc-widget-content fc-wed fc-past" data-date="2015-05-27"></td>
+                                              <td class="fc-day fc-widget-content fc-thu fc-past" data-date="2015-05-28"></td>
+                                              <td class="fc-day fc-widget-content fc-fri fc-past" data-date="2015-05-29"></td>
+                                              <td class="fc-day fc-widget-content fc-sat fc-past" data-date="2015-05-30"></td>
+                                            </tr>
+                                          </tbody>
+                                        </table>
+                                      </div>
+                                      <div class="fc-content-skeleton">
+                                        <table>
+                                          <thead>
+                                            <tr>
+                                              <td class="fc-day-number fc-sun fc-past" data-date="2015-05-24">24</td>
+                                              <td class="fc-day-number fc-mon fc-past" data-date="2015-05-25">25</td>
+                                              <td class="fc-day-number fc-tue fc-past" data-date="2015-05-26">26</td>
+                                              <td class="fc-day-number fc-wed fc-past" data-date="2015-05-27">27</td>
+                                              <td class="fc-day-number fc-thu fc-past" data-date="2015-05-28">28</td>
+                                              <td class="fc-day-number fc-fri fc-past" data-date="2015-05-29">29</td>
+                                              <td class="fc-day-number fc-sat fc-past" data-date="2015-05-30">30</td>
+                                            </tr>
+                                          </thead>
+                                          <tbody>
+                                            <tr>
+                                              <td></td>
+                                              <td></td>
+                                              <td></td>
+                                              <td></td>
+                                              <td></td>
+                                              <td></td>
+                                              <td></td>
+                                            </tr>
+                                          </tbody>
+                                        </table>
+                                      </div>
+                                    </div>
+                                    <div class="fc-row fc-week fc-widget-content fc-rigid" style="height: 66px;">
+                                      <div class="fc-bg">
+                                        <table>
+                                          <tbody>
+                                            <tr>
+                                              <td class="fc-day fc-widget-content fc-sun fc-past" data-date="2015-05-31"></td>
+                                              <td class="fc-day fc-widget-content fc-mon fc-other-month fc-past" data-date="2015-06-01"></td>
+                                              <td class="fc-day fc-widget-content fc-tue fc-other-month fc-past" data-date="2015-06-02"></td>
+                                              <td class="fc-day fc-widget-content fc-wed fc-other-month fc-past" data-date="2015-06-03"></td>
+                                              <td class="fc-day fc-widget-content fc-thu fc-other-month fc-past" data-date="2015-06-04"></td>
+                                              <td class="fc-day fc-widget-content fc-fri fc-other-month fc-past" data-date="2015-06-05"></td>
+                                              <td class="fc-day fc-widget-content fc-sat fc-other-month fc-past" data-date="2015-06-06"></td>
+                                            </tr>
+                                          </tbody>
+                                        </table>
+                                      </div>
+                                      <div class="fc-content-skeleton">
+                                        <table>
+                                          <thead>
+                                            <tr>
+                                              <td class="fc-day-number fc-sun fc-past" data-date="2015-05-31">31</td>
+                                              <td class="fc-day-number fc-mon fc-other-month fc-past" data-date="2015-06-01">1</td>
+                                              <td class="fc-day-number fc-tue fc-other-month fc-past" data-date="2015-06-02">2</td>
+                                              <td class="fc-day-number fc-wed fc-other-month fc-past" data-date="2015-06-03">3</td>
+                                              <td class="fc-day-number fc-thu fc-other-month fc-past" data-date="2015-06-04">4</td>
+                                              <td class="fc-day-number fc-fri fc-other-month fc-past" data-date="2015-06-05">5</td>
+                                              <td class="fc-day-number fc-sat fc-other-month fc-past" data-date="2015-06-06">6</td>
+                                            </tr>
+                                          </thead>
+                                          <tbody>
+                                            <tr>
+                                              <td></td>
+                                              <td></td>
+                                              <td></td>
+                                              <td></td>
+                                              <td></td>
+                                              <td></td>
+                                              <td></td>
+                                            </tr>
+                                          </tbody>
+                                        </table>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- Table donnees -->
+                  <div id="rowTable" class="row">
+                    <table class="striped">
+                    <thead>
+                      <tr>
+                        <th data-field="id">Nom</th>
+                        <th data-field="name">Date Début</th>
+                        <th data-field="price">Date Fin</th>
+                        <th data-field="price">Statut</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>Valérie Guimard</td>
+                        <td>08.12.18 matin</td>
+                        <td>09.12.18 soir</td>
+                        <td>Validé</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  </div>
+                </div>
+                <!-- Right part -->
+                <div id="rightPart" class="col s12 m3 l3"
+                  <div class="row">
+                    <div id="rttPart" class="col s1 m1 l1">
+                      <h5 class="header"><font color="black">RTT :</font></h5>
+                      <h10 class="header"> 50 </h10>
+                      <h6 class="header"> jours restants </h6>
+                    </div>
+                    <div class="col s1 m1 l1">
+                      <div class="row">
+                        <h5 class="header"><font color="black">Congés Payés :</font></h5>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="input-field col s12 m3 l3">
+                      <button type="submit" class="btn waves-effect waves-light col s12">Demander un congé</button>
+                    </div>
+                  </div>
                 </div>
               </div>
-              <div class="col s12 m8 l9">
-                <div id="calendar" class="fc fc-ltr fc-unthemed"><div class="fc-toolbar"><div class="fc-left"><div class="fc-button-group"><button type="button" class="fc-prev-button fc-button fc-state-default fc-corner-left"><span class="fc-icon fc-icon-left-single-arrow"></span></button><button type="button" class="fc-next-button fc-button fc-state-default fc-corner-right"><span class="fc-icon fc-icon-right-single-arrow"></span></button></div><button type="button" class="fc-today-button fc-button fc-state-default fc-corner-left fc-corner-right">today</button></div><div class="fc-right"><div class="fc-button-group"><button type="button" class="fc-month-button fc-button fc-state-default fc-corner-left fc-state-active">month</button><button type="button" class="fc-basicWeek-button fc-button fc-state-default">week</button><button type="button" class="fc-basicDay-button fc-button fc-state-default fc-corner-right">day</button></div></div><div class="fc-center"><h2>May 2015</h2></div><div class="fc-clear"></div></div><div class="fc-view-container" style=""><div class="fc-view fc-month-view fc-basic-view" style=""><table><thead class="fc-head"><tr><td class="fc-widget-header"><div class="fc-row fc-widget-header" style=""><table><thead><tr><th class="fc-day-header fc-widget-header fc-sun">Sun</th><th class="fc-day-header fc-widget-header fc-mon">Mon</th><th class="fc-day-header fc-widget-header fc-tue">Tue</th><th class="fc-day-header fc-widget-header fc-wed">Wed</th><th class="fc-day-header fc-widget-header fc-thu">Thu</th><th class="fc-day-header fc-widget-header fc-fri">Fri</th><th class="fc-day-header fc-widget-header fc-sat">Sat</th></tr></thead></table></div></td></tr></thead><tbody class="fc-body"><tr><td class="fc-widget-content"><div class="fc-day-grid-container" style=""><div class="fc-day-grid"><div class="fc-row fc-week fc-widget-content fc-rigid" style="height: 65px;"><div class="fc-bg"><table><tbody><tr><td class="fc-day fc-widget-content fc-sun fc-other-month fc-past" data-date="2015-04-26"></td><td class="fc-day fc-widget-content fc-mon fc-other-month fc-past" data-date="2015-04-27"></td><td class="fc-day fc-widget-content fc-tue fc-other-month fc-past" data-date="2015-04-28"></td><td class="fc-day fc-widget-content fc-wed fc-other-month fc-past" data-date="2015-04-29"></td><td class="fc-day fc-widget-content fc-thu fc-other-month fc-past" data-date="2015-04-30"></td><td class="fc-day fc-widget-content fc-fri fc-past" data-date="2015-05-01"></td><td class="fc-day fc-widget-content fc-sat fc-past" data-date="2015-05-02"></td></tr></tbody></table></div><div class="fc-content-skeleton"><table><thead><tr><td class="fc-day-number fc-sun fc-other-month fc-past" data-date="2015-04-26">26</td><td class="fc-day-number fc-mon fc-other-month fc-past" data-date="2015-04-27">27</td><td class="fc-day-number fc-tue fc-other-month fc-past" data-date="2015-04-28">28</td><td class="fc-day-number fc-wed fc-other-month fc-past" data-date="2015-04-29">29</td><td class="fc-day-number fc-thu fc-other-month fc-past" data-date="2015-04-30">30</td><td class="fc-day-number fc-fri fc-past" data-date="2015-05-01">1</td><td class="fc-day-number fc-sat fc-past" data-date="2015-05-02">2</td></tr></thead><tbody><tr><td></td><td></td><td></td><td></td><td></td><td class="fc-event-container"><a class="fc-day-grid-event fc-h-event fc-event fc-start fc-end fc-draggable fc-resizable" style="background-color:#9c27b0;border-color:#9c27b0"><div class="fc-content"> <span class="fc-title">All Day Event</span></div><div class="fc-resizer fc-end-resizer"></div></a></td><td></td></tr></tbody></table></div></div><div class="fc-row fc-week fc-widget-content fc-rigid" style="height: 65px;"><div class="fc-bg"><table><tbody><tr><td class="fc-day fc-widget-content fc-sun fc-past" data-date="2015-05-03"></td><td class="fc-day fc-widget-content fc-mon fc-past" data-date="2015-05-04"></td><td class="fc-day fc-widget-content fc-tue fc-past" data-date="2015-05-05"></td><td class="fc-day fc-widget-content fc-wed fc-past" data-date="2015-05-06"></td><td class="fc-day fc-widget-content fc-thu fc-past" data-date="2015-05-07"></td><td class="fc-day fc-widget-content fc-fri fc-past" data-date="2015-05-08"></td><td class="fc-day fc-widget-content fc-sat fc-past" data-date="2015-05-09"></td></tr></tbody></table></div><div class="fc-content-skeleton"><table><thead><tr><td class="fc-day-number fc-sun fc-past" data-date="2015-05-03">3</td><td class="fc-day-number fc-mon fc-past" data-date="2015-05-04">4</td><td class="fc-day-number fc-tue fc-past" data-date="2015-05-05">5</td><td class="fc-day-number fc-wed fc-past" data-date="2015-05-06">6</td><td class="fc-day-number fc-thu fc-past" data-date="2015-05-07">7</td><td class="fc-day-number fc-fri fc-past" data-date="2015-05-08">8</td><td class="fc-day-number fc-sat fc-past" data-date="2015-05-09">9</td></tr></thead><tbody><tr><td class="fc-event-container" colspan="2"><a class="fc-day-grid-event fc-h-event fc-event fc-start fc-end fc-draggable" style="background-color:#01579b;border-color:#01579b"><div class="fc-content"><span class="fc-time">12a</span> <span class="fc-title">Conference</span></div></a></td><td rowspan="2"></td><td rowspan="2"></td><td class="fc-event-container" colspan="3"><a class="fc-day-grid-event fc-h-event fc-event fc-start fc-end fc-draggable fc-resizable" style="background-color:#e91e63;border-color:#e91e63"><div class="fc-content"> <span class="fc-title">Long Event</span></div><div class="fc-resizer fc-end-resizer"></div></a></td></tr><tr class=""><td></td><td></td><td></td><td></td><td class="fc-event-container"><a class="fc-day-grid-event fc-h-event fc-event fc-start fc-end fc-draggable" style="background-color:#ff1744;border-color:#ff1744"><div class="fc-content"><span class="fc-time">4p</span> <span class="fc-title">Repeating Event</span></div></a></td></tr></tbody></table></div></div><div class="fc-row fc-week fc-widget-content fc-rigid" style="height: 65px;"><div class="fc-bg"><table><tbody><tr><td class="fc-day fc-widget-content fc-sun fc-past" data-date="2015-05-10"></td><td class="fc-day fc-widget-content fc-mon fc-past" data-date="2015-05-11"></td><td class="fc-day fc-widget-content fc-tue fc-past" data-date="2015-05-12"></td><td class="fc-day fc-widget-content fc-wed fc-past" data-date="2015-05-13"></td><td class="fc-day fc-widget-content fc-thu fc-past" data-date="2015-05-14"></td><td class="fc-day fc-widget-content fc-fri fc-past" data-date="2015-05-15"></td><td class="fc-day fc-widget-content fc-sat fc-past" data-date="2015-05-16"></td></tr></tbody></table></div><div class="fc-content-skeleton"><table><thead><tr><td class="fc-day-number fc-sun fc-past" data-date="2015-05-10">10</td><td class="fc-day-number fc-mon fc-past" data-date="2015-05-11">11</td><td class="fc-day-number fc-tue fc-past" data-date="2015-05-12">12</td><td class="fc-day-number fc-wed fc-past" data-date="2015-05-13">13</td><td class="fc-day-number fc-thu fc-past" data-date="2015-05-14">14</td><td class="fc-day-number fc-fri fc-past" data-date="2015-05-15">15</td><td class="fc-day-number fc-sat fc-past" data-date="2015-05-16">16</td></tr></thead><tbody><tr><td rowspan="5"></td><td rowspan="5"></td><td class="fc-event-container"><a class="fc-day-grid-event fc-h-event fc-event fc-start fc-end fc-draggable" style="background-color:#2196f3;border-color:#2196f3"><div class="fc-content"><span class="fc-time">10:30a</span> <span class="fc-title">Meeting</span></div></a></td><td class="fc-event-container" rowspan="5"><a class="fc-day-grid-event fc-h-event fc-event fc-start fc-end fc-draggable" style="background-color:#00bcd4;border-color:#00bcd4"><div class="fc-content"><span class="fc-time">7a</span> <span class="fc-title">Birthday Party</span></div></a></td><td rowspan="5"></td><td rowspan="5"></td><td class="fc-event-container" rowspan="5"><a class="fc-day-grid-event fc-h-event fc-event fc-start fc-end fc-draggable" style="background-color:#aa00ff;border-color:#aa00ff"><div class="fc-content"><span class="fc-time">4p</span> <span class="fc-title">Repeating Event</span></div></a></td></tr><tr class=""><td class="fc-event-container fc-limited"><a class="fc-day-grid-event fc-h-event fc-event fc-start fc-end fc-draggable" style="background-color:#ff5722;border-color:#ff5722"><div class="fc-content"><span class="fc-time">12p</span> <span class="fc-title">Lunch</span></div></a></td><td class="fc-more-cell" rowspan="1"><div><a class="fc-more">+4 more</a></div></td></tr><tr class="fc-limited"><td class="fc-event-container"><a class="fc-day-grid-event fc-h-event fc-event fc-start fc-end fc-draggable" style="background-color:#4caf50;border-color:#4caf50"><div class="fc-content"><span class="fc-time">2:30p</span> <span class="fc-title">Meeting</span></div></a></td></tr><tr class="fc-limited"><td class="fc-event-container"><a class="fc-day-grid-event fc-h-event fc-event fc-start fc-end fc-draggable" style="background-color:#03a9f4;border-color:#03a9f4"><div class="fc-content"><span class="fc-time">5:30p</span> <span class="fc-title">Happy Hour</span></div></a></td></tr><tr class="fc-limited"><td class="fc-event-container"><a class="fc-day-grid-event fc-h-event fc-event fc-start fc-end fc-draggable" style="background-color:#009688;border-color:#009688"><div class="fc-content"><span class="fc-time">8p</span> <span class="fc-title">Dinner</span></div></a></td></tr></tbody></table></div></div><div class="fc-row fc-week fc-widget-content fc-rigid" style="height: 65px;"><div class="fc-bg"><table><tbody><tr><td class="fc-day fc-widget-content fc-sun fc-past" data-date="2015-05-17"></td><td class="fc-day fc-widget-content fc-mon fc-past" data-date="2015-05-18"></td><td class="fc-day fc-widget-content fc-tue fc-past" data-date="2015-05-19"></td><td class="fc-day fc-widget-content fc-wed fc-past" data-date="2015-05-20"></td><td class="fc-day fc-widget-content fc-thu fc-past" data-date="2015-05-21"></td><td class="fc-day fc-widget-content fc-fri fc-past" data-date="2015-05-22"></td><td class="fc-day fc-widget-content fc-sat fc-past" data-date="2015-05-23"></td></tr></tbody></table></div><div class="fc-content-skeleton"><table><thead><tr><td class="fc-day-number fc-sun fc-past" data-date="2015-05-17">17</td><td class="fc-day-number fc-mon fc-past" data-date="2015-05-18">18</td><td class="fc-day-number fc-tue fc-past" data-date="2015-05-19">19</td><td class="fc-day-number fc-wed fc-past" data-date="2015-05-20">20</td><td class="fc-day-number fc-thu fc-past" data-date="2015-05-21">21</td><td class="fc-day-number fc-fri fc-past" data-date="2015-05-22">22</td><td class="fc-day-number fc-sat fc-past" data-date="2015-05-23">23</td></tr></thead><tbody><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table></div></div><div class="fc-row fc-week fc-widget-content fc-rigid" style="height: 65px;"><div class="fc-bg"><table><tbody><tr><td class="fc-day fc-widget-content fc-sun fc-past" data-date="2015-05-24"></td><td class="fc-day fc-widget-content fc-mon fc-past" data-date="2015-05-25"></td><td class="fc-day fc-widget-content fc-tue fc-past" data-date="2015-05-26"></td><td class="fc-day fc-widget-content fc-wed fc-past" data-date="2015-05-27"></td><td class="fc-day fc-widget-content fc-thu fc-past" data-date="2015-05-28"></td><td class="fc-day fc-widget-content fc-fri fc-past" data-date="2015-05-29"></td><td class="fc-day fc-widget-content fc-sat fc-past" data-date="2015-05-30"></td></tr></tbody></table></div><div class="fc-content-skeleton"><table><thead><tr><td class="fc-day-number fc-sun fc-past" data-date="2015-05-24">24</td><td class="fc-day-number fc-mon fc-past" data-date="2015-05-25">25</td><td class="fc-day-number fc-tue fc-past" data-date="2015-05-26">26</td><td class="fc-day-number fc-wed fc-past" data-date="2015-05-27">27</td><td class="fc-day-number fc-thu fc-past" data-date="2015-05-28">28</td><td class="fc-day-number fc-fri fc-past" data-date="2015-05-29">29</td><td class="fc-day-number fc-sat fc-past" data-date="2015-05-30">30</td></tr></thead><tbody><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table></div></div><div class="fc-row fc-week fc-widget-content fc-rigid" style="height: 66px;"><div class="fc-bg"><table><tbody><tr><td class="fc-day fc-widget-content fc-sun fc-past" data-date="2015-05-31"></td><td class="fc-day fc-widget-content fc-mon fc-other-month fc-past" data-date="2015-06-01"></td><td class="fc-day fc-widget-content fc-tue fc-other-month fc-past" data-date="2015-06-02"></td><td class="fc-day fc-widget-content fc-wed fc-other-month fc-past" data-date="2015-06-03"></td><td class="fc-day fc-widget-content fc-thu fc-other-month fc-past" data-date="2015-06-04"></td><td class="fc-day fc-widget-content fc-fri fc-other-month fc-past" data-date="2015-06-05"></td><td class="fc-day fc-widget-content fc-sat fc-other-month fc-past" data-date="2015-06-06"></td></tr></tbody></table></div><div class="fc-content-skeleton"><table><thead><tr><td class="fc-day-number fc-sun fc-past" data-date="2015-05-31">31</td><td class="fc-day-number fc-mon fc-other-month fc-past" data-date="2015-06-01">1</td><td class="fc-day-number fc-tue fc-other-month fc-past" data-date="2015-06-02">2</td><td class="fc-day-number fc-wed fc-other-month fc-past" data-date="2015-06-03">3</td><td class="fc-day-number fc-thu fc-other-month fc-past" data-date="2015-06-04">4</td><td class="fc-day-number fc-fri fc-other-month fc-past" data-date="2015-06-05">5</td><td class="fc-day-number fc-sat fc-other-month fc-past" data-date="2015-06-06">6</td></tr></thead><tbody><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table></div></div></div></div></td></tr></tbody></table></div></div></div>
-              </div>
+              <!-- end first row !-->
             </div>
           </div>
-          </div>
-
-          <!-- Floating Action Button -->
-          <div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
-              <a class="btn-floating btn-large red">
-                <i class="large mdi-editor-mode-edit"></i>
-              </a>
-              <ul>
-                <li><a href="css-helpers.html" class="btn-floating red" style="transform: scaleY(0.4) scaleX(0.4) translateY(40px); opacity: 0;"><i class="large mdi-communication-live-help"></i></a></li>
-                <li><a href="app-widget.html" class="btn-floating yellow darken-1" style="transform: scaleY(0.4) scaleX(0.4) translateY(40px); opacity: 0;"><i class="large mdi-device-now-widgets"></i></a></li>
-                <li><a href="app-calendar.html" class="btn-floating green" style="transform: scaleY(0.4) scaleX(0.4) translateY(40px); opacity: 0;"><i class="large mdi-editor-insert-invitation"></i></a></li>
-                <li><a href="app-email.html" class="btn-floating blue" style="transform: scaleY(0.4) scaleX(0.4) translateY(40px); opacity: 0;"><i class="large mdi-communication-email"></i></a></li>
-              </ul>
-          </div>
-          <!-- Floating Action Button -->
+        </div>
+        <!--end container-->
+      </section>
+      <!-- END CONTENT -->
       </div>
-      <!--end container-->
-
-    </section>
-    <!-- END CONTENT -->
-
-    <!-- //////////////////////////////////////////////////////////////////////////// -->
-    <!-- START RIGHT SIDEBAR NAV-->
-    <aside id="right-sidebar-nav">
-      <ul id="chat-out" class="side-nav rightside-navigation right-aligned ps-container ps-active-y" style="width: 300px; right: -310px; height: 639px;">
-          <li class="li-hover">
-          <a href="#" data-activates="chat-out" class="chat-close-collapse right"><i class="mdi-navigation-close"></i></a>
-          <div id="right-search" class="row">
-              <form class="col s12">
-                  <div class="input-field">
-                      <i class="mdi-action-search prefix"></i>
-                      <input id="icon_prefix" type="text" class="validate">
-                      <label for="icon_prefix">Search</label>
-                  </div>
-              </form>
-          </div>
-          </li>
-          <li class="li-hover">
-              <ul class="chat-collapsible" data-collapsible="expandable">
-              <li class="active">
-                  <div class="collapsible-header teal white-text active"><i class="mdi-social-whatshot"></i>Recent Activity</div>
-                  <div class="collapsible-body recent-activity" style="display: block;">
-                      <div class="recent-activity-list chat-out-list row">
-                          <div class="col s3 recent-activity-list-icon"><i class="mdi-action-add-shopping-cart"></i>
-                          </div>
-                          <div class="col s9 recent-activity-list-text">
-                              <a href="#">just now</a>
-                              <p>Jim Doe Purchased new equipments for zonal office.</p>
-                          </div>
-                      </div>
-                      <div class="recent-activity-list chat-out-list row">
-                          <div class="col s3 recent-activity-list-icon"><i class="mdi-device-airplanemode-on"></i>
-                          </div>
-                          <div class="col s9 recent-activity-list-text">
-                              <a href="#">Yesterday</a>
-                              <p>Your Next flight for USA will be on 15th August 2015.</p>
-                          </div>
-                      </div>
-                      <div class="recent-activity-list chat-out-list row">
-                          <div class="col s3 recent-activity-list-icon"><i class="mdi-action-settings-voice"></i>
-                          </div>
-                          <div class="col s9 recent-activity-list-text">
-                              <a href="#">5 Days Ago</a>
-                              <p>Natalya Parker Send you a voice mail for next conference.</p>
-                          </div>
-                      </div>
-                      <div class="recent-activity-list chat-out-list row">
-                          <div class="col s3 recent-activity-list-icon"><i class="mdi-action-store"></i>
-                          </div>
-                          <div class="col s9 recent-activity-list-text">
-                              <a href="#">Last Week</a>
-                              <p>Jessy Jay open a new store at S.G Road.</p>
-                          </div>
-                      </div>
-                      <div class="recent-activity-list chat-out-list row">
-                          <div class="col s3 recent-activity-list-icon"><i class="mdi-action-settings-voice"></i>
-                          </div>
-                          <div class="col s9 recent-activity-list-text">
-                              <a href="#">5 Days Ago</a>
-                              <p>Natalya Parker Send you a voice mail for next conference.</p>
-                          </div>
-                      </div>
-                  </div>
-              </li>
-              <li class="active">
-                  <div class="collapsible-header light-blue white-text active"><i class="mdi-editor-attach-money"></i>Sales Repoart</div>
-                  <div class="collapsible-body sales-repoart" style="display: block;">
-                      <div class="sales-repoart-list  chat-out-list row">
-                          <div class="col s8">Target Salse</div>
-                          <div class="col s4"><span id="sales-line-1"></span>
-                          </div>
-                      </div>
-                      <div class="sales-repoart-list chat-out-list row">
-                          <div class="col s8">Payment Due</div>
-                          <div class="col s4"><span id="sales-bar-1"></span>
-                          </div>
-                      </div>
-                      <div class="sales-repoart-list chat-out-list row">
-                          <div class="col s8">Total Delivery</div>
-                          <div class="col s4"><span id="sales-line-2"></span>
-                          </div>
-                      </div>
-                      <div class="sales-repoart-list chat-out-list row">
-                          <div class="col s8">Total Progress</div>
-                          <div class="col s4"><span id="sales-bar-2"></span>
-                          </div>
-                      </div>
-                  </div>
-              </li>
-              <li>
-                  <div class="collapsible-header red white-text"><i class="mdi-action-stars"></i>Favorite Associates</div>
-                  <div class="collapsible-body favorite-associates">
-                      <div class="favorite-associate-list chat-out-list row">
-                          <div class="col s4"><img src="images/avatar.jpg" alt="" class="circle responsive-img online-user valign profile-image">
-                          </div>
-                          <div class="col s8">
-                              <p>Eileen Sideways</p>
-                              <p class="place">Los Angeles, CA</p>
-                          </div>
-                      </div>
-                      <div class="favorite-associate-list chat-out-list row">
-                          <div class="col s4"><img src="images/avatar.jpg" alt="" class="circle responsive-img online-user valign profile-image">
-                          </div>
-                          <div class="col s8">
-                              <p>Zaham Sindil</p>
-                              <p class="place">San Francisco, CA</p>
-                          </div>
-                      </div>
-                      <div class="favorite-associate-list chat-out-list row">
-                          <div class="col s4"><img src="images/avatar.jpg" alt="" class="circle responsive-img offline-user valign profile-image">
-                          </div>
-                          <div class="col s8">
-                              <p>Renov Leongal</p>
-                              <p class="place">Cebu City, Philippines</p>
-                          </div>
-                      </div>
-                      <div class="favorite-associate-list chat-out-list row">
-                          <div class="col s4"><img src="images/avatar.jpg" alt="" class="circle responsive-img online-user valign profile-image">
-                          </div>
-                          <div class="col s8">
-                              <p>Weno Carasbong</p>
-                              <p>Tokyo, Japan</p>
-                          </div>
-                      </div>
-                      <div class="favorite-associate-list chat-out-list row">
-                          <div class="col s4"><img src="images/avatar.jpg" alt="" class="circle responsive-img offline-user valign profile-image">
-                          </div>
-                          <div class="col s8">
-                              <p>Nusja Nawancali</p>
-                              <p class="place">Bangkok, Thailand</p>
-                          </div>
-                      </div>
-                  </div>
-              </li>
-              </ul>
-          </li>
-      <div class="ps-scrollbar-x-rail" style="left: 0px; bottom: 3px;"><div class="ps-scrollbar-x" style="left: 0px; width: 0px;"></div></div><div class="ps-scrollbar-y-rail" style="top: 0px; height: 579px; right: 3px;"><div class="ps-scrollbar-y" style="top: 0px; height: 524px;"></div></div></ul>
-    </aside>
-    <!-- LEFT RIGHT SIDEBAR NAV-->
-
-  </div>
-  <!-- END WRAPPER -->
-
-</div>
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-	<script>window.jQuery || document.write('<script src="js/vendor/jquery-1.9.1.min.js"><\/script>')</script>
-	<script src="js/main.js"></script>
-</body>
-{% endblock %}
+      <!-- END WRAPPER -->
+    </div>
+  </body>
+  {% endblock %}

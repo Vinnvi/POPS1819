@@ -26,10 +26,11 @@
                 </div>
                 <div class="col s2"></div>
               </li>
+
               <li class="col s12 m4 l2">
                 <a class='dropdown-trigger btn btn-large grey lighten-3 black-text' href='#' data-target='dropdown1'>
                   <i class='material-icons left'>
-                    <img src={{app.user.profile_pic_path}} class="circle responsive-img" style="width:35px;height:35px;"/>
+                    <img src="{{app.user.profile_pic_path}}" class="circle responsive-img" style="width:35px;height:35px;"/>
                   </i>
                   <b>{{app.user.nom}}</b>
                   {{app.user.prenom}}
@@ -41,17 +42,37 @@
             <a class="btn-flat waves-effect waves-light btn-large" href="{{ path('app_noteFrais') }}" name="action">Mes notes de frais
               <i class="material-icons right">book</i>
             </a>
-            <a class="btn-flat waves-effect waves-light btn-large"  href="{{ path('app_noteFrais') }}"  name="action">Mes demandes de congés
+            <a class="btn-flat waves-effect waves-light btn-large"  href="{{ path('app_demandesDeConges') }}"  name="action">Mes demandes de congés
               <i class="material-icons right">perm_contact_calendar</i>
             </a>
-            <button class="btn-flat waves-effect waves-light btn-large" href="{{ path('app_noteFrais') }}"  name="action">Mes demandes d'information
+            <a class="btn-flat waves-effect waves-light btn-large" href="{{ path('app_demandesDInformation') }}"  name="action">Mes demandes d'information
               <i class="material-icons right">send</i>
-            </button>
+            </a>
+            {% if app.user.service.id == 1 or app.user.roles[0] == 'Chef de service' %}
+              <a class="btn-flat waves-effect waves-light btn-large" href="{{ path('app_gestionDemandesDeConges') }}"  name="action">Gestion des congés
+                <i class="material-icons right">beach_access</i>
+              </a>
+            {% endif %}
+            {% if app.user.service.id == 2 or app.user.roles[0] == 'Chef de service'%}
+              <a class="btn-flat waves-effect waves-light btn-large" href="{{ path('app_gestionNotesFrais') }}"  name="action">Gestion des notes de frais
+                <i class="material-icons right">local_atm</i>
+              </a>
+            {% endif %}
+            {% if app.user.service.id == 1 %}
+              <a class="btn-flat waves-effect waves-light btn-large" href="{{ path('app_gestionDemandesDInformation') }}"  name="action">Gestion des D. d'information
+                <i class="material-icons right">assignment</i>
+              </a>
+            {% endif %}
+            {% if app.user.roles[0] == 'Chef de service' %}
+              <a class="btn-flat waves-effect waves-light btn-large" href="{{ path('app_gestionMissions') }}"  name="action">Gestion des missions
+                <i class="material-icons right">people</i>
+              </a>
+            {% endif %}
           </div>
         </nav>
         <!-- Dropdown Structure -->
         <ul id='dropdown1' class='dropdown-content'>
-          <li><a href="#!">Edition de profil</a></li>
+          <li><a href="{{ path('app_profile') }}">Edition de profil</a></li>
           <li><a href="#!">Paramètres</a></li>
           <li class="divider" tabindex="-1"></li>
           <li>
@@ -64,16 +85,20 @@
         {% block body %}
 
         {% endblock %}
-
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
         <script type="text/javascript" src="materialize/js/materialize.min.js"></script>
-        
+        <script src="https://rawgit.com/aurelia-ui-toolkits/aurelia-materialize-bundles/0.20.2/config2.js"></script>
+
         <script>
           $('.dropdown-trigger').dropdown({
             coverTrigger: false
           });
         </script>
 
-        {% block javascripts %}{% endblock %}
+
+        {% block javascripts %}
+        {% endblock %}
+        {% block researchBar %}
+        {% endblock %}
     </body>
 </html>

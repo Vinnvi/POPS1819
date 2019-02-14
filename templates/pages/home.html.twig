@@ -15,22 +15,40 @@
             </thead>
 
             <tbody>
+            {% dump notifications %}
             {% for notification in notifications %}
-                <tr class="
-                    {% if notification.getStatut() == "OK" %}
-                        green lighten-4
-                    {% elseif notification.getStatut() == "ACTION_NECESSAIRE" %}
-                        red lighten-4
-                    {% endif %}
-                ">
-                    <td>{{ notification.getCategorie() }}</td>
-                    <td>{{ notification.getDescription() }}</td>
-                    {% if notification.getDate()|date('d') == currentDate[0] and notification.getDate()|date('m') == currentDate[1] and notification.getDate()|date('Y') == currentDate[2] %}
-                        <td>{{ notification.getDate()|date('H:i') }}</td>
-                    {% else %}
-                        <td>{{ notification.getDate()|date('d/m/Y') }}</td>
-                    {% endif %}
-                </tr>
+                    <tr class="
+                        {% if notification.getStatut() == "OK" %}
+                            green lighten-4
+                        {% elseif notification.getStatut() == "ACTION_NECESSAIRE" %}
+                            red lighten-4
+                        {% endif %}
+                        {% if not notification.getPersonnel() %}red-text{% endif %}
+                    " data-href="{{path('app_noteFrais')}}">
+                        <td>
+                            {% if not notification.getVu() %}<b>{% endif %}
+                            {{ notification.getCategorie() }}
+                            {% if not notification.getVu() %}</b>{% endif %}
+                        </td>
+                        <td>
+                            {% if not notification.getVu() %}<b>{% endif %}
+                            {{ notification.getDescription() }}
+                            {% if not notification.getVu() %}</b>{% endif %}
+                        </td>
+                        {% if notification.getDate()|date('d') == currentDate[0] and notification.getDate()|date('m') == currentDate[1] and notification.getDate()|date('Y') == currentDate[2] %}
+                            <td>
+                                {% if not notification.getVu() %}<b>{% endif %}
+                                {{ notification.getDate()|date('H:i') }}
+                                {% if not notification.getVu() %}</b>{% endif %}
+                            </td>
+                        {% else %}
+                            <td>
+                                {% if not notification.getVu() %}<b>{% endif %}
+                                {{ notification.getDate()|date('d/m/Y') }}
+                                {% if not notification.getVu() %}</b>{% endif %}
+                            </td>
+                        {% endif %}
+                    </tr>
             {% endfor %}
             </tbody>
         </table>
@@ -82,3 +100,16 @@
     </script>
 {% endblock %}
 
+{% block tabNotifications %}
+<script>
+    $(function(){
+      $(document).on('click', '[data-href]', function () {
+        var url = $(this).data('href');
+        if (url && url.length > 0) {
+            document.location.href = url;
+            return false;
+        }
+      });
+    });
+</script>
+{% endblock %}

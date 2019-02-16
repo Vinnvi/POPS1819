@@ -49,6 +49,11 @@ class Projet
      */
     private $Service;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $status;
+
     public function __construct()
     {
         $this->collabos = new ArrayCollection();
@@ -148,5 +153,17 @@ class Projet
     public function __toString()
     {
         return $this->nom;
+    }
+
+    public function getStatus(): ?string
+    {
+        return $this->status;
+    }
+
+    public function setStatus(string $status): self
+    {
+        $this->status = $status;
+
+        return $this;
     }
 }

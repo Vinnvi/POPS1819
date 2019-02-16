@@ -1,0 +1,63 @@
+{% extends 'topBar.html.twig' %}
+{% block title %}Mes missions{% endblock %}
+
+{% block body %}
+<div class='container'>
+    <h4 class="center-align">Mes missions</h4>
+    <div class="collapsible-header blue lighten-4 row">
+        <div class="col s2"><b>Intitulé</b></div>
+        <div class="col s2"><b>Dates</b></div>
+        <div class="col s2"><b>Etat</b></div>
+        <div class="col s2"><b>ID</b></div>
+        <div class="col s2"><b>Service</b></div>
+        <div class="col s1"></div>
+    </div>
+    <ul class="collapsible">
+        {% set i = 0 %}
+        {% if missions is empty %}
+            <h5 class="center-align p-2">Vous n'avez aucune mission.</h5>
+        {% endif %}
+        {% for mission in missions %}
+                {% if i == 0 %}
+                <li class="active">
+                {% else %}
+                <li>
+                {% endif %}
+                <div class="collapsible-header blue lighten-5 row m-0 waves-effect waves-light">
+                    <div class="col s2">{{ mission.nom }}</div>
+                    <div class="col s2">{{ mission.DateDebut|date('d/m/Y') }}-{{ mission.DateFin|date('d/m/Y') }} </div>
+                    <div class="col s2">{{ mission.status }}</div>
+                    <div class="col s2">{{ mission.id }}</div>
+                    <div class="col s2">{{ mission.Service }}</div>
+                    <i class="large material-icons col s1">expand_less</i>
+                </div>
+                <div class="collapsible-body">
+                    <b>Description</b>
+                    <p>{{ mission.Description }}</p>
+                    <!--<b>Liste des collaborateurs</b>
+                    <b>Total des notes de frais liées à cette mission</b>-->
+                </div>
+            </li>
+        {% set i = 1 %}
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}
+
+{% block researchBar %}
+    <script>
+        $(document).ready(function(){
+            $('input.validate').autocomplete({
+            data: {{ listeCollaborateurs|json_encode|raw }},
+            });
+        });
+    </script>
+{% endblock %}
+
+{% block javascripts %}
+  <script>
+    $(document).ready(function(){
+      $('.collapsible').collapsible();
+    });
+  </script>
+{% endblock %}

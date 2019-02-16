@@ -28,8 +28,13 @@ class MissionsController extends AbstractController
       }
       // FIN CODE TOPBAR
 
-    return new Response($this->twig->render('pages/home.html.twig',[
+      // CODE MISSION
+      $missions = $this->getDoctrine()->getEntityManager()->getRepository('App\Entity\Projet')->findByCollaborateurId($this->getUser()->getId());
+      // FIN
+
+    return new Response($this->twig->render('pages/missions.html.twig',[
                   'listeCollaborateurs' => $listeCollaborateursPrenomNom,
+                  'missions' => $missions,
             ]));
     }
 }

@@ -46,7 +46,7 @@ class GestionNotesFraisController extends AbstractController
     {
 
         $notesRepository = $this->getDoctrine()->getEntityManager()->getRepository('App\Entity\NoteDeFrais');
-        $notesDeFraisEnAttente = $notesRepository->findByStatus(NoteDeFrais::STATUS[4]);
+        $notesDeFraisEnAttente = $notesRepository->findByStatus(NoteDeFrais::STATUS[3]);
         $notesDeFraisPasses = array_merge($notesRepository->findByStatus(NoteDeFrais::STATUS[5]), $notesRepository->findByStatus(NoteDeFrais::STATUS[7])) ;
 
         return $this->render('pages/gestionNotesFrais.html.twig',

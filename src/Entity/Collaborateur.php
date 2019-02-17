@@ -95,8 +95,9 @@ class Collaborateur implements UserInterface,EquatableInterface
     {
         $this->ServiceChef = new ArrayCollection();
         $this->projet = new ArrayCollection();
-        $this->setRoles('Collaborateur');
+        $this->setRoles('ROLE_USER');
         $this->setProfilePicPath('');
+        $this->setBackgroundPicPath('');
         $this->notifications = new ArrayCollection();
     }
 

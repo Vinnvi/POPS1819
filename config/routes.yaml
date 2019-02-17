@@ -25,6 +25,10 @@ app_gestionNotesFrais:
   path: /gestionNotesFrais
   controller: App\Controller\GestionNotesFraisController::index
 
+app_gestionNotesFraisAdmin:
+  path: /gestionNotesFraisChef
+  controller: App\Controller\GestionNotesAdminController::index
+
 #app_noteFrais:
 #  path: /profile
 #  controller: App\Controller\profile::index

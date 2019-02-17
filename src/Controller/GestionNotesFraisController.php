@@ -5,6 +5,7 @@ namespace App\Controller;
 
 use App\Entity\NoteDeFrais;
 use App\Entity\LigneDeFrais;
+use App\Entity\Service;
 use PhpParser\Node\Expr\Array_;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Twig\Environment;
@@ -43,12 +44,15 @@ class GestionNotesFraisController extends AbstractController
      */
     public function index(): Response
     {
+
         $notesRepository = $this->getDoctrine()->getEntityManager()->getRepository('App\Entity\NoteDeFrais');
-        $notesDeFrais = $notesRepository->findEnAttente();
+        $notesDeFraisEnAttente = $notesRepository->findByStatus(NoteDeFrais::STATUS[4]);
+        $notesDeFraisPasses = array_merge($notesRepository->findByStatus(NoteDeFrais::STATUS[5]), $notesRepository->findByStatus(NoteDeFrais::STATUS[7])) ;
 
         return $this->render('pages/gestionNotesFrais.html.twig',
             [
-                'notesDeFrais' => $notesDeFrais
+                'notesDeFraisEnAttente' => $notesDeFraisEnAttente,
+                'notesDeFraisPassees' => $notesDeFraisPasses,
             ]);
     }
 

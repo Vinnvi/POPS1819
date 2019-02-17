@@ -35,6 +35,15 @@ class GestionNotesAdminController extends AbstractController
     }
 
     /**
+     * @param $note1
+     * @param $note2
+     * @return bool
+     */
+    function comparator($note1, $note2){
+        return $note1->getLastModif() < $note2->getLastModif();
+    }
+
+    /**
      * @Route("/gestionNotesDeFraisChef", name="index")
      * @return \Symfony\Component\HttpFoundation\Response
      */
@@ -47,7 +56,6 @@ class GestionNotesAdminController extends AbstractController
 
         $collaborateurRepository = $this->getDoctrine()->getEntityManager()->getRepository('App\Entity\Collaborateur');
 
-
         //On recupere la liste des collaborateurs qu'on gere
         $collaborateurs =  array();
         foreach ($servicesIds as $servicesId){
@@ -59,15 +67,39 @@ class GestionNotesAdminController extends AbstractController
 
 
         $notesEnAttente = array();
+        $notesValideesRefusees = array();
+
         //On prend toutes les notes de frais en attente de validation de ces employes
         foreach ($collaborateurs as $collaborateur){
             $notesEnAttente = array_merge($notesEnAttente, $noteRepository->findByStatusAndCollabo(NoteDeFrais::STATUS[1],$collaborateur->getId()));
+            $notesValideesRefusees = array_merge($notesValideesRefusees, $noteRepository->findByStatusAndCollabo(NoteDeFrais::STATUS[2],$collaborateur->getId()));
+            $notesValideesRefusees = array_merge($notesValideesRefusees, $noteRepository->findByStatusAndCollabo(NoteDeFrais::STATUS[3],$collaborateur->getId()));
         }
+        usort($notesValideesRefusees,array($this,"comparator"));
 
         return $this->render('pages/gestionNotesFraisChef.html.twig',
             [
                 'notesDeFraisEnAttente' => $notesEnAttente,
+                'notesValideesRefusees' => $notesValideesRefusees,
             ]);
+    }
+
+    /**
+     * @Route("/gestionNotesDeFraisChef/details/{id}", name="gestionNotesChef.details")
+     * @param NoteDeFrais $notesDeFrais
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function details(NoteDeFrais $noteDeFrais)
+    {
+        //Récupération des lignes de frais relatives à la note
+        $LigneRepository = $this->getDoctrine()->getEntityManager()->getRepository('App\Entity\LigneDeFrais');
+        $lignesDeFrais =  $LigneRepository->findByNoteId($noteDeFrais->getId());
+
+        return $this->render('pages/gestionNotesFraisChefDetails.html.twig',[
+            'noteDeFrais' => $noteDeFrais,
+            'ligneDeFrais' => $lignesDeFrais,
+            'statusNotes' => NoteDeFrais::STATUS,
+        ]);
     }
 
     /**
@@ -93,6 +125,49 @@ class GestionNotesAdminController extends AbstractController
 
         }
         $this->em->flush();
+
+        return $this->redirectToRoute('app_gestionNotesFraisAdmin');
+    }
+
+
+    /**
+     * @Route("/gestionNotesDeFrais/validationDetails/", name="validation.lignes.chef.details")
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     * @throws \Exception
+     */
+    public function validationDemandesLigne()
+    {
+        $LigneRepository = $this->getDoctrine()->getEntityManager()->getRepository('App\Entity\LigneDeFrais');
+        $ok = true;
+        //Validation des lignes
+        foreach ($_POST as $key => $value){
+            $LigneDeFrais = $LigneRepository->findOneByID($key);
+            if($LigneDeFrais != null){
+                if($value == "refus"){
+                    $LigneDeFrais->setStatutValidation(LigneDeFrais::STATUS[3]);
+                    $ok = false;
+                }
+                else{
+                    $LigneDeFrais->setStatutValidation(LigneDeFrais::STATUS[2]);
+                }
+                $LigneDeFrais->setLastModif(new \DateTime());
+            }
+        }
+        //Validation ou non de la note
+        $noteRepository = $this->getDoctrine()->getEntityManager()->getRepository('App\Entity\NoteDeFrais');
+        if(isset($_POST['id'])){
+            $notesDeFrais = $noteRepository->findOneByID($_POST['id']);
+            if($ok){
+                $notesDeFrais->setStatut(NoteDeFrais::STATUS[2]);
+            }
+            else{
+                $notesDeFrais->setStatut(NoteDeFrais::STATUS[3]);
+            }
+            $notesDeFrais->setLastModif(new \DateTime());
+        }
+
+        $this->em->flush();
+
 
         return $this->redirectToRoute('app_gestionNotesFraisAdmin');
     }

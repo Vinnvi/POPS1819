@@ -9,14 +9,29 @@
                     {% for note in notesDeFraisEnAttente %}
                         <li class="collection-item">
                             <div>
-                                Note de frais de <b>{{ note.collabo.nom }}</b> {{ note.collabo.prenom }} du {{ note.mois }} {{ note.annee }} <a href="{{ path('gestionNotes.details', {id: note.id}) }}">(voir détails)</a>
+                                Note de frais de <b>{{ note.collabo.nom }}</b> {{ note.collabo.prenom }} du {{ note.mois }} {{ note.annee }} <a href="{{ path('gestionNotesChef.details', {id: note.id}) }}">(voir détails)</a>
                                 <div class="secondary-content"><label><input name="choix[]" value="{{ note.id }}" onchange="toggleCheckbox(this)" type="checkbox"><span></span></label></div>
-                            </div></li>
+                            </div>
+                        </li>
                     {% endfor %}
                     <li class="collection-item"><div class="secondary-content"><button id="id1" class="btn waves-effect waves-light">Valider</button></div></li>
                 </ul>
             </div>
         </form>
+            <div class="col s12 m6 l6">
+                <ul class="collection with-header">
+                    <li class="collection-header"><h5>Historique</h5></li>
+                    {% for note in notesValideesRefusees %}
+                    <li class="collection-item">
+                        <div>
+                            Note de frais de <b>{{ note.collabo.nom }}</b> {{ note.collabo.prenom }} du {{ note.mois }} {{ note.annee }} <a href="{{ path('gestionNotesChef.details', {id: note.id}) }}">(voir détails)</a>
+                            Statut : {{ note.statut }}
+                            <div class="secondary-content"><a class="btn-floating btn-small waves-effect waves-light red"><i class="material-icons">clear</i></a></div>
+                        </div>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
     </div>
 {% endblock %}
 
@@ -25,9 +40,6 @@
         let nombreElements = 0;
 
         document.getElementById("id1").disabled = true;
-
-
-
         function toggleCheckbox(element)
         {
             if(element.checked){

@@ -113,6 +113,7 @@ class NoteFraisController extends AbstractController
          'typesPaiements' => $typesPaiements,
          'projectsAvailables' => $projectsAvailables,
          'ligneDeFrais' => $maLigneDeFrais,
+         'status' => NoteDeFrais::STATUS,
          'form' => $form->createView(),]));
     }
 

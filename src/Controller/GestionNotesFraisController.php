@@ -47,8 +47,11 @@ class GestionNotesFraisController extends AbstractController
 
         $notesRepository = $this->getDoctrine()->getEntityManager()->getRepository('App\Entity\NoteDeFrais');
         $notesDeFraisEnAttente = $notesRepository->findByStatus(NoteDeFrais::STATUS[2]);
-        $notesDeFraisPasses = array_merge($notesRepository->findByStatus(NoteDeFrais::STATUS[5]), $notesRepository->findByStatus(NoteDeFrais::STATUS[7])) ;
+        $notesDeFraisPasses = array();
+        $notesDeFraisPasses = array_merge($notesDeFraisPasses,$notesRepository->findByStatus(NoteDeFrais::STATUS[5]));
+        $notesDeFraisPasses = array_merge($notesDeFraisPasses,$notesRepository->findByStatus(NoteDeFrais::STATUS[7]));
 
+        dump($notesDeFraisPasses);
         return $this->render('pages/gestionNotesFrais.html.twig',
             [
                 'notesDeFraisEnAttente' => $notesDeFraisEnAttente,
@@ -66,7 +69,6 @@ class GestionNotesFraisController extends AbstractController
         //Récupération des lignes de frais relatives à la note
         $LigneRepository = $this->getDoctrine()->getEntityManager()->getRepository('App\Entity\LigneDeFrais');
         $lignesDeFrais =  $LigneRepository->findByNoteId($noteDeFrais->getId());
-        dump($lignesDeFrais);
         return $this->render('pages/gestionNotesFraisDetails.html.twig',[
             'noteDeFrais' => $noteDeFrais,
             'ligneDeFrais' => $lignesDeFrais,
@@ -74,7 +76,7 @@ class GestionNotesFraisController extends AbstractController
     }
 
     /**
-     * @Route("/gestionNotesDeFrais/validationDetails/", name="validation.lignes.details")
+     * @Route("/gestionNotesDeFrais/validationDetails", name="validation.lignes.details.compta")
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      * @throws \Exception
      */
@@ -84,6 +86,8 @@ class GestionNotesFraisController extends AbstractController
         $ok = true;
         //Validation des lignes
         foreach ($_POST as $key => $value){
+            dump($key);
+            dump($value);
             $LigneDeFrais = $LigneRepository->findOneByID($key);
             if($LigneDeFrais != null){
                 if($value == "refus"){
@@ -113,10 +117,11 @@ class GestionNotesFraisController extends AbstractController
 
 
         return $this->redirectToRoute('app_gestionNotesFrais');
+
     }
 
     /**
-     * @Route("/gestionNotesDeFrais/Validation", name="validationNotes.compta")
+     * @Route("/gestionNotesDeFrais/ValidationGlobale", name="validationNotes.compta")
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function validationNotes(){
@@ -125,21 +130,22 @@ class GestionNotesFraisController extends AbstractController
 
         //Pour chaque id on update le statut de la note
         foreach ($_POST['choix'] as $value){
+
             //La note est validée ...
-            $noteRepository->findOneByID($value)->setStatut(NoteDeFrais::STATUS[2]);
+            $noteRepository->findOneByID($value)->setStatut(NoteDeFrais::STATUS[5]);
             $noteRepository->findOneByID($value)->setLastModif(new \DateTime());
 
             //...ainsi que l'ensemble de ses lignes
             $lignes = $LigneDeFraisRepository->findByNoteID($value);
             foreach ($lignes as $ligne){
-                $ligne->setStatutValidation(LigneDeFrais::STATUS[2]);
+                $ligne->setStatutValidation(LigneDeFrais::STATUS[5]);
                 $ligne->setLastModif(new \DateTime());
             }
 
         }
         $this->em->flush();
 
-        return $this->redirectToRoute('app_gestionNotesFraisAdmin');
+        return $this->redirectToRoute('app_gestionNotesFrais');
     }
 
 

@@ -14,7 +14,9 @@
         <div class="collapsible-header blue lighten-2">Note de Frais de {{note.mois}} / {{note.annee}} <i class="large material-icons">expand_more</i> Statut de la note de frais : {{noteDeFrais[i].statut}} </div>
         <div class="collapsible-body">
           <ul class="collapsible">
+            {% if note.statut == status[0] %}
             <a class="waves-effect waves-light modalAjout btn modal-trigger" data-id="{{note.mois}}/{{note.annee}}"  href="#ajoutLigneFraisModal">Ajouter une ligne de frais <i class="material-icons right">add</i></a>
+            {% endif %}
             <div class="right" style="padding-right: 10px;padding-top:5px" > Demandes d'avance</div>
             {% for ligne in mesLignesDeFrais[i] %}
                 <li>

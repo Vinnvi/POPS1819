@@ -4,7 +4,7 @@
     <div class="container">
         <div class="col l8 m12 s12 push-l2">
             <h5>Détails de la note de frais {{ noteDeFrais.collabo.nom }} {{ noteDeFrais.collabo.prenom }} du {{ noteDeFrais.mois }} {{ noteDeFrais.annee }}</h5>
-            <form method="post" action="{{ path('validation.lignes.details') }}">
+            <form method="POST" action="{{ path('validation.lignes.details.compta') }}">
             <table class="responsive-table striped">
                 <thead>
                 <tr>
@@ -26,7 +26,7 @@
                                 <td>{{ ligne.montant }}€</td>
 
                                 <td><label><input name="{{ligne.id}}"  value="refus" type="radio" required="required"/><span></span></label></td>
-                                <td><label><input name="{{ ligne.id }}" value="accept" type="radio" required="required" /><span></span></label></td>
+                                <td><label><input name="{{ligne.id}}" value="accept" type="radio" required="required" /><span></span></label></td>
                         </tr>
                     {% endfor %}
                 </tbody>

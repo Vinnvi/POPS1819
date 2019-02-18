@@ -52,7 +52,8 @@ class Projet
     const STATUS = [
         0 => 'A venir',
         1 => 'En cours',
-        2 => 'Fini',
+        2 => 'Suspendu',
+        3 => 'Fini',
     ];
 
     /**

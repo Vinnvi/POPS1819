@@ -19,8 +19,14 @@
   margin : 0;
   padding:0;
 }
+#iconSearch{
+  top :0;
+}
 #search{
 
+}
+#test {
+  
 }
 
 #liProfil{
@@ -29,7 +35,6 @@
 #partProfil{
   padding-left: 5%;
   padding-right:5%;
-  vertical-align : middle !important;
   width : 80%;
 }
 #iconPicture{

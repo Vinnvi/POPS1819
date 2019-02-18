@@ -15,27 +15,27 @@
 
           <div id="navWrapper" class="nav-wrapper">
             <ul id="rowtopBar" class="hide-on-med-and-down row">
-              <li class="col s12 m4 l2">
+              <div class="col s12 m4 l2">
                 <a href="{{ path('app_homepage') }}" class="brand-logo"><img src="/images/logo.png" style="width:110px;height:45px;"></a>
-              </li>
+              </div>
               <!-- Barre de recherche -->
-              <li id="liSearch" class="col s12 m4 l7 ">
+              <div id="liSearch" class="col s12 m4 l7 ">
                   <div class="input-field">
-                    <i class="material-icons prefix grey-text text-darken-4">search</i>
+                    <i id="iconSearch" class="material-icons prefix grey-text text-darken-4">search</i>
                     <input id="search" type="text" class="validate">
-                    <label for="search"class="center-align">Rechercher un collaborateur</label>
+                    <label for="search" id="test" class="center-align">Rechercher un collaborateur</label>
                   </div>
-              </li>
+              </div>
 
-              <li id="liProfil" class="col s12 m4 l3">
-                <a id="partProfil" class='dropdown-trigger btn btn-large grey lighten-3 black-text' href='#' data-target='dropdown1'>
+              <div id="liProfil" class="col s12 m4 l3">
+                <a id="partProfil" class='dropdown-trigger btn btn-large grey lighten-5 black-text' href='#' data-target='dropdown1'>
                   <i id="iconPicture" class='material-icons left'>
                     <img id="imageProfil" src="{{app.user.profile_pic_path}}" class="circle responsive-img" style="width:35px;height:35px;"/>
                   </i>
                   <b id="bProfil">{{app.user.nom}} {{app.user.prenom}}</b>
 
                 </a>
-              </li>
+              </div>
             </ul>
           </div>
           <div id="navContent" class="nav-content">

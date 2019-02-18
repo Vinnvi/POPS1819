@@ -9,6 +9,13 @@
     <script src='js/plugins/fullcalendar/lib/moment.min.js' type="text/javascript"></script>
     <script src='js/plugins/fullcalendar/js/fullcalendar.min.js' type="text/javascript"></script>
     <script src="js/plugins/fullcalendar/fullcalendar-script.js" type="text/javascript"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+      var elems = document.querySelectorAll('.modal');
+      var instances = M.Modal.init(elems, options);
+    });
+    </script>
+
   {% endblock %}
   {% block stylesheets %}
     <link rel="stylesheet" type="text/css" href="/css/topBar.css">
@@ -32,13 +39,13 @@
                 <div class="col s12 m3 l2">
                   <div id="external-events">
                     <h4 class="header"><font color="white">Draggable Events</font></h4>
-                    <div class="fc-event cyan ui-draggable ui-draggable-handle">March Invoices</div>
-                    <div class="fc-event teal ui-draggable ui-draggable-handle">Call Emy</div>
-                    <div class="fc-event cyan darken-1 ui-draggable ui-draggable-handle">Dinner with Team</div>
-                    <div class="fc-event cyan accent-4 ui-draggable ui-draggable-handle">Meeting with Support Team</div>
-                    <div class="fc-event teal accent-4 ui-draggable ui-draggable-handle">Meeting with Sales Team</div>
-                    <div class="fc-event light-blue accent-3 ui-draggable ui-draggable-handle">Design an iOS App</div>
-                    <div class="fc-event light-blue accent-4 ui-draggable ui-draggable-handle">Company Party</div>
+                    <div class="fc-event cyan ui-draggable ui-draggable-handle">Factures Mai</div>
+                    <div class="fc-event teal ui-draggable ui-draggable-handle">Appeler Valérie</div>
+                    <div class="fc-event cyan darken-1 ui-draggable ui-draggable-handle">Dinner avec l'équipe</div>
+                    <div class="fc-event cyan accent-4 ui-draggable ui-draggable-handle">Meeting avec la Support Team</div>
+                    <div class="fc-event teal accent-4 ui-draggable ui-draggable-handle">Demander Augmentation</div>
+                    <div class="fc-event light-blue accent-3 ui-draggable ui-draggable-handle">Design iOS App</div>
+                    <div class="fc-event light-blue accent-4 ui-draggable ui-draggable-handle">Oummar&Co Party</div>
                     <p>
                       <input type="checkbox" id="drop-remove">
                       <label for="drop-remove">remove after drop</label>
@@ -54,7 +61,7 @@
                   <div id="rowTable">
                     <table class="striped">
                       <thead>
-                        <tr>
+                        <tr id="rowCongesBottom">
                           <th data-field="id">Nom</th>
                           <th data-field="name">Date Début</th>
                           <th data-field="price">Date Fin</th>
@@ -62,10 +69,16 @@
                         </tr>
                       </thead>
                       <tbody>
-                        <tr>
+                        <tr id="dataBottom">
                           <td>Valérie Guimard</td>
                           <td>08.12.18 matin</td>
                           <td>09.12.18 soir</td>
+                          <td>Validé</td>
+                        </tr>
+                        <tr id="dataBottom">
+                          <td>Frédéric Voisin</td>
+                          <td>10.12.18 matin</td>
+                          <td>15.12.18 soir</td>
                           <td>Validé</td>
                         </tr>
                       </tbody>
@@ -96,7 +109,7 @@
                   <div class="row">
                     <table id="data-table-row-grouping" class="display dataTable" cellspacing="0" width="100%" role="grid" aria-describedby="data-table-row-grouping_info" style="width: 100%;">
                       <thead>
-                          <tr role="row">
+                          <tr id="rowCongesRight" role="row">
                             <th class="sorting" tabindex="0" aria-controls="data-table-row-grouping" rowspan="1" colspan="1" aria-label="Name: activate to sort column ascending" style="width: 49px;">Type</th>
                             <th class="sorting" tabindex="0" aria-controls="data-table-row-grouping" rowspan="1" colspan="1" aria-label="Start date: activate to sort column ascending" style="width: 59px;">Du-</th>
                             <th class="sorting" tabindex="0" aria-controls="data-table-row-grouping" rowspan="1" colspan="1" aria-label="Start date: activate to sort column ascending" style="width: 59px;">Au-</th>
@@ -104,13 +117,13 @@
                           </tr>
                       </thead>
                       <tbody>
-                        <tr role="row" class="odd">
+                        <tr id="dataBottom" role="row" class="odd">
                           <td>RTT</td>
                           <td>08.10.18</td>
                           <td>10.10.18</td>
                           <td>En cours</td>
                         </tr>
-                        <tr role="row" class="even">
+                        <tr id="dataBottom" role="row" class="even">
                           <td>C.P.</td>
                           <td>18.10.18</td>
                           <td>23.10.18</td>
@@ -143,12 +156,5 @@
       <a href="#!" class="modal-close waves-effect waves-green btn-flat">Agree</a>
     </div>
   </div>
-
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-    var elems = document.querySelectorAll('.modal');
-    var instances = M.Modal.init(elems, options);
-  });
-  </script>
 
 {% endblock %}

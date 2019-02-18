@@ -1,5 +1,8 @@
 {% extends 'topBar.html.twig' %}
 {% block title %}Mes notes de frais{% endblock %}
+{% block stylesheets %}
+  <link rel="stylesheet" type="text/css" href="/css/topBar.css">
+{% endblock %}
 {% block body %}
 <div class="row p-2">
     <div class="card-panel col s8">
@@ -37,7 +40,7 @@
     </div>
     <div class="col s4 h-100">
         <div class="card-panel p-1">
-            
+
             <h5>Accès rapide</h5>
             <div class="divider"></div>
             {% for note in notes_de_frais %}
@@ -79,4 +82,3 @@
         });
     </script>
 {% endblock %}
-

@@ -52,6 +52,19 @@ table, th, td {
     cursor: all-scroll;
     border: none;
 }
+#rowCongesBottom{
+  background-color: #143a77;
+  color : white;
+}
+#rowCongesRight{
+  background-color: #1f51a3;
+  color : white;
+}
+#dataBottom{
+  background-color: #edf3ff;
+  color : black;
+  border-color : black;
+}
 h4.header {
     font-size: 1.4rem;
     font-weight: 400;

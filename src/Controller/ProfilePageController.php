@@ -21,10 +21,9 @@ class ProfilePageController extends AbstractController
     private $repository;
 
 
-    public function __construct(Environment $twig,ProfilePageRepository $repository)
+    public function __construct(Environment $twig)
     {
       $this->twig = $twig;
-      $this->repository = $repository;
     }
 
     public function index(): Response

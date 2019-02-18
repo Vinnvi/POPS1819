@@ -8,7 +8,7 @@
     <div class="card-panel col s8">
         <h5>Notifications</h5>
         <div class="divider"></div>
-        <table class="responsive-table">
+        <table class="highlight">
             <thead>
             <tr class="black white-text">
                 <th>Catégorie</th>
@@ -18,22 +18,58 @@
             </thead>
 
             <tbody>
+            {% dump notifications %}
             {% for notification in notifications %}
-                <tr class="
-                    {% if notification.getStatut() == "OK" %}
-                        green lighten-4
-                    {% elseif notification.getStatut() == "ACTION_NECESSAIRE" %}
-                        red lighten-4
-                    {% endif %}
-                ">
-                    <td>{{ notification.getCategorie() }}</td>
-                    <td>{{ notification.getDescription() }}</td>
-                    {% if notification.getDate()|date('d') == currentDate[0] and notification.getDate()|date('m') == currentDate[1] and notification.getDate()|date('Y') == currentDate[2] %}
-                        <td>{{ notification.getDate()|date('H:i') }}</td>
-                    {% else %}
-                        <td>{{ notification.getDate()|date('d/m/Y') }}</td>
-                    {% endif %}
-                </tr>
+                    <tr class="
+                            {% if notification.getStatut() == "OK" %}
+                                green lighten-4
+                            {% elseif notification.getStatut() == "ACTION_NECESSAIRE" %}
+                                red lighten-4
+                            {% endif %}
+                            {% if not notification.getPersonnel() %}red-text{% endif %}"
+
+                                {% if notification.getCategorie() == "Note de frais" and notification.getPersonnel() %}
+                                    onclick="window.location='{{path('app_noteFrais')}}';"
+                                {% elseif notification.getCategorie() == "Note de frais" %}
+                                    onclick="window.location='{{path('app_gestionNotesFrais')}}';"
+                                {% elseif notification.getCategorie() == "D. de congés" and notification.getPersonnel() %}
+                                    onclick="window.location='{{path('app_demandesDeConges')}}';"
+                                {% elseif notification.getCategorie() == "D. de congés" %}
+                                    onclick="window.location='{{path('app_gestionDemandesDeConges')}}';"
+                                {% elseif notification.getCategorie() == "D. d\'informationMission" and notification.getPersonnel() %}
+                                    onclick="window.location='{{path('app_demandesDInformation')}}';"
+                                {% elseif notification.getCategorie() == "D. d\'informationMission" %}
+                                    onclick="window.location='{{path('app_gestionDemandesDInformation')}}';"
+                                {% elseif notification.getCategorie() == "Mission" and notification.getPersonnel() %}
+                                    onclick="window.location='{{path('app_missions')}}';"
+                                {% elseif notification.getCategorie() == "Mission" %}
+                                    onclick="window.location='{{path('app_gestionMissions')}}';"
+                                {% endif %}
+                            >
+                        <td>
+                            {% if not notification.getVu() %}<b>{% endif %}
+                            {{ notification.getCategorie() }}
+                            {% if not notification.getVu() %}</b>{% endif %}
+                        </td>
+                        <td>
+                            {% if not notification.getVu() %}<b>{% endif %}
+                            {{ notification.getDescription() }}
+                            {% if not notification.getVu() %}</b>{% endif %}
+                        </td>
+                        {% if notification.getDate()|date('d') == currentDate[0] and notification.getDate()|date('m') == currentDate[1] and notification.getDate()|date('Y') == currentDate[2] %}
+                            <td>
+                                {% if not notification.getVu() %}<b>{% endif %}
+                                {{ notification.getDate()|date('H:i') }}
+                                {% if not notification.getVu() %}</b>{% endif %}
+                            </td>
+                        {% else %}
+                            <td>
+                                {% if not notification.getVu() %}<b>{% endif %}
+                                {{ notification.getDate()|date('d/m/Y') }}
+                                {% if not notification.getVu() %}</b>{% endif %}
+                            </td>
+                        {% endif %}
+                    </tr>
             {% endfor %}
             </tbody>
         </table>
@@ -53,20 +89,22 @@
                     </div>
                 </a>
             {% endfor %}
-            <a class="waves-effect waves-light btn">Faire une demande de congés</a>
+            <a class="waves-effect waves-light btn" href="{{path('app_noteFrais')}}">Faire une demande de congés</a>
         </div>
         <div class="card-panel p-1">
             <h5>Mes missions</h5>
             <div class="divider"></div>
             {% for mission in missions %}
-                <div class="card grey darken-1">
-                    <div class="card-content white-text">
-                    <span class="card-title">{{ mission.getNom() }}</span>
-                    <i>{{ mission.getDateDebut()|date('d/m/Y') }} - {{ mission.getDateFin()|date('d/m/Y') }}</i>
+                <a href="{{path('app_missions')}}">
+                    <div class="card grey darken-1">
+                        <div class="card-content white-text">
+                        <span class="card-title">{{ mission.getNom() }}</span>
+                        <i>{{ mission.getDateDebut()|date('d/m/Y') }} - {{ mission.getDateFin()|date('d/m/Y') }}</i>
+                        </div>
                     </div>
-                </div>
+                </a>
             {% endfor %}
-            <a class="waves-effect waves-light btn">Accèder à toutes mes missions</a>
+            <a class="waves-effect waves-light btn" href="{{path('app_missions')}}">Accèder à toutes mes missions</a>
         </div>
     </div>
 </div>
@@ -81,4 +119,14 @@
             });
         });
     </script>
+{% endblock %}
+
+{% block tabNotifications %}
+<script>
+    jQuery(document).ready(function($) {
+        $(".clickable-row").click(function() {
+            window.location = $(this).data("href");
+        });
+    });
+</script>
 {% endblock %}

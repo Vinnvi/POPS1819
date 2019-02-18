@@ -45,15 +45,29 @@
             <a id ="partNav" class="col s4 m 4 l4 btn-flat waves-effect waves-light btn-large"  href="{{ path('app_calendarConges') }}"  name="action">Mes demandes de congés
               <i class="material-icons right">perm_contact_calendar</i>
             </a>
-            <a id ="partNav" class="col s4 m 4 l4 btn-flat waves-effect waves-light btn-large" href="{{ path('app_noteFrais') }}"  name="action">Mes demandes d'information
-              <i class="material-icons right">send</i>
+            <a id ="partNav" class="col s4 m 4 l4 btn-flat waves-effect waves-light btn-large" href="{{ path('app_demandesDInformation') }}"  name="action">Mes demandes d'information
+          <i class="material-icons right">send</i>
             </a>
-              {% if app.user.service.nom == "RH" %}
-              <a class="btn-flat waves-effect waves-light btn-large" href="{{ path('app_gestionNotesFrais') }}"  name="action">Gestion Notes de frais
-                  <i class="material-icons right">send</i>
+            {% if app.user.service.id == 1 or app.user.roles[0] == 'Chef de service' %}
+              <a class="btn-flat waves-effect waves-light btn-large" href="{{ path('app_gestionDemandesDeConges') }}"  name="action">Gestion des congés
+                <i class="material-icons right">beach_access</i>
               </a>
-              {% endif %}
-
+            {% endif %}
+            {% if app.user.service.id == 2 or app.user.roles[0] == 'Chef de service'%}
+              <a class="btn-flat waves-effect waves-light btn-large" href="{{ path('app_gestionNotesFrais') }}"  name="action">Gestion des notes de frais
+                <i class="material-icons right">local_atm</i>
+              </a>
+            {% endif %}
+            {% if app.user.service.id == 1 %}
+              <a class="btn-flat waves-effect waves-light btn-large" href="{{ path('app_gestionDemandesDInformation') }}"  name="action">Gestion des D. d'information
+                <i class="material-icons right">assignment</i>
+              </a>
+            {% endif %}
+            {% if app.user.roles[0] == 'Chef de service' %}
+              <a class="btn-flat waves-effect waves-light btn-large" href="{{ path('app_gestionMissions') }}"  name="action">Gestion des missions
+                <i class="material-icons right">people</i>
+              </a>
+            {% endif %}
           </div>
         </nav>
 

@@ -50,7 +50,13 @@ class HomeController extends AbstractController
       array_push($currentDate,date("Y"));
       // FIN DATE ACTUELLE
 
-      // CODE SORT PAR DATE
+      // CODE SERVICE
+      $service = null;$this->getDoctrine()->getEntityManager()->getRepository('App\Entity\Service')->findBy(
+        array('id' => $this->getUser()->getService()->getId())
+      );
+      $chefTab = null;$this->getDoctrine()->getEntityManager()->getRepository('App\Entity\Service')->findBy(
+        array('id' => $this->getUser()->getService()->getId())
+      );
       // FIN
 
     return new Response($this->twig->render('pages/home.html.twig',[
@@ -58,7 +64,7 @@ class HomeController extends AbstractController
                   'currentDate' => $currentDate,
                   'notifications' => $notification,
                   'notes_de_frais' => $notes_de_frais,
-                  'missions' => $missions,
+                  'missions' => $missions, 
             ]));
     }
 

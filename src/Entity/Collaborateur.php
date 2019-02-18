@@ -79,24 +79,30 @@ class Collaborateur implements UserInterface,EquatableInterface
      * @ORM\Column(type="string", length=1024)
      */
     private $email;
-
-
-    const STATUS = [
-        0 => 'Collaborateur',
-        1 => 'Chef de projet',
-    ];
-
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Notification", mappedBy="collaborateur")
      */
     private $notifications;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $role_entreprise;
+
+    const STATUS = [
+        0 => 'Collaborateur',
+        1 => 'Chef de service',
+        2 => 'directeur',
+    ];
+
     public function __construct()
     {
         $this->ServiceChef = new ArrayCollection();
         $this->projet = new ArrayCollection();
-        $this->setRoles('Collaborateur');
+        $this->setRoles('ROLE_USER');
+        $this->setRoleEntreprise(Collaborateur::STATUS[0]);
         $this->setProfilePicPath('');
+        $this->setBackgroundPicPath('');
         $this->notifications = new ArrayCollection();
     }
 
@@ -315,6 +321,18 @@ class Collaborateur implements UserInterface,EquatableInterface
                 $notification->setCollaborateur(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getRoleEntreprise(): ?string
+    {
+        return $this->role_entreprise;
+    }
+
+    public function setRoleEntreprise(string $role_entreprise): self
+    {
+        $this->role_entreprise = $role_entreprise;
 
         return $this;
     }

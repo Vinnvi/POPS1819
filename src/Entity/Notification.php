@@ -56,6 +56,21 @@ class Notification
      */
     private $date;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $personnel;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $cumulable;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $vu;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -117,6 +132,42 @@ class Notification
     public function setDate(\DateTimeInterface $date): self
     {
         $this->date = $date;
+
+        return $this;
+    }
+
+    public function getPersonnel(): ?bool
+    {
+        return $this->personnel;
+    }
+
+    public function setPersonnel(bool $personnel): self
+    {
+        $this->personnel = $personnel;
+
+        return $this;
+    }
+
+    public function getCumulable(): ?bool
+    {
+        return $this->cumulable;
+    }
+
+    public function setCumulable(bool $cumulable): self
+    {
+        $this->cumulable = $cumulable;
+
+        return $this;
+    }
+
+    public function getVu(): ?bool
+    {
+        return $this->vu;
+    }
+
+    public function setVu(bool $vu): self
+    {
+        $this->vu = $vu;
 
         return $this;
     }

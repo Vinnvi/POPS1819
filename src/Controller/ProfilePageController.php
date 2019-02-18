@@ -118,7 +118,6 @@ class ProfilePageController extends AbstractController
       $collaborateur = $collaborateur->findById($this->getUser()->getId());
       if(isset($_POST['mail']))
       {
-        dump('check');
         $collaborateur[0]->setEmail($_POST['mail']);
         $this->getDoctrine()->getEntityManager()->persist($collaborateur[0]);
         $this->getDoctrine()->getEntityManager()->flush();

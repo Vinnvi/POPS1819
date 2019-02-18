@@ -101,7 +101,8 @@ class Collaborateur implements UserInterface,EquatableInterface
         $this->projet = new ArrayCollection();
         $this->setRoles('ROLE_USER');
         $this->setRoleEntreprise(Collaborateur::STATUS[0]);
-        $this->setProfilePicPath('');
+        $this->setSalt('');
+        $this->setProfilePicPath('images/profile_pics/anonym_picture.jpg');
         $this->setBackgroundPicPath('');
         $this->notifications = new ArrayCollection();
     }

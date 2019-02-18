@@ -1,0 +1,93 @@
+body {
+    background-image: url("/images/background_login.png");
+}
+table, th, td {
+  border: 1px solid white;
+  text-align: center;
+}
+.container {
+    padding: 0 0.5rem;
+    margin: 0 auto;
+    max-width: 100% !important;
+    width: 98%;
+}
+
+#mainCalendar{
+  color : white;
+}
+#btnConge{
+  margin-bottom: 5% !important;
+}
+#rowTable{
+  margin-top : 4%;
+  background-color: transparent !important;
+}
+#data-table-row-grouping{
+  margin-left : 3%;
+}
+#rightPart{
+  color: white;
+  text-align: center;
+}
+#calendarBox{
+  background-color: #f7f8f9;
+}
+#toolbarCalendar{
+  color: white;
+}
+#rttPart{
+  width : 50%;
+}
+#congePart{
+  width : 50%;
+}
+#content .container .row {
+    margin-bottom: 0;
+}
+#external-events .fc-event {
+    color: #fff;
+    text-decoration: none;
+    padding: 5px;
+    margin-bottom: 10px;
+    cursor: all-scroll;
+    border: none;
+}
+#rowCongesBottom{
+  background-color: #143a77;
+  color : white;
+}
+#rowCongesRight{
+  background-color: #1f51a3;
+  color : white;
+}
+#dataBottom{
+  background-color: #edf3ff;
+  color : black;
+  border-color : black;
+}
+h4.header {
+    font-size: 1.4rem;
+    font-weight: 400;
+    text-transform: uppercase;
+    line-height: 2.508rem;
+    margin: 1.14rem 0 0.912rem 0;
+}
+h5.header {
+    font-size: 1rem;
+    font-weight: 400;
+    text-transform: uppercase;
+    line-height: 1.508rem;
+    white-space:nowrap;
+}
+h6.header {
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.508rem;
+    white-space:nowrap;
+}
+h10.header {
+    font-size: 3rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    line-height: 1.508rem;
+}

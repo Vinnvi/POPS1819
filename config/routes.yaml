@@ -17,6 +17,10 @@ app_homepage:
 app_logout:
     path: /logout
 
+app_calendarConges:
+  path: /mesConges
+  controller: App\Controller\CalendarCongesController::index
+
 app_noteFrais:
   path: /mesNotesDeFrais
   controller: App\Controller\NoteFraisController::index

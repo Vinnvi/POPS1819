@@ -36,6 +36,34 @@ class NoteDeFraisRepository extends ServiceEntityRepository
         ;
     }
 
+    public function findByStatus($status)
+    {
+        return $this->createQueryBuilder('n')
+            ->andWhere('n.statut = :val')
+            ->setParameter('val',$status)
+            ->addOrderBy('n.lastModif')
+            ->setMaxResults(20)
+            ->getQuery()
+            ->getResult()
+        ;
+
+    }
+
+    public function findByStatusAndCollabo($status,$collaboId)
+    {
+        return $this->createQueryBuilder('n')
+            ->andWhere('n.statut = :val')
+            ->andWhere('n.collabo = :val2')
+            ->setParameter('val',$status)
+            ->setParameter('val2',$collaboId)
+            ->addOrderBy('n.lastModif')
+            ->setMaxResults(20)
+            ->getQuery()
+            ->getResult()
+            ;
+
+    }
+
     public function findByMonthAndYear($month,$year,$collaboId)
     {
         return $this->createQueryBuilder('n')

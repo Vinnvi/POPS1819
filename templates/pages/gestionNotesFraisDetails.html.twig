@@ -25,25 +25,16 @@
                                 <td>{{ ligne.statutValidation }}</td>
                                 <td>{{ ligne.montant }}€</td>
 
-                                <td><label><input name="{{ ligne.id }}" onclick="enable()" value="refus" type="radio"/><span></span></label></td>
-                                <td><label><input name="{{ ligne.id }}" onclick="enable()" value="accept" type="radio" /><span></span></label></td>
+                                <td><label><input name="{{ligne.id}}"  value="refus" type="radio" required="required"/><span></span></label></td>
+                                <td><label><input name="{{ ligne.id }}" value="accept" type="radio" required="required" /><span></span></label></td>
                         </tr>
                     {% endfor %}
                 </tbody>
             </table>
             <input type="hidden" id="id" name="id" value="{{ noteDeFrais.id }}"/>
-            <div class="secondary-content"><button id="id1" disabled="disabled" class="btn waves-effect waves-light">Valider</button></div>
+            <div class="secondary-content"><button id="id1" class="btn waves-effect waves-light">Valider</button></div>
             </form>
         </div>
     </div>
-
-{% endblock %}
-
-{% block javascripts %}
-    <script>
-        function enable(){
-            document.getElementById("id1").disabled = false;
-        }
-    </script>
 
 {% endblock %}

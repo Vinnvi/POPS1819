@@ -8,6 +8,10 @@ body {
     max-width: 100% !important;
     width: 98%;
 }
+
+#mainCalendar{
+  color : white;
+}
 table, th, td {
   border: 1px solid white;
   text-align: center;
@@ -22,6 +26,12 @@ table, th, td {
 #rightPart{
   color: white;
   text-align: center;
+}
+#calendarBox{
+  background-color: #f7f8f9;
+}
+#toolbarCalendar{
+  color: white;
 }
 #rttPart{
   width : 50%;
@@ -42,9 +52,6 @@ table, th, td {
     margin-bottom: 10px;
     cursor: all-scroll;
     border: none;
-}
-#mainCalendar{
-  color: #ffffff;
 }
 h4.header {
     font-size: 1.4rem;

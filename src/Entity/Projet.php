@@ -49,6 +49,18 @@ class Projet
      */
     private $Service;
 
+    const STATUS = [
+        0 => 'A venir',
+        1 => 'En cours',
+        2 => 'Suspendu',
+        3 => 'Fini',
+    ];
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $status;
+
     public function __construct()
     {
         $this->collabos = new ArrayCollection();
@@ -148,5 +160,16 @@ class Projet
     public function __toString()
     {
         return $this->nom;
+    }
+
+    public function getStatus(): ?string
+    {
+        return $this->status;
+    }
+
+    public function setStatus(int $status): self
+    {
+        $this->status = $this->STATUS[$status];
+        return $this;
     }
 }

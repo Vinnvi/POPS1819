@@ -92,7 +92,7 @@
             <h5>Mes missions</h5>
             <div class="divider"></div>
             {% for mission in missions %}
-                <a href="{{path('app_homepage')}}">
+                <a href="{{path('app_missions')}}">
                     <div class="card grey darken-1">
                         <div class="card-content white-text">
                         <span class="card-title">{{ mission.getNom() }}</span>
@@ -101,7 +101,7 @@
                     </div>
                 </a>
             {% endfor %}
-            <a class="waves-effect waves-light btn" href="{{path('app_homepage')}}">Accèder à toutes mes missions</a>
+            <a class="waves-effect waves-light btn" href="{{path('app_missions')}}">Accèder à toutes mes missions</a>
         </div>
     </div>
 </div>

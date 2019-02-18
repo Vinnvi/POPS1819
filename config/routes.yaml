@@ -43,7 +43,7 @@ app_gestionDemandesDInformation:
 
 app_missions:
   path: /mesMissions
-  controller: App\Controller\GestionNotesFraisController::index
+  controller: App\Controller\MissionsController::index
 
 app_gestionMissions:
   path: /gestionMissions

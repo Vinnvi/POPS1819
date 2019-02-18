@@ -5,6 +5,7 @@ namespace App\Controller;
 
 use App\Entity\NoteDeFrais;
 use App\Entity\LigneDeFrais;
+use App\Entity\Service;
 use PhpParser\Node\Expr\Array_;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Twig\Environment;
@@ -43,12 +44,15 @@ class GestionNotesFraisController extends AbstractController
      */
     public function index(): Response
     {
+
         $notesRepository = $this->getDoctrine()->getEntityManager()->getRepository('App\Entity\NoteDeFrais');
-        $notesDeFrais = $notesRepository->findEnAttente();
+        $notesDeFraisEnAttente = $notesRepository->findByStatus(NoteDeFrais::STATUS[2]);
+        $notesDeFraisPasses = array_merge($notesRepository->findByStatus(NoteDeFrais::STATUS[5]), $notesRepository->findByStatus(NoteDeFrais::STATUS[7])) ;
 
         return $this->render('pages/gestionNotesFrais.html.twig',
             [
-                'notesDeFrais' => $notesDeFrais
+                'notesDeFraisEnAttente' => $notesDeFraisEnAttente,
+                'notesDeFraisPassees' => $notesDeFraisPasses,
             ]);
     }
 
@@ -110,4 +114,33 @@ class GestionNotesFraisController extends AbstractController
 
         return $this->redirectToRoute('app_gestionNotesFrais');
     }
+
+    /**
+     * @Route("/gestionNotesDeFrais/Validation", name="validationNotes.compta")
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function validationNotes(){
+        $noteRepository = $this->getDoctrine()->getEntityManager()->getRepository('App\Entity\NoteDeFrais');
+        $LigneDeFraisRepository = $this->getDoctrine()->getEntityManager()->getRepository('App\Entity\LigneDeFrais');
+
+        //Pour chaque id on update le statut de la note
+        foreach ($_POST['choix'] as $value){
+            //La note est validée ...
+            $noteRepository->findOneByID($value)->setStatut(NoteDeFrais::STATUS[2]);
+            $noteRepository->findOneByID($value)->setLastModif(new \DateTime());
+
+            //...ainsi que l'ensemble de ses lignes
+            $lignes = $LigneDeFraisRepository->findByNoteID($value);
+            foreach ($lignes as $ligne){
+                $ligne->setStatutValidation(LigneDeFrais::STATUS[2]);
+                $ligne->setLastModif(new \DateTime());
+            }
+
+        }
+        $this->em->flush();
+
+        return $this->redirectToRoute('app_gestionNotesFraisAdmin');
+    }
+
+
 }

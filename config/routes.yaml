@@ -49,6 +49,10 @@ app_gestionMissions:
   path: /gestionMissions
   controller: App\Controller\GestionNotesFraisController::index
 
+app_gestionNotesFraisAdmin:
+  path: /gestionNotesFraisChef
+  controller: App\Controller\GestionNotesAdminController::index
+
 app_admin:
   path: /admin
   controller: App\Controller\Admin\AdminCollaborateurController::index

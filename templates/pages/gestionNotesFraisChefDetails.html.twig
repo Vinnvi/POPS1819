@@ -1,0 +1,50 @@
+{% extends 'topBar.html.twig' %}
+{% block title %}Detail Note de Frais{% endblock %}
+{% block body %}
+    <div class="container">
+        <div class="col l8 m12 s12 push-l2">
+            <h5>Détails de la note de frais {{ noteDeFrais.collabo.nom }} {{ noteDeFrais.collabo.prenom }} du {{ noteDeFrais.mois }} {{ noteDeFrais.annee }}</h5>
+
+            {%  if  noteDeFrais.statut == statusNotes[1] %}
+            <form method="post" action="{{ path('validation.lignes.chef.details') }}">
+            {% endif %}
+                <table class="responsive-table striped">
+                    <thead>
+                    <tr>
+                        <th>Intitule</th>
+                        <th>date</th>
+                        <th>Statut</th>
+                        <th>Montant</th>
+
+                        {%  if  noteDeFrais.statut == statusNotes[1] %}
+                        <th>Refus</th>
+                        <th>Acceptation</th>
+                        {% endif %}
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    {% for ligne in ligneDeFrais %}
+                        <tr>
+                            <td>{{ ligne.intitule }}</td>
+                            <td>{{ ligne.date|date("d/m/Y") }}</td>
+                            <td>{{ ligne.statutValidation }}</td>
+                            <td>{{ ligne.montant }}€</td>
+
+                            {%  if  noteDeFrais.statut == statusNotes[1] %}
+                            <td><label><input name="{{ligne.id}}"  value="refus" type="radio" required="required"/><span></span></label></td>
+                            <td><label><input name="{{ ligne.id }}" value="accept" type="radio" required="required" /><span></span></label></td>
+                            {% endif %}
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+                {%  if  noteDeFrais.statut == statusNotes[1] %}
+                <input type="hidden" id="id" name="id" value="{{ noteDeFrais.id }}"/>
+                <div class="secondary-content"><button id="id1" class="btn waves-effect waves-light">Valider</button></div>
+            </form>
+            {% endif %}
+        </div>
+    </div>
+
+{% endblock %}

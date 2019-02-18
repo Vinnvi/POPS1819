@@ -52,7 +52,7 @@ class NoteDeFrais
         1 => 'En attente chef',
         2 => 'validee chef',
         3 => 'refusee chef',
-        4 => 'En attente compta',
+        4 => 'En attente compta', #NOT USED
         5 => 'validee compta',
         6 => 'valideeExceptJustificatif',
         7 => 'refusee compta',

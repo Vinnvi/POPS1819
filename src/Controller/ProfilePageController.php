@@ -21,10 +21,9 @@ class ProfilePageController extends AbstractController
     private $repository;
 
 
-    public function __construct(Environment $twig,ProfilePageRepository $repository)
+    public function __construct(Environment $twig)
     {
       $this->twig = $twig;
-      $this->repository = $repository;
     }
 
     public function index(): Response
@@ -120,7 +119,6 @@ class ProfilePageController extends AbstractController
       $collaborateur = $collaborateur->findById($this->getUser()->getId());
       if(isset($_POST['mail']))
       {
-        dump('check');
         $collaborateur[0]->setEmail($_POST['mail']);
         $this->getDoctrine()->getEntityManager()->persist($collaborateur[0]);
         $this->getDoctrine()->getEntityManager()->flush();

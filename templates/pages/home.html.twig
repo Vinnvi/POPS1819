@@ -1,5 +1,8 @@
 {% extends 'topBar.html.twig' %}
 {% block title %}Mes notes de frais{% endblock %}
+{% block stylesheets %}
+  <link rel="stylesheet" type="text/css" href="/css/topBar.css">
+{% endblock %}
 {% block body %}
 <div class="row p-2">
     <div class="card-panel col s8">
@@ -24,7 +27,7 @@
                                 red lighten-4
                             {% endif %}
                             {% if not notification.getPersonnel() %}red-text{% endif %}"
-                            
+
                                 {% if notification.getCategorie() == "Note de frais" and notification.getPersonnel() %}
                                     onclick="window.location='{{path('app_noteFrais')}}';"
                                 {% elseif notification.getCategorie() == "Note de frais" %}
@@ -73,7 +76,7 @@
     </div>
     <div class="col s4 h-100">
         <div class="card-panel p-1">
-            
+
             <h5>Accès rapide</h5>
             <div class="divider"></div>
             {% for note in notes_de_frais %}

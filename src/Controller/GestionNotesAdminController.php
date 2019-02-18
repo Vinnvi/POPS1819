@@ -103,7 +103,7 @@ class GestionNotesAdminController extends AbstractController
     }
 
     /**
-     * @Route("/gestionNotesDeFraisChefValidation", name="validationNotes")
+     * @Route("/gestionNotesDeFraisChef/Validation", name="validationNotes")
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function validationNotes(){

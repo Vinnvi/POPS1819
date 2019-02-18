@@ -2,7 +2,7 @@
 {% block title %}Gestion Notes Frais{% endblock %}
 {% block body %}
         <div class="row">
-            <form action="#">
+            <form method="POST" action="{{ path('validationNotes.compta') }}">
             <div class="col s12 m6 l6">
                 <ul class="collection with-header">
                     <li class="collection-header"><h5>Notes en attente</h5></li>
@@ -10,7 +10,7 @@
                         <li class="collection-item">
                             <div>
                                 Note de frais de <b>{{ note.collabo.nom }}</b> {{ note.collabo.prenom }} du {{ note.mois }} {{ note.annee }} <a href="{{ path('gestionNotes.details', {id: note.id}) }}">(voir détails)</a>
-                                <div class="secondary-content"><label><input onchange="toggleCheckbox(this)" type="checkbox" /><span></span></label></div>
+                                <div class="secondary-content"><label><input name="choix[]" value="{{ note.id }}" onchange="toggleCheckbox(this)" type="checkbox" /><span></span></label></div>
                             </div></li>
                     {% endfor %}
                     <li class="collection-item"><div class="secondary-content"><button id="id1" class="btn waves-effect waves-light">Valider</button></div></li>

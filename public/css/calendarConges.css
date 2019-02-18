@@ -1,7 +1,10 @@
 body {
     background-image: url("/images/background_login.png");
 }
-
+table, th, td {
+  border: 1px solid white;
+  text-align: center;
+}
 .container {
     padding: 0 0.5rem;
     margin: 0 auto;
@@ -12,9 +15,8 @@ body {
 #mainCalendar{
   color : white;
 }
-table, th, td {
-  border: 1px solid white;
-  text-align: center;
+#btnConge{
+  margin-bottom: 5% !important;
 }
 #rowTable{
   margin-top : 4%;
@@ -36,14 +38,11 @@ table, th, td {
 #rttPart{
   width : 50%;
 }
-#full-calendar {
-    /* padding-top: 30px;  */
+#congePart{
+  width : 50%;
 }
 #content .container .row {
     margin-bottom: 0;
-}
-#external-events {
-    /* padding-top: 50px; */
 }
 #external-events .fc-event {
     color: #fff;
@@ -65,11 +64,13 @@ h5.header {
     font-weight: 400;
     text-transform: uppercase;
     line-height: 1.508rem;
+    white-space:nowrap;
 }
 h6.header {
     font-size: 1rem;
     font-weight: 400;
     line-height: 1.508rem;
+    white-space:nowrap;
 }
 h10.header {
     font-size: 3rem;

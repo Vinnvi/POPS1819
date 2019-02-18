@@ -7,45 +7,45 @@
         <link type="text/css" rel="stylesheet" href="/css/content.css"/>
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
         <link rel="icon" type="image/png" href="/images/logo_sans_texte.png" />
-        {% block stylesheets %}{% endblock %}
+        {% block stylesheets %}
+        {% endblock %}
     </head>
     <body>
-        <nav class="nav-extended navbar-fixed grey lighten-4">
-          <div class="nav-wrapper">
-            <ul class="hide-on-med-and-down row">
+        <nav id="navBar" class="nav-extended navbar-fixed grey lighten-4">
+
+          <div id="navWrapper" class="nav-wrapper">
+            <ul id="rowtopBar" class="hide-on-med-and-down row">
               <li class="col s12 m4 l2">
                 <a href="{{ path('app_homepage') }}" class="brand-logo"><img src="/images/logo.png" style="width:110px;height:45px;"></a>
               </li>
               <!-- Barre de recherche -->
-              <li class="col s12 m4 l8">
-                <div class="col s2"></div>
-                <div class="input-field center-align col s6">
-                  <i class="material-icons prefix grey-text text-darken-4">search</i>
-                  <input id="search" type="text" class="validate">
-                  <label for="search">Rechercher un collaborateur</label>
-                </div>
-                <div class="col s2"></div>
+              <li id="liSearch" class="col s12 m4 l7 ">
+                  <div class="input-field">
+                    <i class="material-icons prefix grey-text text-darken-4">search</i>
+                    <input id="search" type="text" class="validate">
+                    <label for="search"class="center-align">Rechercher un collaborateur</label>
+                  </div>
               </li>
 
-              <li class="col s12 m4 l2">
-                <a class='dropdown-trigger btn btn-large grey lighten-3 black-text' href='#' data-target='dropdown1'>
-                  <i class='material-icons left'>
-                    <img src="{{app.user.profile_pic_path}}" class="circle responsive-img" style="width:35px;height:35px;"/>
+              <li id="liProfil" class="col s12 m4 l3">
+                <a id="partProfil" class='dropdown-trigger btn btn-large grey lighten-3 black-text' href='#' data-target='dropdown1'>
+                  <i id="iconPicture" class='material-icons left'>
+                    <img id="imageProfil" src="{{app.user.profile_pic_path}}" class="circle responsive-img" style="width:35px;height:35px;"/>
                   </i>
-                  <b>{{app.user.nom}}</b>
-                  {{app.user.prenom}}
+                  <b id="bProfil">{{app.user.nom}} {{app.user.prenom}}</b>
+
                 </a>
               </li>
             </ul>
           </div>
-          <div class="nav-content">
-            <a class="btn-flat waves-effect waves-light btn-large" href="{{ path('app_noteFrais') }}" name="action">Mes notes de frais
+          <div id="navContent" class="nav-content">
+            <a id ="partNav" class="btn-flat waves-effect waves-light btn-large" href="{{ path('app_noteFrais') }}" name="action">Mes notes de frais
               <i class="material-icons right">book</i>
             </a>
-            <a class="btn-flat waves-effect waves-light btn-large"  href="{{ path('app_calendarConges') }}"  name="action">Mes demandes de congés
+            <a id ="partNav" class="col s4 m 4 l4 btn-flat waves-effect waves-light btn-large"  href="{{ path('app_calendarConges') }}"  name="action">Mes demandes de congés
               <i class="material-icons right">perm_contact_calendar</i>
             </a>
-            <a class="btn-flat waves-effect waves-light btn-large" href="{{ path('app_noteFrais') }}"  name="action">Mes demandes d'information
+            <a id ="partNav" class="col s4 m 4 l4 btn-flat waves-effect waves-light btn-large" href="{{ path('app_noteFrais') }}"  name="action">Mes demandes d'information
               <i class="material-icons right">send</i>
             </a>
               {% if app.user.service.nom == "RH" %}
@@ -56,6 +56,7 @@
 
           </div>
         </nav>
+
         <!-- Dropdown Structure -->
         <ul id='dropdown1' class='dropdown-content'>
           <li><a href="{{ path('app_profile') }}">Edition de profil</a></li>

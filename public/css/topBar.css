@@ -1,0 +1,47 @@
+#navBar{
+  height : 10% !important;
+}
+#navWrapper{
+  background-color: white;
+  min-height : 10%;
+  max-height: 10%;
+}
+#navContent{
+  background-color: #f2f6ff;
+  min-height : 10%;
+  max-height: 10%;
+}
+#rowtopBar{
+  margin-bottom : 0 !important;
+  line-height : 0;
+}
+#liSearch{
+  margin : 0;
+  padding:0;
+}
+#search{
+
+}
+
+#liProfil{
+
+}
+#partProfil{
+  padding-left: 5%;
+  padding-right:5%;
+  vertical-align : middle !important;
+  width : 80%;
+}
+#iconPicture{
+}
+#imageProfil{
+
+}
+#bProfil{
+  white-space: nowrap;
+  font-weight : 500;
+}
+#partNav{
+  width : 33%;
+  margin-right :0;
+}

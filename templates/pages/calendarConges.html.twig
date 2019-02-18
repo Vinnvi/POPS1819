@@ -1,4 +1,5 @@
 {% extends 'topBar.html.twig' %}
+{% block title %} Calendrier de Congés {% endblock %}
 {% block head %}
   {% block javascripts %}
     <script src="js/vendor/modernizr-2.6.2.min.js"></script>
@@ -10,6 +11,7 @@
     <script src="js/plugins/fullcalendar/fullcalendar-script.js" type="text/javascript"></script>
   {% endblock %}
   {% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="/css/topBar.css">
     <link rel="stylesheet" type="text/css" href="/css/calendarConges.css">
     <link rel="stylesheet" type="text/css" href="/css/loader.css">
     <link href="js/plugins/chartist-js/chartist.min.css" type="text/css" rel="stylesheet">
@@ -78,15 +80,17 @@
                       <h10 class="header"> 50 </h10>
                       <h6 class="header"> jours restants </h6>
                     </div>
-                    <div class="col s1 m1 l1">
+                    <div id="congePart" class="col s1 m1 l1">
                       <div class="row">
-                        <h5 class="header">Congés Payés :</h5>
+                        <h5 class="header">Congés payés :</h5>
+                        <h10 class="header"> 0 </h10>
+                        <h6 class="header"> jours restants </h6>
                       </div>
                     </div>
                   </div>
-                  <div class="row">
-                    <div class="input-field col s12 m12 l12">
-                        <a class="waves-effect waves-light modalAjout btn modal-trigger" href="#demandeConge">Demander un congé</a>
+                  <div id="btnConge" class="row">
+                    <div class="col s12 m12 l12">
+                        <a class="waves-effect waves-light btn modal-trigger" href="#demandeConge">Poser un congé</a>
                     </div>
                   </div>
                   <div class="row">
@@ -130,57 +134,21 @@
 
   <!-- modal for asking conge -->
   <!-- Modal Structure -->
-  <div id="demandeConge" class="modal myModal">
-      <div class="container mt-4">
-          <form method="post" action="{{ path('modif.ligne') }}">
-              <div class="modal-content" id="modal-content">
-                  <h5>Modification d'une ligne de frais</h5>
-                  <div id="container">
-                      <div class="section">
-                          <div class="input-field">
-                              <select name="ligneIntitule" id="ligneIntitule">
-                              </select>
-                          </div>
-                      </div>
-                      <div class="section">
-                          <input type="text" class="datepicker" id="ligneDate" name="ligneDate">
-                      </div>
-
-                      <div class="section">
-                          <div class="input-field">
-                              <input placeholder="montant" id="ligneMontant" name="ligneMontant" type="integer" class="validate">
-                          </div>
-                      </div>
-
-                      <div class="section">
-                          <div class="file-field input-field">
-                              <div class="btn">
-                                  <span>Justificatif</span>
-                                  <input type="file">
-                              </div>
-                              <div class="file-path-wrapper">
-                                  <input class="file-path validate" type="text">
-                              </div>
-                          </div>
-                      </div>
-
-                      <div class="section">
-                          <div class="input-field">
-                              <input id="ligneMission" name="ligneMission" type="text" class="validate">
-                          </div>
-                          <div class="input-field">
-                              <select name="projet" id="projet">
-                              </select>
-                              <input type="hidden" name="ligneId" id="ligneId" value=""/>
-                          </div>
-                      </div>
-                  </div>
-              </div>
-              <div class="modal-footer">
-                  <a href="#!" class="modal-close waves-effect waves-green btn-flat"><i class="material-icons left">clear</i>Annuler</a>
-                  <button type="submit" class="btn btn-primary">Enregistrer<i class="material-icons right">check</i></button>
-              </div>
-          </form>
-      </div>
+  <div id="demandeConge" class="modal">
+    <div class="modal-content">
+      <h4>Modal Header</h4>
+      <p>A bunch of text</p>
+    </div>
+    <div class="modal-footer">
+      <a href="#!" class="modal-close waves-effect waves-green btn-flat">Agree</a>
+    </div>
   </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+    var elems = document.querySelectorAll('.modal');
+    var instances = M.Modal.init(elems, options);
+  });
+  </script>
+
 {% endblock %}

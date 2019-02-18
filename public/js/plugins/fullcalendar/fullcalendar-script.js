@@ -1,7 +1,5 @@
 
   $(document).ready(function() {
-
-
     /* initialize the external events
     -----------------------------------------------------------------*/
     $('#external-events .fc-event').each(function() {
@@ -31,7 +29,7 @@
         center: 'title',
         right: 'month,basicWeek,basicDay'
       },
-      defaultDate: '2015-05-12',
+      defaultDate: $('#calendar').fullCalendar('today'),
       editable: true,
       droppable: true, // this allows things to be dropped onto the calendar
       eventLimit: true, // allow "more" link when too many events

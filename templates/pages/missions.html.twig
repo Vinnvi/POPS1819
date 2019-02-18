@@ -12,7 +12,7 @@
         <div class="col s2"><b>Service</b></div>
         <div class="col s1"></div>
     </div>
-    {% dump missions %}
+    {% dump montants %}
     <ul class="collapsible">
         {% set i = 0 %}
         {% if missions is empty %}
@@ -35,8 +35,14 @@
                 <div class="collapsible-body">
                     <b>Description</b>
                     <p>{{ mission.Description }}</p>
-                    <!--<b>Liste des collaborateurs</b>
-                    <b>Total des notes de frais liées à cette mission</b>-->
+                    <b>Liste des collaborateurs</b>
+                    {% for collabo in mission.collabos %}
+                        <p>{{ collabo.Nom }} {{ collabo.Prenom }} <span class="grey-text lighten-1">{{ collabo.service.nom }}</span></p>
+                    {% endfor %}
+                    <span>
+                        <b>Total des notes de frais liées à cette mission: </b>
+                        {{ montants[mission.id] }}
+                    </span>
                 </div>
             </li>
         {% set i = 1 %}

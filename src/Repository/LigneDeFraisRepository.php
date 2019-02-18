@@ -49,6 +49,18 @@ class LigneDeFraisRepository extends ServiceEntityRepository
         ;
     }
 
+    public function findByCollaborateurID($id)
+    {
+        return $this->createQueryBuilder('l')
+            ->innerJoin('l.Note', 'n')
+            ->where('n.collabo = :collabo_id')
+            ->setParameter('collabo_id', $id)
+            ->setMaxResults(100)
+            ->getQuery()
+            ->getResult();
+        ;
+    }
+
     /*
     public function findOneBySomeField($value): ?LigneDeFrais
     {

@@ -160,14 +160,14 @@
   <!-- modal for asking conge -->
   <!-- Modal Structure -->
   <div id="demandeConge" class="modal">
-    <div class="modal-content">
-      <h4>Poser un Congé</h4>
-      <div class="container mt-4">
-        <form method="post" action="{{ path('modif.ligne') }}">
-          <div class="modal-content" id="modal-content">
+    <div class="modal-content teal lighten-2">
+      <h4><b>Poser un Congé</b></h4>
+      <div class="container">
+        <form method="post" action="{{ path('modif.demandeConge') }}" class="white">
+          <div id="marginModal">
             <div class="select-wrapper">
               <select class="initialized">
-                <option value="" disabled="" selected="">Choose your option</option>
+                <option value="" disabled="" selected="" style="tex">Choose your option</option>
                 <option value="1">RTT</option>
                 <option value="2">Conge</option>
               </select>
@@ -176,12 +176,11 @@
             <div id="container">
               <div class="row">
                 <div class="input-field col s6 m6 l6">
-                  <input id="dateDebut" type="text" class="datepicker">
-                  <label for="dateDebut" class="">Indiquez la date de début</label>
+                  <input id="dateDebutConge" type="text" class="datepicker" placeholder="Indiquez la date de début">
                   </div>
                 <div class="input-field col s6 m6 l6">
                   <select class="initialized">
-                    <option value="" disabled="" selected="">Choose your option</option>
+                    <option id="timeCongeDebut" value="" disabled="" selected="">Choose your option</option>
                     <option value="1">Matin</option>
                     <option value="2">Après-Midi</option>
                   </select>
@@ -189,11 +188,10 @@
               </div>
               <div class="row">
                 <div class="input-field col s6 m6 l6">
-                  <input id="dateFin" type="text" class="datepicker">
-                  <label for="dateFin" class="form-control">Indiquez la date de Fin</label>
+                  <input id="dateFinConge" type="text" class="datepicker" placeholder="Indiquez la date de Fin">
                   </div>
                 <div class="input-field col s6 m6 l6">
-                  <select class="initialized">
+                  <select id ="timeCongeFin"class="initialized">
                     <option value="" disabled="" selected="">Choose your option</option>
                     <option value="1">Matin</option>
                     <option value="2">Après-Midi</option>

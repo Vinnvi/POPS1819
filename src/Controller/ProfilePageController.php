@@ -112,8 +112,6 @@ class ProfilePageController extends AbstractController
     * @return \Symfony\Component\HttpFoundation\Response
     */
     public function changeInfosProfile() : Response {
-      dump('hum');
-      print_r("checkHEre");
       //get current collaborateur
       $collaborateur = $this->getDoctrine()->getManager()->getRepository('App\Entity\Collaborateur');
       $collaborateur = $collaborateur->findById($this->getUser()->getId());
@@ -122,7 +120,6 @@ class ProfilePageController extends AbstractController
         $collaborateur[0]->setEmail($_POST['mail']);
         $this->getDoctrine()->getEntityManager()->persist($collaborateur[0]);
         $this->getDoctrine()->getEntityManager()->flush();
-        dump('ohlala');
       }
       else{
         dump('noooo');

@@ -27,8 +27,13 @@
         $('select').formSelect();
       });
     </script>
-  {% endblock %}
-  {% block stylesheets %}
+    <script>
+    function form_submit() {
+      document.getElementById("formConge").submit();
+    }
+    </script>
+    {% endblock %}
+    {% block stylesheets %}
     <link rel="stylesheet" type="text/css" href="/css/topBar.css">
     <link rel="stylesheet" type="text/css" href="/css/calendarConges.css">
     <link rel="stylesheet" type="text/css" href="/css/loader.css">
@@ -102,13 +107,13 @@
                   <div class="row">
                     <div id="rttPart" class="col s1 m1 l1">
                       <h5 class="header">RTT :</h5>
-                      <h10 class="header"> 50 </h10>
+                      <h10 class="header"> {{app.user.rtt}} </h10>
                       <h6 class="header"> jours restants </h6>
                     </div>
                     <div id="congePart" class="col s1 m1 l1">
                       <div class="row">
                         <h5 class="header">Congés payés :</h5>
-                        <h10 class="header"> 0 </h10>
+                        <h10 class="header"> {{app.user.conge}} </h10>
                         <h6 class="header"> jours restants </h6>
                       </div>
                     </div>
@@ -163,11 +168,11 @@
     <div class="modal-content teal lighten-2">
       <h4><b>Poser un Congé</b></h4>
       <div class="container">
-        <form method="post" action="{{ path('modif.demandeConge') }}" class="white">
+        <form method="POST" id="formConge" action="{{path('modif.demandeConge')}}" class="white">
           <div id="marginModal">
             <div class="select-wrapper">
               <select class="initialized">
-                <option value="" disabled="" selected="" style="tex">Choose your option</option>
+                <option value="" disabled="" selected=""> RTT ou Congé ?</option>
                 <option value="1">RTT</option>
                 <option value="2">Conge</option>
               </select>
@@ -180,7 +185,7 @@
                   </div>
                 <div class="input-field col s6 m6 l6">
                   <select class="initialized">
-                    <option id="timeCongeDebut" value="" disabled="" selected="">Choose your option</option>
+                    <option id="timeCongeDebut" value="" disabled="" selected="">Matin ou Après-Midi?</option>
                     <option value="1">Matin</option>
                     <option value="2">Après-Midi</option>
                   </select>
@@ -192,7 +197,7 @@
                   </div>
                 <div class="input-field col s6 m6 l6">
                   <select id ="timeCongeFin"class="initialized">
-                    <option value="" disabled="" selected="">Choose your option</option>
+                    <option value="" disabled="" selected="">Matin ou Après-Midi?</option>
                     <option value="1">Matin</option>
                     <option value="2">Après-Midi</option>
                   </select>
@@ -203,10 +208,15 @@
           </div>
           <!-- End Modal Content -->
           <div class="modal-footer">
-            <a href="#!" class="modal-close waves-effect waves-green btn-flat"><i class="material-icons left">clear</i>Annuler</a>
-            <button type="submit" class="btn btn-primary">Enregistrer<i class="material-icons right">check</i></button>
+            <a href="#!" class="modal-close waves-effect waves-green btn-flat">
+              <i class="material-icons left">clear</i>Annuler
+            </a>
+            <button onclick="form_submit()" class="btn btn-primary">Enregistrer
+              <i class="material-icons right">check</i>
+            </button>
           </div>
         </form>
       </div>
     </div>
+  </div>
 {% endblock %}

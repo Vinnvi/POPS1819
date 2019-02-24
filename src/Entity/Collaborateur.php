@@ -89,6 +89,16 @@ class Collaborateur implements UserInterface,EquatableInterface
      */
     private $role_entreprise;
 
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $rtt;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $conge;
+
     const STATUS = [
         0 => 'Collaborateur',
         1 => 'Chef de service',
@@ -333,6 +343,30 @@ class Collaborateur implements UserInterface,EquatableInterface
     public function setRoleEntreprise(string $role_entreprise): self
     {
         $this->role_entreprise = $role_entreprise;
+
+        return $this;
+    }
+
+    public function getRtt(): ?int
+    {
+        return $this->rtt;
+    }
+
+    public function setRtt(int $rtt): self
+    {
+        $this->rtt = $rtt;
+
+        return $this;
+    }
+
+    public function getConge(): ?int
+    {
+        return $this->conge;
+    }
+
+    public function setConge(int $conge): self
+    {
+        $this->conge = $conge;
 
         return $this;
     }

@@ -89,6 +89,11 @@ class Collaborateur implements UserInterface,EquatableInterface
      */
     private $role_entreprise;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\DemandeAvance", mappedBy="collabo")
+     */
+    private $demandeAvances;
+
     const STATUS = [
         0 => 'Collaborateur',
         1 => 'Chef de service',
@@ -105,6 +110,7 @@ class Collaborateur implements UserInterface,EquatableInterface
         $this->setProfilePicPath('images/profile_pics/anonym_picture.jpg');
         $this->setBackgroundPicPath('');
         $this->notifications = new ArrayCollection();
+        $this->demandeAvances = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -334,6 +340,37 @@ class Collaborateur implements UserInterface,EquatableInterface
     public function setRoleEntreprise(string $role_entreprise): self
     {
         $this->role_entreprise = $role_entreprise;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|DemandeAvance[]
+     */
+    public function getDemandeAvances(): Collection
+    {
+        return $this->demandeAvances;
+    }
+
+    public function addDemandeAvance(DemandeAvance $demandeAvance): self
+    {
+        if (!$this->demandeAvances->contains($demandeAvance)) {
+            $this->demandeAvances[] = $demandeAvance;
+            $demandeAvance->setCollabo($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDemandeAvance(DemandeAvance $demandeAvance): self
+    {
+        if ($this->demandeAvances->contains($demandeAvance)) {
+            $this->demandeAvances->removeElement($demandeAvance);
+            // set the owning side to null (unless already changed)
+            if ($demandeAvance->getCollabo() === $this) {
+                $demandeAvance->setCollabo(null);
+            }
+        }
 
         return $this;
     }

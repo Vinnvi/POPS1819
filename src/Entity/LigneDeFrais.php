@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\DateType;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -69,6 +71,11 @@ class LigneDeFrais
      */
     private $lastModif;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\DemandeAvance", mappedBy="lignes")
+     */
+    private $demandeAvances;
+
     const STATUS = [
         0 => 'En cours',
         1 => 'En attente chef',
@@ -85,6 +92,7 @@ class LigneDeFrais
       $this->statutValidation = "Non validée";
       $this->lastModif = new \DateTime();
       $this->avance = false;
+      $this->demandeAvances = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -208,6 +216,34 @@ class LigneDeFrais
     public function setLastModif(?\DateTimeInterface $lastModif): self
     {
         $this->lastModif = $lastModif;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|DemandeAvance[]
+     */
+    public function getDemandeAvances(): Collection
+    {
+        return $this->demandeAvances;
+    }
+
+    public function addDemandeAvance(DemandeAvance $demandeAvance): self
+    {
+        if (!$this->demandeAvances->contains($demandeAvance)) {
+            $this->demandeAvances[] = $demandeAvance;
+            $demandeAvance->addLigne($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDemandeAvance(DemandeAvance $demandeAvance): self
+    {
+        if ($this->demandeAvances->contains($demandeAvance)) {
+            $this->demandeAvances->removeElement($demandeAvance);
+            $demandeAvance->removeLigne($this);
+        }
 
         return $this;
     }

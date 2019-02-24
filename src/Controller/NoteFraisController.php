@@ -5,6 +5,7 @@ use App\Form\LigneDeFraisFormType;
 use Symfony\Component\HttpFoundation\Response;
 use Twig\Environment;
 use App\Entity\NoteDeFrais;
+use App\Entity\DemandeAvance;
 use App\Entity\TypePaiementEnum;
 use App\Repository\NoteDeFraisRepository;
 use Doctrine\Common\Persistence\ObjectManager;
@@ -136,6 +137,35 @@ class NoteFraisController extends AbstractController
         $this->getDoctrine()->getEntityManager()->flush();
 
         return $this->redirectToRoute('app_noteFrais');
+
+    }
+
+    /**
+     * @Route("/mesNotesDeFrais/demandeAvance", name="demandeAvance")
+     */
+    public function demandeAvance(){
+
+        if(isset($_POST['montant'])){
+            $LigneRepository = $this->getDoctrine()->getEntityManager()->getRepository('App\Entity\LigneDeFrais');
+            $DemandeAvanceRepository = $this->getDoctrine()->getEntityManager()->getRepository('App\Entity\DemandeAvance');
+
+            $maDemandeAvance = new DemandeAvance();
+            $maDemandeAvance->setCollabo($this->getUser());
+            $maDemandeAvance->setMontant($_POST['montant']);
+
+
+            foreach ($_POST['lignes'] as $ligneId){
+                $ligne = $LigneRepository->findOneByID($ligneId);
+                $ligne->setAvance(true);
+                $maDemandeAvance->addLigne($ligne);
+            }
+            $this->getDoctrine()->getEntityManager()->persist($maDemandeAvance);
+            $this->em->flush();
+            return $this->redirectToRoute('app_noteFrais');
+        }
+        else{
+            return $this->redirectToRoute('app_noteFrais');
+        }
 
     }
 

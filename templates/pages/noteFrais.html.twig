@@ -21,15 +21,28 @@
             <a class="waves-effect waves-light modalAjout btn modal-trigger" data-id="{{note.mois}}/{{note.annee}}"  href="#ajoutLigneFraisModal">Ajouter une ligne de frais <i class="material-icons right">add</i></a>
             {% endif %}
             <div class="right" style="padding-right: 10px;padding-top:5px" > Demandes d'avance</div>
-            {% for ligne in mesLignesDeFrais[i] %}
-                <li>
-                  <div style="display:block" class="collapsible-header"> {{ligne.intitule}} <div class="secondary-content"> <input mdx-no-collapse class="no-collapse" type="checkbox" /><span></span> </div> </div>
-                  <div class="collapsible-body">
-                    Mission : {{ligne.mission}},   Montant : {{ligne.montant}} euros,   date : {{ ligne.date|date("Y-m-d") }},   statut : {{ligne.statutValidation}}
-                    <a class="waves-effect waves-light modalModification btn modal-trigger" data-id="{{ligne.id}}/{{ligne.montant}}/{{ligne.intitule}}/{{ligne.mission}}/{{ligne.date|date("Y-m-d")}}"  href="#modificationLigneFraisModal">Modifier</a>
-                  </div>
-                </li>
-            {% endfor %}
+              <form action="{{ path('demandeAvance') }}" method="post">
+                  <ul class="collection">
+                      {% for ligne in mesLignesDeFrais[i] %}
+                          <li class="collection-item">
+                              {{ ligne.mission }} : {{ ligne.intitule }} ({{ ligne.montant }} Euros)
+                              <a class="waves-effect waves-light modalModification btn modal-trigger" data-id="{{ligne.id}}/{{ligne.montant}}/{{ligne.intitule}}/{{ligne.mission}}/{{ligne.date|date("Y-m-d")}}"  href="#modificationLigneFraisModal">Modifier</a>
+                                <div class="secondary-content"><label><input onclick="ajoutDemandes(this)" name="lignes[]" value="{{ ligne.id }}" type="checkbox" /><span></span></label></div>
+                          </li>
+                      {% endfor %}
+                      {% if note.statut == status[0] %}
+                      <li class="collection-item">
+                          <div style=" text-align: right;">
+                              <input name="montant" id="montant" type="text" required>
+                              <button id="btnDemande" disabled="disabled" class="btn btn-primary">Faire la demande</button>
+                          </div>
+
+                      </li>
+                      {% endif %}
+                  </ul>
+              </form>
+
+
           </ul>
         </div>
       </li>
@@ -167,5 +180,21 @@
             $(".modal-content #ligneMission").val( data[3] );
             $(".modal-content #ligneDate").val( data[4] );
         });
+    </script>
+    
+    <script>
+        let nBDemandes = 0;
+        function ajoutDemandes(element) {
+            if(element.checked){
+                nBDemandes +=1;
+                document.getElementById('btnDemande').disabled = false;
+            }
+            else{
+                nBDemandes -=1;
+                if(nBDemandes == 0){
+                    document.getElementById('btnDemande').disabled = true;
+                }
+            }
+        }
     </script>
 {% endblock %}

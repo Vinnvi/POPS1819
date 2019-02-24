@@ -27,7 +27,17 @@
                           <li class="collection-item">
                               {{ ligne.mission }} : {{ ligne.intitule }} ({{ ligne.montant }} Euros)
                               <a class="waves-effect waves-light modalModification btn modal-trigger" data-id="{{ligne.id}}/{{ligne.montant}}/{{ligne.intitule}}/{{ligne.mission}}/{{ligne.date|date("Y-m-d")}}"  href="#modificationLigneFraisModal">Modifier</a>
-                                <div class="secondary-content"><label><input onclick="ajoutDemandes(this)" name="lignes[]" value="{{ ligne.id }}" type="checkbox" /><span></span></label></div>
+
+                              <div class="secondary-content">
+                                  {% if ligne.avance == false %}
+                                  <label>
+                                      <input onclick="ajoutDemandes(this)" name="lignes[]" value="{{ ligne.id }}" type="checkbox" />
+                                      <span></span>
+                                  </label>
+                                  {% else %}
+                                    {{ ligne.demandeAvance.statut }}
+                                  {% endif %}
+                              </div>
                           </li>
                       {% endfor %}
                       {% if note.statut == status[0] %}

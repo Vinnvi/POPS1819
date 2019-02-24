@@ -25,31 +25,31 @@ class DemandeAvance
     private $collabo;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\LigneDeFrais", inversedBy="demandeAvances")
-     */
-    private $lignes;
-
-    /**
-     * @ORM\Column(type="float", nullable=true)
+     * @ORM\Column(type="float")
      */
     private $montant;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\LigneDeFrais", mappedBy="demandeAvance")
+     */
+    private $Lignes;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
     private $statut;
 
-    const  STATUS = [
-       0 => 'En cours de validation',
-       1 => 'accepete',
-       2 => 'refusee',
+    const STATUS= [
+        0 => 'En cours de validation',
+        1 => 'Validee',
+        2 => 'Refusee',
     ];
 
     public function __construct()
     {
-        $this->lignes = new ArrayCollection();
-        $this->setMontant(0);
+        $this->Lignes = new ArrayCollection();
         $this->setStatut(DemandeAvance::STATUS[0]);
+        $this->setMontant(0);
     }
 
     public function getId(): ?int
@@ -69,18 +69,31 @@ class DemandeAvance
         return $this;
     }
 
+    public function getMontant(): ?float
+    {
+        return $this->montant;
+    }
+
+    public function setMontant(float $montant): self
+    {
+        $this->montant = $montant;
+
+        return $this;
+    }
+
     /**
      * @return Collection|LigneDeFrais[]
      */
     public function getLignes(): Collection
     {
-        return $this->lignes;
+        return $this->Lignes;
     }
 
     public function addLigne(LigneDeFrais $ligne): self
     {
-        if (!$this->lignes->contains($ligne)) {
-            $this->lignes[] = $ligne;
+        if (!$this->Lignes->contains($ligne)) {
+            $this->Lignes[] = $ligne;
+            $ligne->setDemandeAvance($this);
         }
 
         return $this;
@@ -88,21 +101,13 @@ class DemandeAvance
 
     public function removeLigne(LigneDeFrais $ligne): self
     {
-        if ($this->lignes->contains($ligne)) {
-            $this->lignes->removeElement($ligne);
+        if ($this->Lignes->contains($ligne)) {
+            $this->Lignes->removeElement($ligne);
+            // set the owning side to null (unless already changed)
+            if ($ligne->getDemandeAvance() === $this) {
+                $ligne->setDemandeAvance(null);
+            }
         }
-
-        return $this;
-    }
-
-    public function getMontant(): ?float
-    {
-        return $this->montant;
-    }
-
-    public function setMontant(?float $montant): self
-    {
-        $this->montant = $montant;
 
         return $this;
     }

@@ -94,6 +94,7 @@ class Collaborateur implements UserInterface,EquatableInterface
      */
     private $demandeAvances;
 
+
     const STATUS = [
         0 => 'Collaborateur',
         1 => 'Chef de service',
@@ -374,4 +375,6 @@ class Collaborateur implements UserInterface,EquatableInterface
 
         return $this;
     }
+
+
 }

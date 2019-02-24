@@ -158,8 +158,10 @@ class NoteFraisController extends AbstractController
                 $ligne = $LigneRepository->findOneByID($ligneId);
                 $ligne->setAvance(true);
                 $maDemandeAvance->addLigne($ligne);
+                $ligne->setDemandeAvance($maDemandeAvance);
             }
             $this->getDoctrine()->getEntityManager()->persist($maDemandeAvance);
+
             $this->em->flush();
             return $this->redirectToRoute('app_noteFrais');
         }

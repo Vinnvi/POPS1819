@@ -2,9 +2,15 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="802d256f-bcd2-482c-be83-2b10e8eba1aa" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Controller/NoteFraisController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/NoteFraisController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Entity/Collaborateur.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Collaborateur.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Entity/DemandeAvance.php" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Entity/LigneDeFrais.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/LigneDeFrais.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Migrations/Version20190224104037.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Migrations/Version20190224104409.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Migrations/Version20190224115328.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Repository/DemandeAvanceRepository.php" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/pages/noteFrais.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/pages/noteFrais.html.twig" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -18,11 +24,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/templates/pages/noteFrais.html.twig">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1094">
-              <caret line="29" column="121" selection-start-line="29" selection-start-column="121" selection-end-line="29" selection-end-column="121" />
+            <state relative-caret-position="368">
+              <caret line="37" column="65" selection-start-line="37" selection-start-column="65" selection-end-line="37" selection-end-column="65" />
               <folding>
                 <element signature="n#style#0;n#div#0;n#li#1;n#ul#0;n#form#0;n#ul#0;n#div#1;n#li#1;n#ul#0;n#div#0;n#!!top" expanded="true" />
               </folding>
@@ -33,8 +39,26 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Entity/LigneDeFrais.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="3031">
-              <caret line="236" selection-start-line="236" selection-end-line="236" />
+            <state relative-caret-position="2922">
+              <caret line="233" selection-start-line="233" selection-end-line="233" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/Entity/NoteDeFrais.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="345">
+              <caret line="144" selection-start-line="144" selection-end-line="144" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/Entity/Collaborateur.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="617">
+              <caret line="377" selection-start-line="377" selection-end-line="377" />
             </state>
           </provider>
         </entry>
@@ -42,8 +66,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Controller/NoteFraisController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="609">
-              <caret line="158" column="40" selection-start-line="158" selection-start-column="40" selection-end-line="158" selection-end-column="40" />
+            <state relative-caret-position="286">
+              <caret line="160" column="59" selection-start-line="160" selection-start-column="59" selection-end-line="160" selection-end-column="59" />
               <folding>
                 <element signature="e#33#67#0#PHP" expanded="true" />
               </folding>
@@ -52,19 +76,10 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/Migrations/Version20190224115328.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="187">
-              <caret line="12" column="33" selection-start-line="12" selection-start-column="19" selection-end-line="12" selection-end-column="33" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/Entity/DemandeAvance.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="170">
-              <caret line="51" column="51" selection-start-line="51" selection-start-column="51" selection-end-line="51" selection-end-column="51" />
+            <state relative-caret-position="221">
+              <caret line="51" column="29" selection-start-line="51" selection-start-column="29" selection-end-line="51" selection-end-column="29" />
             </state>
           </provider>
         </entry>
@@ -74,24 +89,6 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="357">
               <caret line="41" column="31" selection-start-line="41" selection-start-column="20" selection-end-line="41" selection-end-column="31" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/Migrations/Version20190224104409.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="187">
-              <caret line="12" column="33" selection-start-line="12" selection-start-column="19" selection-end-line="12" selection-end-column="33" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/Migrations/Version20190224104037.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="85">
-              <caret line="12" column="33" selection-start-line="12" selection-start-column="19" selection-end-line="12" selection-end-column="33" />
             </state>
           </provider>
         </entry>
@@ -126,8 +123,6 @@
         <option value="$PROJECT_DIR$/src/Repository/NoteDeFraisRepository.php" />
         <option value="$PROJECT_DIR$/templates/pages/gestionNotesFraisChef.html.twig" />
         <option value="$PROJECT_DIR$/templates/pages/gestionNotesFraisChefDetails.html.twig" />
-        <option value="$PROJECT_DIR$/src/Entity/LigneDeFrais.php" />
-        <option value="$PROJECT_DIR$/src/Entity/NoteDeFrais.php" />
         <option value="$PROJECT_DIR$/src/Controller/GestionNotesAdminController.php" />
         <option value="$PROJECT_DIR$/src/Migrations/Version20190218142314.php" />
         <option value="$PROJECT_DIR$/src/Controller/ProfilePageController.php" />
@@ -138,11 +133,14 @@
         <option value="$PROJECT_DIR$/templates/pages/gestionNotesFraisDetails.html.twig" />
         <option value="$PROJECT_DIR$/src/Controller/GestionNotesFraisController.php" />
         <option value="$PROJECT_DIR$/templates/pages/home.html.twig" />
-        <option value="$PROJECT_DIR$/src/Entity/Collaborateur.php" />
         <option value="$PROJECT_DIR$/templates/pages/gestionNotesFrais.html.twig" />
-        <option value="$PROJECT_DIR$/templates/pages/noteFrais.html.twig" />
+        <option value="$PROJECT_DIR$/src/Entity/LigneDeFrais.php" />
+        <option value="$PROJECT_DIR$/src/Entity/Collaborateur.php" />
+        <option value="$PROJECT_DIR$/src/Migrations/Version20190224104037.php" />
+        <option value="$PROJECT_DIR$/src/Entity/NoteDeFrais.php" />
         <option value="$PROJECT_DIR$/src/Controller/NoteFraisController.php" />
         <option value="$PROJECT_DIR$/src/Entity/DemandeAvance.php" />
+        <option value="$PROJECT_DIR$/templates/pages/noteFrais.html.twig" />
       </list>
     </option>
   </component>
@@ -321,12 +319,12 @@
       <workItem from="1550496788525" duration="14077000" />
       <workItem from="1550560236519" duration="658000" />
       <workItem from="1550764735686" duration="1728000" />
-      <workItem from="1551002455283" duration="3893000" />
+      <workItem from="1551002455283" duration="5522000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="44714000" />
+    <option name="totallyTimeSpent" value="46343000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1295" height="695" extended-state="6" />
@@ -552,20 +550,6 @@
     <entry file="file://$PROJECT_DIR$/src/Migrations/Version20190203132455.php">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Entity/Collaborateur.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1683">
-          <caret line="103" column="27" selection-start-line="103" selection-start-column="27" selection-end-line="103" selection-end-column="27" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Entity/NoteDeFrais.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="96">
-          <caret line="49" column="2" lean-forward="true" selection-start-line="49" selection-start-column="2" selection-end-line="49" selection-end-column="2" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/templates/pages/gestionNotesFrais.html.twig">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="204">
@@ -583,10 +567,17 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/Migrations/Version20190224115328.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="187">
+          <caret line="12" column="33" selection-start-line="12" selection-start-column="19" selection-end-line="12" selection-end-column="33" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/Migrations/Version20190224104037.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="85">
-          <caret line="12" column="33" selection-start-line="12" selection-start-column="19" selection-end-line="12" selection-end-column="33" />
+          <caret line="12" column="19" selection-start-line="12" selection-start-column="19" selection-end-line="12" selection-end-column="19" />
         </state>
       </provider>
     </entry>
@@ -604,44 +595,51 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/templates/pages/noteFrais.html.twig">
+    <entry file="file://$PROJECT_DIR$/src/Entity/Collaborateur.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1094">
-          <caret line="29" column="121" selection-start-line="29" selection-start-column="121" selection-end-line="29" selection-end-column="121" />
-          <folding>
-            <element signature="n#style#0;n#div#0;n#li#1;n#ul#0;n#form#0;n#ul#0;n#div#1;n#li#1;n#ul#0;n#div#0;n#!!top" expanded="true" />
-          </folding>
+        <state relative-caret-position="617">
+          <caret line="377" selection-start-line="377" selection-end-line="377" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Controller/NoteFraisController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="609">
-          <caret line="158" column="40" selection-start-line="158" selection-start-column="40" selection-end-line="158" selection-end-column="40" />
+        <state relative-caret-position="286">
+          <caret line="160" column="59" selection-start-line="160" selection-start-column="59" selection-end-line="160" selection-end-column="59" />
           <folding>
             <element signature="e#33#67#0#PHP" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Migrations/Version20190224115328.php">
+    <entry file="file://$PROJECT_DIR$/src/Entity/DemandeAvance.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="187">
-          <caret line="12" column="33" selection-start-line="12" selection-start-column="19" selection-end-line="12" selection-end-column="33" />
+        <state relative-caret-position="221">
+          <caret line="51" column="29" selection-start-line="51" selection-start-column="29" selection-end-line="51" selection-end-column="29" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Entity/NoteDeFrais.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="345">
+          <caret line="144" selection-start-line="144" selection-end-line="144" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Entity/LigneDeFrais.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3031">
-          <caret line="236" selection-start-line="236" selection-end-line="236" />
+        <state relative-caret-position="2922">
+          <caret line="233" selection-start-line="233" selection-end-line="233" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Entity/DemandeAvance.php">
+    <entry file="file://$PROJECT_DIR$/templates/pages/noteFrais.html.twig">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="170">
-          <caret line="51" column="51" selection-start-line="51" selection-start-column="51" selection-end-line="51" selection-end-column="51" />
+        <state relative-caret-position="368">
+          <caret line="37" column="65" selection-start-line="37" selection-start-column="65" selection-end-line="37" selection-end-column="65" />
+          <folding>
+            <element signature="n#style#0;n#div#0;n#li#1;n#ul#0;n#form#0;n#ul#0;n#div#1;n#li#1;n#ul#0;n#div#0;n#!!top" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

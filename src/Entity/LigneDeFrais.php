@@ -72,9 +72,9 @@ class LigneDeFrais
     private $lastModif;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\DemandeAvance", mappedBy="lignes")
+     * @ORM\ManyToOne(targetEntity="App\Entity\DemandeAvance", inversedBy="Lignes")
      */
-    private $demandeAvances;
+    private $demandeAvance;
 
     const STATUS = [
         0 => 'En cours',
@@ -220,31 +220,16 @@ class LigneDeFrais
         return $this;
     }
 
-    /**
-     * @return Collection|DemandeAvance[]
-     */
-    public function getDemandeAvances(): Collection
+    public function getDemandeAvance(): ?DemandeAvance
     {
-        return $this->demandeAvances;
+        return $this->demandeAvance;
     }
 
-    public function addDemandeAvance(DemandeAvance $demandeAvance): self
+    public function setDemandeAvance(?DemandeAvance $demandeAvance): self
     {
-        if (!$this->demandeAvances->contains($demandeAvance)) {
-            $this->demandeAvances[] = $demandeAvance;
-            $demandeAvance->addLigne($this);
-        }
+        $this->demandeAvance = $demandeAvance;
 
         return $this;
     }
 
-    public function removeDemandeAvance(DemandeAvance $demandeAvance): self
-    {
-        if ($this->demandeAvances->contains($demandeAvance)) {
-            $this->demandeAvances->removeElement($demandeAvance);
-            $demandeAvance->removeLigne($this);
-        }
-
-        return $this;
-    }
 }

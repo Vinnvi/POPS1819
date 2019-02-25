@@ -142,5 +142,43 @@ class GestionNotesFraisController extends AbstractController
         return $this->redirectToRoute('app_gestionNotesFraisAdmin');
     }
 
+    public function changePicture() : Response {
+        /* verification file */
+        if(isset($_FILES['profilePicToUpload'])){
+          $errors= array();
+          $target_dir = "images/justificatifs/";
+          //$file_name = basename($_FILES['profilePicToUpload']['name']);
+          $target_file = $target_dir . basename($_FILES["profilePicToUpload"]["name"]);
+          $file_size = $_FILES['profilePicToUpload']['size'];
+          $file_tmp = $_FILES['profilePicToUpload']['tmp_name'];
+          $file_type = $_FILES['profilePicToUpload']['type'];
+          $tmp = explode('.',$_FILES['profilePicToUpload']['name']);
+          $file_ext = strtolower(end($tmp));
+  
+           $extensions= array("jpeg","jpg","png");
+           if(in_array($file_ext,$extensions)=== false){
+              $errors[]="extension not allowed, please choose a JPEG or PNG file.";
+           }
+           if($file_size > 2097152) {
+              $errors[]='File size must be excately 2 MB';
+           }
+           /* picture is valid, we can update it */
+           if(empty($errors)==true) {
+              //move file in our folder
+              move_uploaded_file($file_tmp,$target_file);
+              //update databse
+              $lignesDeFraisRepository = $this->getDoctrine()->getEntityManager()->getRepository('App\Entity\LigneDeFrais');
+              $ligneDeFrais = $lignesDeFraisRepository->findByCollaborateurID($this->getUser()->getId());
+              $ligneDeFrais->setJustificatif($target_file);
+              $this->getDoctrine()->getEntityManager()->persist($ligneDeFrais);
+              $this->getDoctrine()->getEntityManager()->flush();
+              echo "Success";
+           }else{
+              print_r($errors);
+           }
+        }
+        return $this->redirectToRoute('app_noteFrais');
+    }
+
 
 }

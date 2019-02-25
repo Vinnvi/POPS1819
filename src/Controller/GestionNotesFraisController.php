@@ -142,8 +142,8 @@ class GestionNotesFraisController extends AbstractController
         return $this->redirectToRoute('app_gestionNotesFraisAdmin');
     }
 
-    public function changePicture() : Response {
-        /* verification file */
+    /*public function changePicture($ligneId) : Response {
+        // verification file
         if(isset($_FILES['profilePicToUpload'])){
           $errors= array();
           $target_dir = "images/justificatifs/";
@@ -162,13 +162,13 @@ class GestionNotesFraisController extends AbstractController
            if($file_size > 2097152) {
               $errors[]='File size must be excately 2 MB';
            }
-           /* picture is valid, we can update it */
+           // picture is valid, we can update it
            if(empty($errors)==true) {
               //move file in our folder
               move_uploaded_file($file_tmp,$target_file);
               //update databse
               $lignesDeFraisRepository = $this->getDoctrine()->getEntityManager()->getRepository('App\Entity\LigneDeFrais');
-              $ligneDeFrais = $lignesDeFraisRepository->findByCollaborateurID($this->getUser()->getId());
+              $ligneDeFrais = $lignesDeFraisRepository->findOneByID($ligneId);
               $ligneDeFrais->setJustificatif($target_file);
               $this->getDoctrine()->getEntityManager()->persist($ligneDeFrais);
               $this->getDoctrine()->getEntityManager()->flush();
@@ -178,7 +178,7 @@ class GestionNotesFraisController extends AbstractController
            }
         }
         return $this->redirectToRoute('app_noteFrais');
-    }
+    }*/
 
 
 }

@@ -14,7 +14,8 @@
                 {% for ligne in demande.lignes %}
                 <li class="collection-item">
                     {{ ligne.mission }} {{ ligne.intitule }} <br>
-                    Montant estimé : {{ ligne.montant }}
+                    Montant estimé : {{ ligne.montant }}<br>
+                    Montant demandé : {{ ligne.montantAvance }} <br>
                     Date d'ajout de la ligne : {{ ligne.date|date("d/m/Y") }}<br>
                     Projet rattaché : {{ ligne.projet.nom }}
                 </li>

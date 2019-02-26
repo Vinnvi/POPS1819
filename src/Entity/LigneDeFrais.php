@@ -76,6 +76,11 @@ class LigneDeFrais
      */
     private $demandeAvance;
 
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $montantAvance;
+
     const STATUS = [
         0 => 'En cours',
         1 => 'En attente chef',
@@ -228,6 +233,18 @@ class LigneDeFrais
     public function setDemandeAvance(?DemandeAvance $demandeAvance): self
     {
         $this->demandeAvance = $demandeAvance;
+
+        return $this;
+    }
+
+    public function getMontantAvance(): ?int
+    {
+        return $this->montantAvance;
+    }
+
+    public function setMontantAvance(?int $montantAvance): self
+    {
+        $this->montantAvance = $montantAvance;
 
         return $this;
     }

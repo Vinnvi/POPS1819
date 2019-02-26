@@ -145,29 +145,25 @@ class NoteFraisController extends AbstractController
      */
     public function demandeAvance(){
 
-        if(isset($_POST['montant'])){
-            $LigneRepository = $this->getDoctrine()->getEntityManager()->getRepository('App\Entity\LigneDeFrais');
-            $DemandeAvanceRepository = $this->getDoctrine()->getEntityManager()->getRepository('App\Entity\DemandeAvance');
+        $LigneRepository = $this->getDoctrine()->getEntityManager()->getRepository('App\Entity\LigneDeFrais');
+        $maDemandeAvance = new DemandeAvance();
+        $maDemandeAvance->setCollabo($this->getUser());
+        $maDemandeAvance->setMotif($_POST['motifDemande']);
 
-            $maDemandeAvance = new DemandeAvance();
-            $maDemandeAvance->setCollabo($this->getUser());
-            $maDemandeAvance->setMontant($_POST['montant']);
-            $maDemandeAvance->setMotif($_POST['motifDemande']);
-
-            foreach ($_POST['lignes'] as $ligneId){
-                $ligne = $LigneRepository->findOneByID($ligneId);
-                $ligne->setAvance(true);
-                $maDemandeAvance->addLigne($ligne);
-                $ligne->setDemandeAvance($maDemandeAvance);
-            }
-            $this->getDoctrine()->getEntityManager()->persist($maDemandeAvance);
-
-            $this->em->flush();
-            return $this->redirectToRoute('app_noteFrais');
+        $id = 0;
+        foreach ($_POST['lignes'] as $ligneId){
+            $ligne = $LigneRepository->findOneByID($ligneId);
+            $ligne->setAvance(true);
+            $maDemandeAvance->addLigne($ligne);
+            $ligne->setDemandeAvance($maDemandeAvance);
+            $ligne->setMontantAvance($_POST['montant'][$id]);
+            $id++;
         }
-        else{
-            return $this->redirectToRoute('app_noteFrais');
-        }
+        $maDemandeAvance->setMontant(array_sum($_POST['montant']));
+        $this->getDoctrine()->getEntityManager()->persist($maDemandeAvance);
+
+        $this->em->flush();
+        return $this->redirectToRoute('app_noteFrais');
 
     }
 

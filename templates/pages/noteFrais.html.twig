@@ -28,10 +28,11 @@
                               {{ ligne.mission }} : {{ ligne.intitule }} ({{ ligne.montant }} Euros)
                               <a class="waves-effect waves-light modalModification btn modal-trigger" data-id="{{ligne.id}}/{{ligne.montant}}/{{ligne.intitule}}/{{ligne.mission}}/{{ligne.date|date("Y-m-d")}}"  href="#modificationLigneFraisModal">Modifier</a>
 
-                              <div class="secondary-content">
+                              <div class="secondary-content" style="display: inline">
                                   {% if ligne.avance == false %}
+                                  <input placeholder="Montant"  id="ligne{{ ligne.id }}" name="montant[]" type="number" class="validate">
                                   <label>
-                                      <input onclick="ajoutDemandes(this)" name="lignes[]" value="{{ ligne.id }}" type="checkbox" />
+                                      <input onclick="ajoutDemandes(this)" id="{{ ligne.id }}" name="lignes[]" value="{{ ligne.id }}" type="checkbox" />
                                       <span></span>
                                   </label>
                                   {% else %}
@@ -42,14 +43,11 @@
                       {% endfor %}
                       {% if note.statut == status[0] %}
                       <li class="collection-item">
-                              <textarea name="motifDemande" id="motifDemande" class="materialize-textarea"></textarea>
-                              <label for="motifDemande">Motif de la demande</label>
-                              <input name="montant" id="montant" type="number" required>
-                              <label for="montant">Montant de la demande</label>
+                          <textarea name="motifDemande" id="motifDemande" class="materialize-textarea"></textarea>
+                          <label for="motifDemande">Motif de la demande</label>
                           <div class="right-align">
                               <button id="btnDemande" disabled="disabled" class="btn btn-primary">Faire la demande</button>
                           </div>
-
                       </li>
                       {% endif %}
                   </ul>
@@ -199,11 +197,13 @@
         let nBDemandes = 0;
         function ajoutDemandes(element) {
             if(element.checked){
+                document.getElementById("ligne"+element.id).required = true;
                 nBDemandes +=1;
                 document.getElementById('btnDemande').disabled = false;
             }
             else{
                 nBDemandes -=1;
+                document.getElementById("ligne"+element.id).required = false;
                 if(nBDemandes == 0){
                     document.getElementById('btnDemande').disabled = true;
                 }

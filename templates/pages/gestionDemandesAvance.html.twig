@@ -15,7 +15,8 @@
                             Motif : {{ demande.motif }} <br>
                             Lignes concernées :<br>
                             {% for ligne in demande.lignes %}
-                                <span>&#8226;</span> {{ ligne.mission }} - {{ ligne.intitule }} : {{ ligne.montant }} euros
+                                <span>&#8226;</span> {{ ligne.mission }} - {{ ligne.intitule }} : {{ ligne.montant }} euros<br>
+                                &nbsp; &nbsp; Demande d'avance de {{ ligne.montantAvance }} euros
                                 <br>
                             {% endfor %}
                         </div>
@@ -35,7 +36,8 @@
                         Motif : {{ demande.motif }} <br>
                         Lignes concernées :<br>
                         {% for ligne in demande.lignes %}
-                            <span>&#8226;</span> {{ ligne.mission }} - {{ ligne.intitule }} : {{ ligne.montant }} euros
+                            <span>&#8226;</span> {{ ligne.mission }} - {{ ligne.intitule }} : {{ ligne.montant }} euros<br>
+                            Demande d'avance de {{ ligne.montantAvance }} euros
                             <br>
                         {% endfor %}
                         Décision : <b>{{ demande.statut }}</b>

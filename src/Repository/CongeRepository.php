@@ -24,7 +24,14 @@ class CongeRepository extends ServiceEntityRepository
     //  */
     public function findByCollaborateurId($idCollabo)
     {
-    
+      return $this->createQueryBuilder('c')
+          ->andWhere('c.id_collabo = :val')
+          ->setParameter('val', $idCollabo)
+          ->addOrderBy('c.date_debut', 'DESC')
+          ->setMaxResults(2)
+          ->getQuery()
+          ->getResult()
+      ;
     }
 
     /*

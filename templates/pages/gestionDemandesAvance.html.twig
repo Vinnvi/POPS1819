@@ -1,0 +1,49 @@
+{% extends 'topBar.html.twig' %}
+
+{% block title %}Gestion demandes d'avance {% endblock %}
+{% block body %}
+    <div class="row">
+        <div class="col s12 m12 l6">
+            <ul class="collection with-header">
+                <li class="collection-header"><h4>Demandes en attente</h4></li>
+                {% for demande in demandesEnAttente %}
+                    <a class="waves-effect waves-light" href="{{ path('gestionDemandes.details', {id: demande.id}) }}">
+                    <li class="collection-item">
+                        <div>
+
+                            Demande de {{ demande.collabo.nom }} {{ demande.collabo.prenom }} pour {{ demande.montant }} euros.<br>
+                            Motif : {{ demande.motif }} <br>
+                            Lignes concernées :<br>
+                            {% for ligne in demande.lignes %}
+                                <span>&#8226;</span> {{ ligne.mission }} - {{ ligne.intitule }} : {{ ligne.montant }} euros
+                                <br>
+                            {% endfor %}
+                        </div>
+                    </li>
+                    </a>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="col s12 m12 l6">
+            <ul class="collection with-header">
+                <li class="collection-header"><h4>Historique des demandes</h4></li>
+                {% for demande in demandesPassees %}
+                    <li class="collection-item">
+                    <div>
+
+                        Demande de {{ demande.collabo.nom }} {{ demande.collabo.prenom }} pour {{ demande.montant }} euros.<br>
+                        Motif : {{ demande.motif }} <br>
+                        Lignes concernées :<br>
+                        {% for ligne in demande.lignes %}
+                            <span>&#8226;</span> {{ ligne.mission }} - {{ ligne.intitule }} : {{ ligne.montant }} euros
+                            <br>
+                        {% endfor %}
+                        Décision : <b>{{ demande.statut }}</b>
+                    </div>
+                    </li>
+                {% endfor %}
+
+            </ul>
+        </div>
+    </div>
+{% endblock %}

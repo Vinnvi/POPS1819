@@ -42,8 +42,11 @@
                       {% endfor %}
                       {% if note.statut == status[0] %}
                       <li class="collection-item">
-                          <div style=" text-align: right;">
-                              <input name="montant" id="montant" type="text" required>
+                              <textarea name="motifDemande" id="motifDemande" class="materialize-textarea"></textarea>
+                              <label for="motifDemande">Motif de la demande</label>
+                              <input name="montant" id="montant" type="number" required>
+                              <label for="montant">Montant de la demande</label>
+                          <div class="right-align">
                               <button id="btnDemande" disabled="disabled" class="btn btn-primary">Faire la demande</button>
                           </div>
 

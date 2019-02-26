@@ -152,7 +152,7 @@ class NoteFraisController extends AbstractController
             $maDemandeAvance = new DemandeAvance();
             $maDemandeAvance->setCollabo($this->getUser());
             $maDemandeAvance->setMontant($_POST['montant']);
-
+            $maDemandeAvance->setMotif($_POST['motifDemande']);
 
             foreach ($_POST['lignes'] as $ligneId){
                 $ligne = $LigneRepository->findOneByID($ligneId);

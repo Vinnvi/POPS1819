@@ -53,6 +53,11 @@ app_gestionMissions:
   path: /gestionMissions
   controller: App\Controller\GestionNotesFraisController::index
 
+
+app_gestionDemandesAvance:
+  path: /gestionDemandesAvance
+  controller: App\Controller\GestionDemandesAvanceController::index
+
 app_gestionNotesFraisAdmin:
   path: /gestionNotesFraisChef
   controller: App\Controller\GestionNotesAdminController::index

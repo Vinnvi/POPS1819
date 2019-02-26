@@ -22,19 +22,19 @@ class DemandeAvanceRepository extends ServiceEntityRepository
     // /**
     //  * @return DemandeAvance[] Returns an array of DemandeAvance objects
     //  */
-    /*
-    public function findByExampleField($value)
+
+    public function findByStatut($statut)
     {
         return $this->createQueryBuilder('d')
-            ->andWhere('d.exampleField = :val')
-            ->setParameter('val', $value)
+            ->andWhere('d.statut = :val')
+            ->setParameter('val', $statut)
             ->orderBy('d.id', 'ASC')
             ->setMaxResults(10)
             ->getQuery()
             ->getResult()
         ;
     }
-    */
+
 
     /*
     public function findOneBySomeField($value): ?DemandeAvance

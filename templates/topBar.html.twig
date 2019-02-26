@@ -57,6 +57,9 @@
               <a class="btn-flat waves-effect waves-light btn-large" href="{{ path('app_gestionNotesFrais') }}"  name="action">Gestion des notes de frais
                 <i class="material-icons right">local_atm</i>
               </a>
+              <a class="btn-flat waves-effect waves-light btn-large" href="{{ path('app_gestionDemandesAvance') }}"  name="action">Gestion des demandes d'avance
+                <i class="material-icons right">local_atm</i>
+              </a>
             {% elseif app.user.roleEntreprise == 'Chef de service' %}
                 <a class="btn-flat waves-effect waves-light btn-large" href="{{ path('app_gestionNotesFraisAdmin') }}"  name="action">Gestion des notes de frais
                     <i class="material-icons right">local_atm</i>

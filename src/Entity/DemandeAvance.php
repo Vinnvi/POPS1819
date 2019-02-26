@@ -39,6 +39,16 @@ class DemandeAvance
      */
     private $statut;
 
+    /**
+     * @ORM\Column(type="string", length=1024, nullable=true)
+     */
+    private $Motif;
+
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $lastModif;
+
     const STATUS= [
         0 => 'En cours de validation',
         1 => 'Validee',
@@ -49,6 +59,7 @@ class DemandeAvance
     {
         $this->Lignes = new ArrayCollection();
         $this->setStatut(DemandeAvance::STATUS[0]);
+        $this->lastModif = new \DateTime();
         $this->setMontant(0);
     }
 
@@ -120,6 +131,30 @@ class DemandeAvance
     public function setStatut(string $statut): self
     {
         $this->statut = $statut;
+
+        return $this;
+    }
+
+    public function getMotif(): ?string
+    {
+        return $this->Motif;
+    }
+
+    public function setMotif(?string $Motif): self
+    {
+        $this->Motif = $Motif;
+
+        return $this;
+    }
+
+    public function getLastModif(): ?\DateTimeInterface
+    {
+        return $this->lastModif;
+    }
+
+    public function setLastModif(\DateTimeInterface $lastModif): self
+    {
+        $this->lastModif = $lastModif;
 
         return $this;
     }

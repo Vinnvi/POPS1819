@@ -14,12 +14,16 @@ class Conge
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      */
-    private $id;
+    public $idConge;
+   /**
+    * @ORM\Column(type="integer")
+    */
+    private $idCollabo;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $statut;
+    private $type;
 
     /**
      * @ORM\Column(type="date")
@@ -32,23 +36,48 @@ class Conge
     private $dateFin;
 
     /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $statut;
+
+    /**
      * @ORM\Column(type="integer")
      */
     private $duree;
 
-    public function getId(): ?int
+    const STATUS = [
+        0 => 'En cours',
+        1 => 'En attente chef',
+        2 => 'validee chef',
+        3 => 'refusee chef',
+        4 => 'En attente RH',
+        5 => 'validee RH',
+        6 => 'refusee RH',
+    ];
+
+    public function getIdConge(): ?int
     {
-        return $this->id;
+        return $this->idConge;
+    }
+    public function getIdCollabo(): ?int
+    {
+        return $this->idCollabo;
+    }
+    public function setIdCollabo(integer $idCollabo): self
+    {
+        $this->idCollabo = $idCollabo;
+
+        return $this;
     }
 
-    public function getStatut(): ?string
+    public function getType(): ?string
     {
-        return $this->statut;
+        return $this->type;
     }
 
-    public function setStatut(string $statut): self
+    public function setType(string $type): self
     {
-        $this->statut = $statut;
+        $this->type = $type;
 
         return $this;
     }
@@ -73,6 +102,17 @@ class Conge
     public function setDateFin(\DateTimeInterface $dateFin): self
     {
         $this->dateFin = $dateFin;
+
+        return $this;
+    }
+    public function getStatut(): ?string
+    {
+        return $this->statut;
+    }
+
+    public function setStatut(string $statut): self
+    {
+        $this->statut = $statut;
 
         return $this;
     }

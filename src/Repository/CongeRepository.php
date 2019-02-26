@@ -7,7 +7,7 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
- * @method Conge|null find($id, $lockMode = null, $lockVersion = null)
+ * @method Conge|null find($idConge, $lockMode = null, $lockVersion = null)
  * @method Conge|null findOneBy(array $criteria, array $orderBy = null)
  * @method Conge[]    findAll()
  * @method Conge[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
@@ -22,19 +22,10 @@ class CongeRepository extends ServiceEntityRepository
     // /**
     //  * @return Conge[] Returns an array of Conge objects
     //  */
-    /*
-    public function findByExampleField($value)
+    public function findByCollaborateurId($idCollabo)
     {
-        return $this->createQueryBuilder('c')
-            ->andWhere('c.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('c.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
+    
     }
-    */
 
     /*
     public function findOneBySomeField($value): ?Conge

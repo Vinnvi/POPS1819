@@ -146,6 +146,14 @@
                           <td>23.10.18</td>
                           <td>Validé</td>
                         </tr>
+                        {% for conge in mesConges %}
+                          <tr id="dataBottom" role="row" class="odd">
+                            <td>{{conge.statut}}</td>
+                            <td>{{conge.dateDebut}}</td>
+                            <td>{{conge.dateFin}}</td>
+                            <td>{{conge.duree}}</td>
+                          </tr>
+                        {% endfor %}
                       </tbody>
                     </table>
                   </div>

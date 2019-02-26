@@ -4,6 +4,8 @@ namespace App\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Twig\Environment;
 use App\Entity\Conge;
+use App\Repository\CongeRepository;
+use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -13,16 +15,28 @@ class CalendarCongesController extends AbstractController
     * @var Environment
     **/
     private $twig;
+    /**
+     * @var CongeRepository
+     */
+    private $repository;
+    /**
+     * @var ObjectManager
+     */
+    private $em;
 
-    public function __construct(Environment $twig)
+    public function __construct(Environment $twig, CongeRepository $repository, ObjectManager $em)
     {
       $this->twig = $twig;
+      $this->repository = $repository;
+      $this->em = $em;
     }
 
     public function index(): Response
     {
+      //recuperation des conges du collaborateur
+      $mesConges = $this->repository->findByCollaborateurId($this->getUser()->getId());
       return new Response($this->twig->render('pages/calendarConges.html.twig',
-        []));
+        ['mesConges' => $mesConges]));
     }
 
     /**

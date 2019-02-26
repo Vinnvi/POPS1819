@@ -69,6 +69,11 @@ class LigneDeFrais
      */
     private $lastModif;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $type;
+
     const STATUS = [
         0 => 'En cours',
         1 => 'En attente chef',
@@ -208,6 +213,18 @@ class LigneDeFrais
     public function setLastModif(?\DateTimeInterface $lastModif): self
     {
         $this->lastModif = $lastModif;
+
+        return $this;
+    }
+
+    public function getType(): ?string
+    {
+        return $this->type;
+    }
+
+    public function setType(string $type): self
+    {
+        $this->type = $type;
 
         return $this;
     }

@@ -7,7 +7,6 @@
 <div class="container mt-10">
   <ul class="collapsible">
     {% set i = 0 %}
-      {% set test = "Hello world" %}
     {% for note in noteDeFrais%}
       {% if(i == 0) %}
       <li class="active">
@@ -40,7 +39,7 @@
   <!-- Modal Structure -->
   <div id="modificationLigneFraisModal" class="modal myModal">
       <div class="container mt-4">
-          <form method="post" action="{{ path('modif.ligne') }}">
+          <form method="post" action="{{ path('modif.ligne') }}" enctype="multipart/form-data">
               <div class="modal-content" id="modal-content">
                   <h5>Modification d'une ligne de frais</h5>
                   <div id="container">
@@ -67,10 +66,10 @@
                           <div class="file-field input-field">
                               <div class="btn">
                                   <span>Justificatif</span>
-                                  <input type="file">
+                                  <input id="inputFile" type="file" name="justificatifUpload">
                               </div>
                               <div class="file-path-wrapper">
-                                  <input class="file-path validate" type="text">
+                                  <input class="file-path validate" type="text" placeholder="Justificatif">
                               </div>
                           </div>
                       </div>

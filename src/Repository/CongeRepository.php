@@ -20,7 +20,7 @@ class CongeRepository extends ServiceEntityRepository
     }
 
     // /**
-    //  * @return Conge[] Returns an array of Conge objects
+    //  * @return Conge[] Returns an array of Conge objects for self
     //  */
     public function findByCollaborateurId($idCollabo)
     {
@@ -28,7 +28,21 @@ class CongeRepository extends ServiceEntityRepository
           ->andWhere('c.id_collabo = :val')
           ->setParameter('val', $idCollabo)
           ->addOrderBy('c.date_debut', 'DESC')
-          ->setMaxResults(2)
+          ->setMaxResults(10)
+          ->getQuery()
+          ->getResult()
+      ;
+    }
+    // /**
+    //  * @return Conge[] Returns an array of Conge objects for entire service
+    //  */
+    public function findByServiceId($idService)
+    {
+      return $this->createQueryBuilder('c')
+          ->andWhere('c.id_service = :val')
+          ->setParameter('val', $idService)
+          ->addOrderBy('c.date_debut', 'DESC')
+          ->setMaxResults(10)
           ->getQuery()
           ->getResult()
       ;

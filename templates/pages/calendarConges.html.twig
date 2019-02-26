@@ -98,6 +98,17 @@
                           <td>15.12.18 soir</td>
                           <td>Validé</td>
                         </tr>
+                        {% for conge in congesService %}
+                          {% if(conge.id_collabo != app.user.id) %}
+                            <tr id="dataBottom" role="row" class="even">
+                              <td>{{conge.id_collabo}}</td>
+                              <td>{{conge.date_debut|date("d-m-y")}}</td>
+                              <td>{{conge.date_fin|date("d-m-y")}}</td>
+                              <td>{{conge.statut}}</td>
+                            </tr>
+                          {% else %}
+                          {% endif %}
+                        {% endfor %}
                       </tbody>
                     </table>
                   </div>
@@ -134,13 +145,24 @@
                           </tr>
                       </thead>
                       <tbody>
+                        {% set i = 0 %}
                         {% for conge in mesConges %}
-                          <tr id="dataBottom" role="row" class="odd">
-                            <td>{{conge.type}}</td>
-                            <td>{{conge.date_debut|date("d-m-y")}}</td>
-                            <td>{{conge.date_fin|date("d-m-y")}}</td>
-                            <td>{{conge.statut}}</td>
-                          </tr>
+                          {% if(i%2 == 0) %}
+                            <tr id="dataBottom" role="row" class="even">
+                              <td>{{conge.type}}</td>
+                              <td>{{conge.date_debut|date("d-m-y")}}</td>
+                              <td>{{conge.date_fin|date("d-m-y")}}</td>
+                              <td>{{conge.statut}}</td>
+                            </tr>
+                          {% else %}
+                            <tr id="dataBottom" role="row" class="odd">
+                              <td>{{conge.type}}</td>
+                              <td>{{conge.date_debut|date("d-m-y")}}</td>
+                              <td>{{conge.date_fin|date("d-m-y")}}</td>
+                              <td>{{conge.statut}}</td>
+                            </tr>
+                          {% endif %}
+                          {% set i = i+1 %}
                         {% endfor %}
                       </tbody>
                     </table>
@@ -177,13 +199,13 @@
             <div id="container">
               <div class="row">
                 <div class="input-field col s6 m6 l6">
-                  <input id="dateDebutConge" type="text" class="datepicker" placeholder="Indiquez la date de début">
+                  <input name="dateDebutConge" type="text" class="datepicker" placeholder="Indiquez la date de début">
                   </div>
                 <div class="input-field col s6 m6 l6">
                   <select class="initialized">
-                    <option id="timeCongeDebut" value="" disabled="" selected="">Matin ou Après-Midi?</option>
-                    <option value="1">Matin</option>
-                    <option value="2">Après-Midi</option>
+                    <option name="timeCongeDebut" value="" disabled="" selected="">Matin ou Après-Midi?</option>
+                    <option value=true>Matin</option>
+                    <option value=false>Après-Midi</option>
                   </select>
                 </div>
               </div>
@@ -192,7 +214,7 @@
                   <input id="dateFinConge" type="text" class="datepicker" placeholder="Indiquez la date de Fin">
                   </div>
                 <div class="input-field col s6 m6 l6">
-                  <select id ="timeCongeFin"class="initialized">
+                  <select id ="timeCongeFin" class="initialized">
                     <option value="" disabled="" selected="">Matin ou Après-Midi?</option>
                     <option value="1">Matin</option>
                     <option value="2">Après-Midi</option>

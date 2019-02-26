@@ -17,6 +17,10 @@ final class Version20190221154806 extends AbstractMigration
 
         $this->addSql('CREATE TABLE conge (id_conge INT AUTO_INCREMENT NOT NULL, id_collabo INT NOT NULL, type VARCHAR(255) NOT NULL, date_debut DATE NOT NULL, date_fin DATE NOT NULL, duree INT NOT NULL, statut VARCHAR(255) NOT NULL, PRIMARY KEY(id_conge)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
 		$this->addSql('ALTER TABLE conge ADD CONSTRAINT foreignIdConge FOREIGN KEY (id_collabo) REFERENCES collaborateur(id) ON DELETE RESTRICT ON UPDATE RESTRICT');
+		$this->addSql('ALTER TABLE conge ADD id_service INT NOT NULL AFTER id_collabo');
+		$this->addSql('ALTER TABLE conge ADD debut_matin BOOLEAN NOT NULL AFTER date_debut');
+		$this->addSql('ALTER TABLE conge ADD fin_matin BOOLEAN NOT NULL AFTER date_fin');
+
 		// $this->addSql('ALTER TABLE collaborateur ADD conge INT NOT NULL');
 		// $this->addSql('ALTER TABLE collaborateur ADD rtt INT NOT NULL');
     }

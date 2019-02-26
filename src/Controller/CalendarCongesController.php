@@ -60,7 +60,7 @@ class CalendarCongesController extends AbstractController
         $newConge->setType('Conge');
         // $newConge->setDate_debut($_POST['dateDebutConge']);
         $newConge->setDate_debut(new \DateTime('2000-01-01'));
-        $newConge->setDebut_matin($_POST['timeCongeDebut']);
+        $newConge->setDebut_matin(true);
         // $newConge->setDate_fin($_POST['dateFinConge']);
         $newConge->setDate_fin(new \DateTime('2000-01-01'));
         $newConge->setFin_matin(true);

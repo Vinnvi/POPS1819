@@ -46,7 +46,7 @@ class CalendarCongesController extends AbstractController
     public function demandeConge() : Response {
       //get current collaborateur
       dump('ahhhh');
-      print_r('aaaah');
+      print_r($_POST['dateDebutConge']);
       $collaborateur = $this->getDoctrine()->getManager()->getRepository('App\Entity\Collaborateur');
       $collaborateur = $collaborateur->findById($this->getUser()->getId());
       if( (isset($_POST['dateDebutConge']))&&(isset($_POST['dateFinConge'])) )

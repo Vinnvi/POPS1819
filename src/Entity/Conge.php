@@ -14,11 +14,16 @@ class Conge
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      */
-    public $idConge;
+    public $id_conge;
    /**
     * @ORM\Column(type="integer")
     */
-    private $idCollabo;
+    private $id_collabo;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+     private $id_service;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -28,12 +33,22 @@ class Conge
     /**
      * @ORM\Column(type="date")
      */
-    private $dateDebut;
+    private $date_debut;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $debut_matin;
 
     /**
      * @ORM\Column(type="date")
      */
-    private $dateFin;
+    private $date_fin;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $fin_matin;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -55,17 +70,27 @@ class Conge
         6 => 'refusee RH',
     ];
 
-    public function getIdConge(): ?int
+    public function getId_conge(): ?int
     {
-        return $this->idConge;
+        return $this->id_conge;
     }
-    public function getIdCollabo(): ?int
+    public function getId_collabo(): ?int
     {
-        return $this->idCollabo;
+        return $this->id_collabo;
     }
-    public function setIdCollabo(integer $idCollabo): self
+    public function setId_collabo(int $id_collabo): self
     {
-        $this->idCollabo = $idCollabo;
+        $this->id_collabo = $id_collabo;
+
+        return $this;
+    }
+    public function getId_service(): ?int
+    {
+        return $this->id_service;
+    }
+    public function setId_service(int $id_service): self
+    {
+        $this->id_service = $id_service;
 
         return $this;
     }
@@ -82,26 +107,48 @@ class Conge
         return $this;
     }
 
-    public function getDateDebut(): ?\DateTimeInterface
+    public function getDate_debut(): ?\DateTimeInterface
     {
-        return $this->dateDebut;
+        return $this->date_debut;
     }
 
-    public function setDateDebut(\DateTimeInterface $dateDebut): self
+    public function setDate_debut(\DateTimeInterface $date_debut): self
     {
-        $this->dateDebut = $dateDebut;
+        $this->date_debut = $date_debut;
+
+        return $this;
+    }
+    public function getDebut_matin(): ?bool
+    {
+        return $this->debut_matin;
+    }
+
+    public function setDebut_matin(bool $debut_matin): self
+    {
+        $this->debut_matin = $debut_matin;
 
         return $this;
     }
 
-    public function getDateFin(): ?\DateTimeInterface
+    public function getDate_fin(): ?\DateTimeInterface
     {
-        return $this->dateFin;
+        return $this->date_fin;
     }
 
-    public function setDateFin(\DateTimeInterface $dateFin): self
+    public function setDate_fin(\DateTimeInterface $date_fin): self
     {
-        $this->dateFin = $dateFin;
+        $this->date_fin = $date_fin;
+
+        return $this;
+    }
+    public function getFin_matin(): ?bool
+    {
+        return $this->fin_matin;
+    }
+
+    public function setFin_matin(bool $fin_matin): self
+    {
+        $this->fin_matin = $fin_matin;
 
         return $this;
     }

@@ -48,28 +48,40 @@ class CalendarCongesController extends AbstractController
     public function demandeConge() : Response {
       //get current collaborateur
       dump('ahhhh');
+
+      print_r($_POST['dateDebutConge']);
+      $collaborateur = $this->getDoctrine()->getManager()->getRepository('App\Entity\Collaborateur');
+      $collaborateur = $collaborateur->findById($this->getUser()->getId());
+      if( (isset($_POST['dateDebutConge']))&&(isset($_POST['dateFinConge'])) )
+      {
+        dump($_POST['dateDebutConge']);
+        // $collaborateur[0]->setEmail($_POST['mail']);
+      }
+      else{
+        dump('noooo');
+      }
+      // $this->getDoctrine()->getEntityManager()->persist($collaborateur[0]);
+      // $this->getDoctrine()->getEntityManager()->flush();
       $collaborateurRepository = $this->getDoctrine()->getManager()->getRepository('App\Entity\Collaborateur');
       $collaborateurId = $this->getUser()->getId();
       $congeRepository = $this->getDoctrine()->getEntityManager()->getRepository('App\Entity\Conge');
       $newConge = new Conge();
-      // if(isset($_POST['timeCongeDebut']))
-      // {
-        dump('no');
+      if(isset($_POST['timeCongeDebut']))
+      {
+        dump(gettype($_POST['dateDebutConge']));
         $newConge->setId_collabo($collaborateurId);
         $newConge->setId_service(3);
-        $newConge->setType('Conge');
-        // $newConge->setDate_debut($_POST['dateDebutConge']);
-        $newConge->setDate_debut(new \DateTime('2000-01-01'));
-        $newConge->setDebut_matin(true);
-        // $newConge->setDate_fin($_POST['dateFinConge']);
-        $newConge->setDate_fin(new \DateTime('2000-01-01'));
-        $newConge->setFin_matin(true);
+        $newConge->setType($_POST['typeConge']);
+        $newConge->setDate_debut($_POST['dateDebutConge']);
+        $newConge->setDebut_matin($_POST['timeCongeDebut']);
+        $newConge->setDate_fin($_POST['dateFinConge']);
+        $newConge->setFin_matin($_POST['timeCongeFin']);
         $newConge->setStatut('En Attente');
         $newConge->setDuree(16);
-          // $collaborateur[0]->setEmail($_POST['mail']);
 
         $this->getDoctrine()->getEntityManager()->persist($newConge);
         $this->getDoctrine()->getEntityManager()->flush();
+      }
       // }
       // else{
         dump('ahhhh');

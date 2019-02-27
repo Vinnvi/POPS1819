@@ -87,56 +87,48 @@ class NoteFraisController extends AbstractController
       //Recuperation des categories de paiements
       $typesPaiements = TypePaiementEnum::getAvailableTypes();
 
-
-      //Partie form creation
-        $maLigneDeFrais = new LigneDeFrais();
-        $form = $this->createForm(LigneDeFraisFormType::class,$maLigneDeFrais);
-        $form->handleRequest($request);
-
-        if($form->isSubmitted() && $form->isValid())
-        {
-            //Put noteDeFrais
-            $noteRepository = $this->getDoctrine()->getEntityManager()->getRepository('App\Entity\NoteDeFrais');
-            dump($request->get('moisNote'));
-            dump($request->get('anneeNote'));
-            $maLigneDeFrais->setNote($noteRepository->findByMonthAndYear($request->get('moisNote'),$request->get('anneeNote'),$this->getUser()->getId())[0]);
-
-            $this->em->persist($maLigneDeFrais);
-            $this->em->flush();
-            $this->addFlash('success','Ligne de frais ajoutée');
-            return $this->redirectToRoute('app_noteFrais');
-        }
-
       return new Response($this->twig->render('pages/noteFrais.html.twig',
         ['noteDeFrais' => $mesNotesDeFrais,
          'mesLignesDeFrais' => $lignesDeFrais,
          'typesPaiements' => $typesPaiements,
          'projectsAvailables' => $projectsAvailables,
-         'ligneDeFrais' => $maLigneDeFrais,
-         'form' => $form->createView(),]));
+         ]));
     }
 
     /**
-     * @Route("/mesNotesDeFrais/remove", name="modif.ligne")
+     * @Route("/mesNotesDeFrais/creationOrModification", name="modif.ligne")
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function touchLigne() : Response {
         $projetRepository = $this->getDoctrine()->getEntityManager()->getRepository('App\Entity\Projet');
         $LigneRepository = $this->getDoctrine()->getEntityManager()->getRepository('App\Entity\LigneDeFrais');
-
-        $LignedeFraisModifiee = $LigneRepository->findById($_POST['ligneId'])[0];
-        if(isset($_POST['ligneIntitule'])) {
-            $LignedeFraisModifiee->setIntitule($_POST['ligneIntitule']);
+        
+        if($_POST['isCreation'] == "true"){
+          $LignedeFraisModifiee = new LigneDeFrais();
+          $noteRepository = $this->getDoctrine()->getEntityManager()->getRepository('App\Entity\NoteDeFrais');
+          $LignedeFraisModifiee->setNote($noteRepository->findByMonthAndYear($_POST['creationMois'],$_POST['creationAnnee'],$this->getUser()->getId())[0]);
+        }else{
+          $LignedeFraisModifiee = $LigneRepository->findById($_POST['ligneId'])[0];
         }
-        $LignedeFraisModifiee->setMission($_POST['ligneMission']);
+
+
+        $LignedeFraisModifiee->setIntitule($_POST['ligneIntitule']);
+        $LignedeFraisModifiee->setType($_POST['ligneType']);
+        $LignedeFraisModifiee->setMission("inutile");
+        $LignedeFraisModifiee->setAvance(false);
         $LignedeFraisModifiee->setMontant(floatval($_POST['ligneMontant']));
         $LignedeFraisModifiee->setProjet( $projetRepository->findById($_POST['projet'])[0]);
-        $this->getDoctrine()->getEntityManager()->persist($LignedeFraisModifiee);
-        $this->getDoctrine()->getEntityManager()->flush();
 
         $ligneId = $_POST['ligneId'];
-
-        if(isset($_FILES['justificatifUpload'])){
+        if($_POST['idJustificatif'] == "Perdu"){
+          //remove older file
+          if($LignedeFraisModifiee->getJustificatif() != "Perdu" || $LignedeFraisModifiee->getJustificatif() != ""){
+            unlink($LignedeFraisModifiee->getJustificatif());
+          }
+          //set to "Perdu"
+          $LignedeFraisModifiee->setJustificatif($_POST['idJustificatif']);
+        }
+        elseif(isset($_FILES['justificatifUpload'])){
           $errors= array();
           $target_dir = "images/justificatifs/";
           //$file_name = basename($_FILES['profilePicToUpload']['name']);
@@ -158,18 +150,35 @@ class NoteFraisController extends AbstractController
           if(empty($errors)==true) {
             //move file in our folder
             move_uploaded_file($file_tmp,$target_file);
+            //remove older file
+            dump($LignedeFraisModifiee->getJustificatif());
+            if($LignedeFraisModifiee->getJustificatif() != "Perdu" && $LignedeFraisModifiee->getJustificatif() != "" && $LignedeFraisModifiee->getJustificatif() != null){
+              unlink($LignedeFraisModifiee->getJustificatif());
+            }
             //update databse
-            $lignesDeFraisRepository = $this->getDoctrine()->getEntityManager()->getRepository('App\Entity\LigneDeFrais');
-            $ligneDeFrais = $lignesDeFraisRepository->findOneByID($ligneId);
-            $ligneDeFrais->setJustificatif($target_file);
-            $this->getDoctrine()->getEntityManager()->persist($ligneDeFrais);
-            $this->getDoctrine()->getEntityManager()->flush();
-            echo "Success";
+            $LignedeFraisModifiee->setJustificatif($target_file);
           }else{
             print_r($errors);
           }
         }
 
+        $this->getDoctrine()->getEntityManager()->persist($LignedeFraisModifiee);
+        $this->getDoctrine()->getEntityManager()->flush();
+
         return $this->redirectToRoute('app_noteFrais');
     }
+
+    /**
+     * @Route("/mesNotesDeFrais/suppressionJustificatif", name="suppresion.justificatif")
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function removeJustificatif() : Response {
+      $LigneRepository = $this->getDoctrine()->getEntityManager()->getRepository('App\Entity\LigneDeFrais');
+      $LignedeFraisModifiee = $LigneRepository->findById($_POST['idLigneASuppJustificatif'])[0];
+      unlink($LignedeFraisModifiee->getJustificatif());
+      $LignedeFraisModifiee->setJustificatif("");
+      $this->getDoctrine()->getEntityManager()->persist($LignedeFraisModifiee);
+      $this->getDoctrine()->getEntityManager()->flush();
+      return $this->redirectToRoute('app_noteFrais');
+    } 
 }

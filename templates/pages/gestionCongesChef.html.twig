@@ -1,0 +1,35 @@
+{% extends 'topBar.html.twig' %}
+{% block title %}Gestion des congés{% endblock %}
+{% block stylesheets %}
+    <link rel="stylesheet" href="js/plugins/fullcalendar/css/fullcalendar.min.css" type="text/css">
+{% endblock %}
+
+{% block body %}
+        <div class="row">
+            <div class="col s12 m8 l8">
+                <div id='calendar'>
+
+                </div>
+            </div>
+            <div class="col s12 m4 l4">
+                <ul class="tabs">
+                    <li class="tab col s6"><a class="active" href="#demandesEnCours">Demandes en cours</a></li>
+                    <li class="tab col s6"><a href="#HistoriqueDemandes">Historique des demandes</a></li>
+                </ul>
+                <div id="demandesEnCours" class="col s12">Bah voilà les demandes en cours</div>
+                <div id="HistoriqueDemandes" class="col s12">Bah voilà l'historique</div>
+            </div>
+
+        </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script src='js/plugins/fullcalendar/lib/moment.min.js' type="text/javascript"></script>
+    <script src='js/plugins/fullcalendar/js/fullcalendar.min.js' type="text/javascript"></script>
+    <script src="js/plugins/fullcalendar/fullcalendar-script.js" type="text/javascript"></script>
+    <script>
+        $(document).ready(function(){
+            $('.tabs').tabs();
+        });
+    </script>
+{% endblock %}

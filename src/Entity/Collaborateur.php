@@ -111,8 +111,8 @@ class Collaborateur implements UserInterface,EquatableInterface
         $this->projet = new ArrayCollection();
         $this->setRoles('ROLE_USER');
         $this->setRoleEntreprise(Collaborateur::STATUS[0]);
-        $this->setProfilePicPath('');
-        $this->setBackgroundPicPath('');
+        $this->setProfilePicPath('images/profile_pics/anonym_picture.jpg');
+        $this->setBackgroundPicPath('images/profile_pics/backgroundProfil.png');
         $this->notifications = new ArrayCollection();
     }
 
@@ -336,6 +336,11 @@ class Collaborateur implements UserInterface,EquatableInterface
     }
 
     public function getRoleEntreprise(): ?string
+    {
+        return $this->role_entreprise;
+    }
+
+    public function getrole_entreprise(): ?string
     {
         return $this->role_entreprise;
     }

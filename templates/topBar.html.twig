@@ -8,6 +8,7 @@
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
         <link rel="icon" type="image/png" href="/images/logo_sans_texte.png" />
         {% block stylesheets %}
+            <link rel='stylesheet' href='fullcalendar/fullcalendar.css' />
         {% endblock %}
     </head>
     <body>
@@ -48,12 +49,12 @@
             <a id ="partNav" class="col s4 m 4 l4 btn-flat waves-effect waves-light btn-large" href="{{ path('app_demandesDInformation') }}"  name="action">Mes demandes d'information
           <i class="material-icons right">send</i>
             </a>
-            {% if app.user.service.id == 1 or app.user.roles[0] == 'Chef de service' %}
+            {% if app.user.service.id == 1 %}
               <a class="btn-flat waves-effect waves-light btn-large" href="{{ path('app_gestionDemandesDeConges') }}"  name="action">Gestion des congés
                 <i class="material-icons right">beach_access</i>
               </a>
             {% endif %}
-            {% if app.user.service.id == 2 or app.user.roles[0] == 'Chef de service'%}
+            {% if app.user.service.id == 2 or app.user.role_entreprise == 'Chef de service'%}
               <a class="btn-flat waves-effect waves-light btn-large" href="{{ path('app_gestionNotesFrais') }}"  name="action">Gestion des notes de frais
                 <i class="material-icons right">local_atm</i>
               </a>
@@ -63,9 +64,12 @@
                 <i class="material-icons right">assignment</i>
               </a>
             {% endif %}
-            {% if app.user.roles[0] == 'Chef de service' %}
+            {% if app.user.role_entreprise == 'Chef de service' %}
               <a class="btn-flat waves-effect waves-light btn-large" href="{{ path('app_gestionMissions') }}"  name="action">Gestion des missions
                 <i class="material-icons right">people</i>
+              </a>
+              <a class="btn-flat waves-effect waves-light btn-large" href="{{ path('app_gestionDemandesDeCongesChef') }}"  name="action">Gestion des congés
+                <i class="material-icons right">beach_access</i>
               </a>
             {% endif %}
           </div>

@@ -123,17 +123,16 @@ class NoteFraisController extends AbstractController
 
         $ligneId = $_POST['ligneId'];
         if($_POST['idJustificatif'] == "Perdu"){
-          //remove older file
-          if($LignedeFraisModifiee->getJustificatif() != "Perdu" && $LignedeFraisModifiee->getJustificatif() != "" && $LignedeFraisModifiee->getJustificatif() != null){
-            unlink($LignedeFraisModifiee->getJustificatif());
-          }
           //set to "Perdu"
-          $LignedeFraisModifiee->setJustificatif($_POST['idJustificatif']);
+          $listeJustificatifs = $LignedeFraisModifiee->getJustificatif();
+          if(empty($listeJustificatifs)){
+            array_push($listeJustificatifs, $_POST['idJustificatif']);
+            $LignedeFraisModifiee->setJustificatif($listeJustificatifs);
+          }
         }
         elseif(isset($_FILES['justificatifUpload'])){
           $errors= array();
           $target_dir = "images/justificatifs/";
-          //$file_name = basename($_FILES['profilePicToUpload']['name']);
           $target_file = $target_dir . basename($_FILES["justificatifUpload"]["name"]);
           $file_size = $_FILES['justificatifUpload']['size'];
           $file_tmp = $_FILES['justificatifUpload']['tmp_name'];
@@ -141,7 +140,7 @@ class NoteFraisController extends AbstractController
           $tmp = explode('.',$_FILES['justificatifUpload']['name']);
           $file_ext = strtolower(end($tmp));
             
-          $extensions= array("jpeg","jpg","png");
+          $extensions= array("jpeg","jpg","png","pdf");
           if(in_array($file_ext,$extensions)=== false){
             $errors[]="extension not allowed, please choose a JPEG or PNG file.";
           }
@@ -150,15 +149,20 @@ class NoteFraisController extends AbstractController
           }
           // picture is valid, we can update it
           if(empty($errors)==true) {
-            //move file in our folder
-            move_uploaded_file($file_tmp,$target_file);
-            //remove older file
-            dump($LignedeFraisModifiee->getJustificatif());
-            if($LignedeFraisModifiee->getJustificatif() != "Perdu" && $LignedeFraisModifiee->getJustificatif() != "" && $LignedeFraisModifiee->getJustificatif() != null){
-              unlink($LignedeFraisModifiee->getJustificatif());
+            $res = array_search($target_file, $LignedeFraisModifiee->getJustificatif());
+            if($res === false){
+              //move file in our folder
+              move_uploaded_file($file_tmp,$target_file);
+              //update databse
+              $listeJustificatifs = $LignedeFraisModifiee->getJustificatif();
+              array_push($listeJustificatifs, $target_file);
+              //Remove "Perdu"
+              $res = array_search("Perdu", $LignedeFraisModifiee->getJustificatif());
+              if($res !== false){
+                unset($listeJustificatifs[array_search("Perdu", $listeJustificatifs)]);
+              }
+              $LignedeFraisModifiee->setJustificatif($listeJustificatifs);
             }
-            //update databse
-            $LignedeFraisModifiee->setJustificatif($target_file);
           }else{
             print_r($errors);
           }
@@ -176,9 +180,12 @@ class NoteFraisController extends AbstractController
      */
     public function removeJustificatif() : Response {
       $LigneRepository = $this->getDoctrine()->getEntityManager()->getRepository('App\Entity\LigneDeFrais');
-      $LignedeFraisModifiee = $LigneRepository->findById($_POST['idLigneASuppJustificatif'])[0];
-      unlink($LignedeFraisModifiee->getJustificatif());
-      $LignedeFraisModifiee->setJustificatif("");
+      $ID_PATH = explode(',', $_POST['idLigneASuppJustificatif']);
+      $LignedeFraisModifiee = $LigneRepository->findById($ID_PATH[0])[0];
+      $listeJustificatifs = $LignedeFraisModifiee->getJustificatif();
+      unset($listeJustificatifs[array_search($ID_PATH[1], $listeJustificatifs)]);
+      unlink($ID_PATH[1]);
+      $LignedeFraisModifiee->setJustificatif($listeJustificatifs);
       $this->getDoctrine()->getEntityManager()->persist($LignedeFraisModifiee);
       $this->getDoctrine()->getEntityManager()->flush();
       return $this->redirectToRoute('app_noteFrais');

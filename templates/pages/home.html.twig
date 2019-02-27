@@ -8,71 +8,74 @@
     <div class="card-panel col s8">
         <h5>Notifications</h5>
         <div class="divider"></div>
-        <table class="highlight">
-            <thead>
-            <tr class="black white-text">
-                <th>Catégorie</th>
-                <th>Detail</th>
-                <th>Date</th>
-            </tr>
-            </thead>
+        {% if notifications is empty %}
+            <h5 class="center-align p-1">Vous n'avez pas de notification</h5>
+        {% else %}
+            <table class="highlight">
+                <thead>
+                <tr class="black white-text">
+                    <th>Catégorie</th>
+                    <th>Detail</th>
+                    <th>Date</th>
+                </tr>
+                </thead>
 
-            <tbody>
-            {% dump notifications %}
-            {% for notification in notifications %}
-                    <tr class="
-                            {% if notification.getStatut() == "OK" %}
-                                green lighten-4
-                            {% elseif notification.getStatut() == "ACTION_NECESSAIRE" %}
-                                red lighten-4
-                            {% endif %}
-                            {% if not notification.getPersonnel() %}red-text{% endif %}"
+                <tbody>
+                    {% for notification in notifications %}
+                            <tr class="
+                                    {% if notification.getStatut() == "OK" %}
+                                        green lighten-4
+                                    {% elseif notification.getStatut() == "ACTION_NECESSAIRE" %}
+                                        red lighten-4
+                                    {% endif %}
+                                    {% if not notification.getPersonnel() %}red-text{% endif %}"
 
-                                {% if notification.getCategorie() == "Note de frais" and notification.getPersonnel() %}
-                                    onclick="window.location='{{path('app_noteFrais')}}';"
-                                {% elseif notification.getCategorie() == "Note de frais" %}
-                                    onclick="window.location='{{path('app_gestionNotesFrais')}}';"
-                                {% elseif notification.getCategorie() == "D. de congés" and notification.getPersonnel() %}
-                                    onclick="window.location='{{path('app_demandesDeConges')}}';"
-                                {% elseif notification.getCategorie() == "D. de congés" %}
-                                    onclick="window.location='{{path('app_gestionDemandesDeConges')}}';"
-                                {% elseif notification.getCategorie() == "D. d\'informationMission" and notification.getPersonnel() %}
-                                    onclick="window.location='{{path('app_demandesDInformation')}}';"
-                                {% elseif notification.getCategorie() == "D. d\'informationMission" %}
-                                    onclick="window.location='{{path('app_gestionDemandesDInformation')}}';"
-                                {% elseif notification.getCategorie() == "Mission" and notification.getPersonnel() %}
-                                    onclick="window.location='{{path('app_missions')}}';"
-                                {% elseif notification.getCategorie() == "Mission" %}
-                                    onclick="window.location='{{path('app_gestionMissions')}}';"
+                                        {% if notification.getCategorie() == "Note de frais" and notification.getPersonnel() %}
+                                            onclick="window.location='{{path('app_noteFrais')}}';"
+                                        {% elseif notification.getCategorie() == "Note de frais" %}
+                                            onclick="window.location='{{path('app_gestionNotesFrais')}}';"
+                                        {% elseif notification.getCategorie() == "D. de congés" and notification.getPersonnel() %}
+                                            onclick="window.location='{{path('app_demandesDeConges')}}';"
+                                        {% elseif notification.getCategorie() == "D. de congés" %}
+                                            onclick="window.location='{{path('app_gestionDemandesDeConges')}}';"
+                                        {% elseif notification.getCategorie() == "D. d\'informationMission" and notification.getPersonnel() %}
+                                            onclick="window.location='{{path('app_demandesDInformation')}}';"
+                                        {% elseif notification.getCategorie() == "D. d\'informationMission" %}
+                                            onclick="window.location='{{path('app_gestionDemandesDInformation')}}';"
+                                        {% elseif notification.getCategorie() == "Mission" and notification.getPersonnel() %}
+                                            onclick="window.location='{{path('app_missions')}}';"
+                                        {% elseif notification.getCategorie() == "Mission" %}
+                                            onclick="window.location='{{path('app_gestionMissions')}}';"
+                                        {% endif %}
+                                    >
+                                <td>
+                                    {% if not notification.getVu() %}<b>{% endif %}
+                                    {{ notification.getCategorie() }}
+                                    {% if not notification.getVu() %}</b>{% endif %}
+                                </td>
+                                <td>
+                                    {% if not notification.getVu() %}<b>{% endif %}
+                                    {{ notification.getDescription() }}
+                                    {% if not notification.getVu() %}</b>{% endif %}
+                                </td>
+                                {% if notification.getDate()|date('d') == currentDate[0] and notification.getDate()|date('m') == currentDate[1] and notification.getDate()|date('Y') == currentDate[2] %}
+                                    <td>
+                                        {% if not notification.getVu() %}<b>{% endif %}
+                                        {{ notification.getDate()|date('H:i') }}
+                                        {% if not notification.getVu() %}</b>{% endif %}
+                                    </td>
+                                {% else %}
+                                    <td>
+                                        {% if not notification.getVu() %}<b>{% endif %}
+                                        {{ notification.getDate()|date('d/m/Y') }}
+                                        {% if not notification.getVu() %}</b>{% endif %}
+                                    </td>
                                 {% endif %}
-                            >
-                        <td>
-                            {% if not notification.getVu() %}<b>{% endif %}
-                            {{ notification.getCategorie() }}
-                            {% if not notification.getVu() %}</b>{% endif %}
-                        </td>
-                        <td>
-                            {% if not notification.getVu() %}<b>{% endif %}
-                            {{ notification.getDescription() }}
-                            {% if not notification.getVu() %}</b>{% endif %}
-                        </td>
-                        {% if notification.getDate()|date('d') == currentDate[0] and notification.getDate()|date('m') == currentDate[1] and notification.getDate()|date('Y') == currentDate[2] %}
-                            <td>
-                                {% if not notification.getVu() %}<b>{% endif %}
-                                {{ notification.getDate()|date('H:i') }}
-                                {% if not notification.getVu() %}</b>{% endif %}
-                            </td>
-                        {% else %}
-                            <td>
-                                {% if not notification.getVu() %}<b>{% endif %}
-                                {{ notification.getDate()|date('d/m/Y') }}
-                                {% if not notification.getVu() %}</b>{% endif %}
-                            </td>
-                        {% endif %}
-                    </tr>
-            {% endfor %}
-            </tbody>
-        </table>
+                            </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
     </div>
     <div class="col s4 h-100">
         <div class="card-panel p-1">

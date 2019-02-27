@@ -60,11 +60,6 @@ class LigneDeFrais
     private $Projet;
 
     /**
-     * @ORM\Column(type="string", length=512, nullable=true)
-     */
-    private $justificatif;
-
-    /**
      * @ORM\Column(type="datetime", nullable=true)
      */
     private $lastModif;
@@ -73,6 +68,11 @@ class LigneDeFrais
      * @ORM\Column(type="string", length=255)
      */
     private $type;
+
+    /**
+     * @ORM\Column(type="array")
+     */
+    private $justificatif = [];
 
     const STATUS = [
         0 => 'En cours',
@@ -193,18 +193,6 @@ class LigneDeFrais
         return $this;
     }
 
-    public function getJustificatif(): ?string
-    {
-        return $this->justificatif;
-    }
-
-    public function setJustificatif(?string $justificatif): self
-    {
-        $this->justificatif = $justificatif;
-
-        return $this;
-    }
-
     public function getLastModif(): ?\DateTimeInterface
     {
         return $this->lastModif;
@@ -225,6 +213,18 @@ class LigneDeFrais
     public function setType(string $type): self
     {
         $this->type = $type;
+
+        return $this;
+    }
+
+    public function getJustificatif(): ?array
+    {
+        return $this->justificatif;
+    }
+
+    public function setJustificatif(array $justificatif): self
+    {
+        $this->justificatif = $justificatif;
 
         return $this;
     }

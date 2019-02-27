@@ -13,6 +13,7 @@ use App\Entity\LigneDeFrais;
 use App\Entity\LigneDeFraisRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Validator\Constraints\DateTime;
 
 class NoteFraisController extends AbstractController
 {
@@ -107,6 +108,7 @@ class NoteFraisController extends AbstractController
           $LignedeFraisModifiee = new LigneDeFrais();
           $noteRepository = $this->getDoctrine()->getEntityManager()->getRepository('App\Entity\NoteDeFrais');
           $LignedeFraisModifiee->setNote($noteRepository->findByMonthAndYear($_POST['creationMois'],$_POST['creationAnnee'],$this->getUser()->getId())[0]);
+          $LignedeFraisModifiee->setAvance(false);
         }else{
           $LignedeFraisModifiee = $LigneRepository->findById($_POST['ligneId'])[0];
         }
@@ -114,15 +116,15 @@ class NoteFraisController extends AbstractController
 
         $LignedeFraisModifiee->setIntitule($_POST['ligneIntitule']);
         $LignedeFraisModifiee->setType($_POST['ligneType']);
+        $LignedeFraisModifiee->setDate(\DateTime::createFromFormat('Y-m-d', $_POST['ligneDate']));
         $LignedeFraisModifiee->setMission("inutile");
-        $LignedeFraisModifiee->setAvance(false);
         $LignedeFraisModifiee->setMontant(floatval($_POST['ligneMontant']));
         $LignedeFraisModifiee->setProjet( $projetRepository->findById($_POST['projet'])[0]);
 
         $ligneId = $_POST['ligneId'];
         if($_POST['idJustificatif'] == "Perdu"){
           //remove older file
-          if($LignedeFraisModifiee->getJustificatif() != "Perdu" || $LignedeFraisModifiee->getJustificatif() != ""){
+          if($LignedeFraisModifiee->getJustificatif() != "Perdu" && $LignedeFraisModifiee->getJustificatif() != "" && $LignedeFraisModifiee->getJustificatif() != null){
             unlink($LignedeFraisModifiee->getJustificatif());
           }
           //set to "Perdu"

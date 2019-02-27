@@ -23,10 +23,11 @@
                     <div class="col s2"><b>Intitulé</b></div>
                     <div class="col s2"><b>Projet</b></div>
                     <div class="col s1"><b>Montant</b></div>
-                    <div class="col s2"><b>Type</b></div>
-                    <div class="col s2"><b>Date</b></div>
+                    <div class="col s2 toReduceOrExpendIfRemoveMode"><b>Type</b></div>
+                    <div class="col s2 "><b>Date</b></div>
                     <div class="col s2"><b>Status</b></div>
                     <div class="col s1">Avance</div>
+                    <div class="col s1 suppressionMode" hidden="true"></div>
                 </div>
                 
                 <ul class="collapsible">
@@ -37,7 +38,7 @@
                                 <div class="col s2">{{ ligne.intitule }}</div>
                                 <div class="col s2">{{ ligne.projet }}</div>
                                 <div class="col s1">{{ ligne.montant }}€</div>
-                                <div class="col s2">{{ ligne.type }}</div>
+                                <div class="col s2 toReduceOrExpendIfRemoveMode">{{ ligne.type }}</div>
                                 <div class="col s2">{{ ligne.date|date("Y-m-d") }}</div>
                                 <div class="col s2">{{ ligne.statutValidation }}</div>
                                 <div class="col s1">
@@ -45,6 +46,10 @@
                                         A
                                     {% endif %}
                                 </div>
+                                <label class="col s1 suppressionMode" hidden="true">
+                                    <input type="checkbox" class="filled-in red" />
+                                    <span></span>
+                                </label>
                             </div>
                             <div class="collapsible-body row">
                                 <div class="col s8 valign-wrapper">
@@ -89,10 +94,12 @@
             {% endif %}
 
             {% if noteDeFrais[i].statut != "validee compta" %}
-                <a class="waves-effect waves-light modalModification btn modal-trigger green" data-id="{{note.mois}}/{{note.annee}}"  href="#modificationLigneFraisModal">Ajouter une ligne de frais <i class="material-icons right">add</i></a>
-                <a class="waves-effect waves-light modalAjout btn modal-trigger red" data-id="{{note.mois}}/{{note.annee}}"  href="#supprimmerLigneFraisModal">Supprimer une ligne <i class="material-icons right">add</i></a>
+                <a class="waves-effect waves-light modalModification btn modal-trigger green suppressionMode" data-id="{{note.mois}}/{{note.annee}}"  href="#modificationLigneFraisModal">Ajouter une ligne de frais <i class="material-icons right">add</i></a>
+                <a class="waves-effect waves-light btn red" id="supprimmerLigneFraisBouton">Supprimer une ligne</a>
             {% endif %}
-            
+   
+            <input type="checkbox" class="suppressionMode" />
+            <!--<a class="waves-effect waves-light btn red suppressionMode" >LA<i class="material-icons right">add</i></a>-->
             {% if mesLignesDeFrais[i] is not empty %}
                 <div class="collapsible-header row m-0 center-align">
                     <h5>Montant total de la note de frais: {{ montantTotal }}€</h5>
@@ -234,11 +241,11 @@
         $(".modal-content #ligneMontant").change(function(){
             var A = document.getElementById('ligneMontant');
             if(A.value < 0){
-                A.classList.add('MyClass');
+                //A.classList.add('MyClass'); TODO
                 A.style.borderColor = "red";
             }else{
                 A.style.borderColor = "transparent";
-                A.classList.remove('MyClass');
+                //A.classList.remove('MyClass'); TODO 
             }
         });
         $(".modal-content #ligneIntitule").change(function(){
@@ -288,8 +295,6 @@
                 $(".modal-content #ligneId").val(1);
                 $(".modal-content #ligneMontant").val(0);
                 $(".modal-content #ligneIntitule").val("");
-                //$(".modal-content #ligneProjet").val("");
-                //$(".modal-content #ligneType").val("");
                 $(".modal-content #ligneDate").val("{{ "now"|date("Y-m-d") }}");
             }
         });
@@ -297,5 +302,33 @@
             var data = $(this).data('id');
             $(".modal-content #idLigneASuppJustificatif").val(data);
         });
+    </script>
+
+    <script>
+    $( "#supprimmerLigneFraisBouton" ).on( "click", function() {
+        var tab = document.getElementsByClassName("suppressionMode");
+        var tab2 = document.getElementsByClassName("toReduceOrExpendIfRemoveMode");
+        if($("#supprimmerLigneFraisBouton").text() == "Annuler la suppression"){
+            $("#supprimmerLigneFraisBouton").text( "Supprimer une ligne" );
+            for(i=0; i<tab2.length; i++){
+                tab2[i].classList.add('s2');
+                tab2[i].classList.remove('s1');
+            }  
+        }else{
+            $("#supprimmerLigneFraisBouton").text( "Annuler la suppression" );
+            for(i=0; i<tab2.length; i++){
+                tab2[i].classList.add('s1');
+                tab2[i].classList.remove('s2');
+            }
+        }
+
+        for(i=0; i<tab.length; i++){
+            if(tab[i].getAttribute("hidden") == null){
+                tab[i].setAttribute("hidden", true);
+            }else{
+                tab[i].removeAttribute("hidden");
+            }     
+        }
+    });
     </script>
 {% endblock %}

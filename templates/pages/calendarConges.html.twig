@@ -13,6 +13,10 @@
       $(document).ready(function() {
         //initialize all modals
         $('.modal').modal();
+        $('input[type=date]').each(function(){
+        this.type="text";
+      });
+      $('input[type=date]').datepicker({dateFormat: 'dd-mm-yy'});
       });
     </script>
     <!-- Script for DatePickers -->
@@ -64,7 +68,7 @@
                     <div class="fc-event light-blue accent-3 ui-draggable ui-draggable-handle">Design iOS App</div>
                     <div class="fc-event light-blue accent-4 ui-draggable ui-draggable-handle">Oummar&Co Party</div>
                     <p>
-                      <input type="checkbox" id="drop-remove">
+                      <input type="checkbox" id="drop-remove"/>
                       <label for="drop-remove">remove after drop</label>
                     </p>
                   </div>
@@ -86,24 +90,22 @@
                         </tr>
                       </thead>
                       <tbody>
-                        <tr id="dataBottom">
-                          <td>Valérie Guimard</td>
-                          <td>08.12.18 matin</td>
-                          <td>09.12.18 soir</td>
-                          <td>Validé</td>
-                        </tr>
-                        <tr id="dataBottom">
-                          <td>Frédéric Voisin</td>
-                          <td>10.12.18 matin</td>
-                          <td>15.12.18 soir</td>
-                          <td>Validé</td>
-                        </tr>
                         {% for conge in congesService %}
                           {% if(conge.id_collabo != app.user.id) %}
+                            {% if(conge.debut_matin) %}
+                              {% set timeDebut = 'matin' %}
+                            {% else %}
+                              {% set timeDebut = 'après-midi' %}
+                            {% endif %}
+                            {% if(conge.fin_matin) %}
+                              {% set timeFin = 'matin' %}
+                            {% else %}
+                              {% set timeFin = 'après-midi' %}
+                            {% endif %}
                             <tr id="dataBottom" role="row" class="even">
                               <td>{{conge.id_collabo}}</td>
-                              <td>{{conge.date_debut|date("d-m-y")}}</td>
-                              <td>{{conge.date_fin|date("d-m-y")}}</td>
+                              <td>{{conge.date_debut|date("d-m-y")}} {{timeDebut}}</td>
+                              <td>{{conge.date_fin|date("d-m-y")}} {{timeFin}}</td>
                               <td>{{conge.statut}}</td>
                             </tr>
                           {% else %}
@@ -147,18 +149,28 @@
                       <tbody>
                         {% set i = 0 %}
                         {% for conge in mesConges %}
+                          {% if(conge.debut_matin) %}
+                            {% set timeDebut = 'matin' %}
+                          {% else %}
+                            {% set timeDebut = 'après-midi' %}
+                          {% endif %}
+                          {% if(conge.fin_matin) %}
+                            {% set timeFin = 'matin' %}
+                          {% else %}
+                            {% set timeFin = 'après-midi' %}
+                          {% endif %}
                           {% if(i%2 == 0) %}
                             <tr id="dataBottom" role="row" class="even">
                               <td>{{conge.type}}</td>
-                              <td>{{conge.date_debut|date("d-m-y")}}</td>
-                              <td>{{conge.date_fin|date("d-m-y")}}</td>
+                              <td>{{conge.date_debut|date("d-m-y")}} {{timeDebut}}</td>
+                              <td>{{conge.date_fin|date("d-m-y")}} {{timeFin}}</td>
                               <td>{{conge.statut}}</td>
                             </tr>
                           {% else %}
                             <tr id="dataBottom" role="row" class="odd">
                               <td>{{conge.type}}</td>
-                              <td>{{conge.date_debut|date("d-m-y")}}</td>
-                              <td>{{conge.date_fin|date("d-m-y")}}</td>
+                              <td>{{conge.date_debut|date("d-m-y")}} {{timeDebut}}</td>
+                              <td>{{conge.date_fin|date("d-m-y")}} {{timeFin}}</td>
                               <td>{{conge.statut}}</td>
                             </tr>
                           {% endif %}
@@ -189,21 +201,21 @@
         <form method="POST" id="formConge" action="{{path('modif.demandeConge')}}" class="white">
           <div id="marginModal">
             <div class="select-wrapper">
-              <select class="initialized">
+              <select name="typeConge" class="initialized">
                 <option value="" disabled="" selected=""> RTT ou Congé ?</option>
-                <option value="1">RTT</option>
-                <option value="2">Conge</option>
+                <option value="RTT">RTT</option>
+                <option value="Conge">Conge</option>
               </select>
             </div>
             <h5>Date et durée du congé</h5>
             <div id="container">
               <div class="row">
                 <div class="input-field col s6 m6 l6">
-                  <input name="dateDebutConge" type="text" class="datepicker" placeholder="Indiquez la date de début">
+                  <input name="dateDebutConge" type="date" autocomplete="off" class="datepicker" placeholder="Indiquez la date de début"/>
                   </div>
                 <div class="input-field col s6 m6 l6">
-                  <select class="initialized">
-                    <option name="timeCongeDebut" value="" disabled="" selected="">Matin ou Après-Midi?</option>
+                  <select name="timeCongeDebut" class="initialized">
+                    <option value="" disabled="" selected="">Matin ou Après-Midi?</option>
                     <option value=true>Matin</option>
                     <option value=false>Après-Midi</option>
                   </select>
@@ -211,13 +223,13 @@
               </div>
               <div class="row">
                 <div class="input-field col s6 m6 l6">
-                  <input id="dateFinConge" type="text" class="datepicker" placeholder="Indiquez la date de Fin">
-                  </div>
+                  <input name="dateFinConge" type="date" autocomplete="off" class="datepicker" placeholder="Indiquez la date de Fin"/>
+                </div>
                 <div class="input-field col s6 m6 l6">
-                  <select id ="timeCongeFin" class="initialized">
+                  <select name ="timeCongeFin" class="initialized">
                     <option value="" disabled="" selected="">Matin ou Après-Midi?</option>
-                    <option value="1">Matin</option>
-                    <option value="2">Après-Midi</option>
+                    <option value=true>Matin</option>
+                    <option value=false>Après-Midi</option>
                   </select>
                 </div>
               </div>

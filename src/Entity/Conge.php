@@ -65,9 +65,8 @@ class Conge
         1 => 'En attente chef',
         2 => 'validee chef',
         3 => 'refusee chef',
-        4 => 'En attente RH',
-        5 => 'validee RH',
-        6 => 'refusee RH',
+        4 => 'validee RH',
+        5 => 'refusee RH',
     ];
 
     public function getId_conge(): ?int
@@ -112,11 +111,11 @@ class Conge
         return $this->date_debut;
     }
 
-    public function setDate_debut(\DateTimeInterface $date_debut): self
+    public function setDate_debut(string $date_debut): self
     {
-        $this->date_debut = $date_debut;
-
-        return $this;
+      $date = new \DateTime($date_debut);
+      $this->date_debut = $date;
+      return $this;
     }
     public function getDebut_matin(): ?bool
     {
@@ -135,11 +134,11 @@ class Conge
         return $this->date_fin;
     }
 
-    public function setDate_fin(\DateTimeInterface $date_fin): self
+    public function setDate_fin(string $date_fin): self
     {
-        $this->date_fin = $date_fin;
-
-        return $this;
+      $date = new \DateTime($date_fin);
+      $this->date_fin = $date;
+      return $this;
     }
     public function getFin_matin(): ?bool
     {

@@ -48,7 +48,6 @@ class CalendarCongesController extends AbstractController
     public function demandeConge() : Response {
       //get current collaborateur
       dump('ahhhh');
-<<<<<<< HEAD
       print_r($_POST['dateDebutConge']);
       $collaborateur = $this->getDoctrine()->getManager()->getRepository('App\Entity\Collaborateur');
       $collaborateur = $collaborateur->findById($this->getUser()->getId());
@@ -62,7 +61,6 @@ class CalendarCongesController extends AbstractController
       }
       // $this->getDoctrine()->getEntityManager()->persist($collaborateur[0]);
       // $this->getDoctrine()->getEntityManager()->flush();
-=======
       $collaborateurRepository = $this->getDoctrine()->getManager()->getRepository('App\Entity\Collaborateur');
       $collaborateurId = $this->getUser()->getId();
       $congeRepository = $this->getDoctrine()->getEntityManager()->getRepository('App\Entity\Conge');
@@ -87,7 +85,6 @@ class CalendarCongesController extends AbstractController
       // else{
         dump('ahhhh');
       // }
->>>>>>> e4c393f62eb04a749ed7911766b6cf9d8c01caa9
       return $this->redirectToRoute('app_calendarConges');
     }
 }

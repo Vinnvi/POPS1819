@@ -59,7 +59,6 @@ class GestionNotesAdminController extends AbstractController
         //On recupere la liste des collaborateurs qu'on gere
         $collaborateurs =  array();
         foreach ($servicesIds as $servicesId){
-
             $collaborateurs = array_merge($collaborateurs, $collaborateurRepository->findByService($servicesId));
         }
 

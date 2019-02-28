@@ -1,50 +1,141 @@
 {% extends 'topBar.html.twig' %}
 {% block title %}Detail Note de Frais{% endblock %}
 {% block body %}
-    <div class="container">
-        <div class="col l8 m12 s12 push-l2">
-            <h5>Détails de la note de frais {{ noteDeFrais.collabo.nom }} {{ noteDeFrais.collabo.prenom }} du {{ noteDeFrais.mois }} {{ noteDeFrais.annee }}</h5>
+    <div class="row p-2">
+        <h5 class="p-1 center-align">Détails de la note de frais <b>{{ noteDeFrais.collabo.nom }} {{ noteDeFrais.collabo.prenom }}</b> du <b>{{ noteDeFrais.mois }}-{{ noteDeFrais.annee }}</b></h5>
 
-            {%  if  noteDeFrais.statut == statusNotes[1] %}
-            <form method="post" action="{{ path('validation.lignes.chef.details') }}">
-            {% endif %}
-                <table class="responsive-table striped">
-                    <thead>
+        {%  if  noteDeFrais.statut == statusNotes[1] %}
+        <form method="post" action="{{ path('validation.lignes.chef.details') }}">
+        {% endif %}
+            {% set montantTotal = 0 %}
+            <div class="row col s10 blue lighten-4 m-0 p-2 center-align ">
+                <div class="col s2"><b>Intitulé</b></div>
+                <div class="col s2"><b>Projet</b></div>
+                <div class="col s1"><b>Montant</b></div>
+                <div class="col s2"><b>Type</b></div>
+                <div class="col s2"><b>Date</b></div>
+                <div class="col s2"><b>Status</b></div>
+                <div class="col s1">Avance</div>
+            </div>
+            <div class="row col s1 red lighten-4 center-align m-0"><b>Refuser</b></div>
+            <div class="row col s1 green lighten-4 center-align m-0"><b>Accepter</b></div>
+
+            {% for ligne in ligneDeFrais %}
+                <ul class="collapsible col s10 row m-0">
+                    {% set montantTotal = montantTotal + ligne.montant %}
+                    <li>
+                        <div class="collapsible-header row m-0 center-align">
+                            <div class="col s2">{{ ligne.intitule }}</div>
+                            <div class="col s2">{{ ligne.projet }}</div>
+                            <div class="col s1">{{ ligne.montant }}€</div>
+                            <div class="col s2">{{ ligne.type }}</div>
+                            <div class="col s2">{{ ligne.date|date("Y-m-d") }}</div>
+                            <div class="col s2">{{ ligne.statutValidation }}</div>
+                            <div class="col s1">
+                                {% if ligne.avance %}
+                                    A
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="collapsible-body row">
+                            <p>ldol</p>
+                            <div class="col s8 valign-wrapper">
+                                <p style="margin-right:5%;"><b>Justificatif:</b></p>
+                                {% if ligne.justificatif is empty %}
+                                    <span> Il n'y a pas de justificatif associé à cette ligne</span>
+                                {% else %}
+                                    {% for justi in ligne.justificatif %}
+                                        {% if justi == "Perdu" %}
+                                            <div class="card orange">
+                                                <div class="card-content white-text">
+                                                    <span>Justificatif perdu</span>
+                                                </div>
+                                            </div>
+                                        {% else %}
+                                            <div class="card">
+                                                <div class="card-image p-1">
+                                                    <img id="imageProfil" src="/{{ justi }}" class="responsive-img" style="width:100px; margin:auto;"/>
+                                                </div>
+                                                <div class="card-content p-1">
+                                                    <span>{{ justi|split('/')|last }}</span>
+                                                </div>
+                                            </div>
+                                            <a class="btn-floating btn waves-effect waves-light red justificatifModal modal-trigger tooltipped" 
+                                                    data-id="{{ligne.id}},{{justi}}" 
+                                                    href="#suppressionJustificatifModal" 
+                                                    style="margin-left:5px;margin-right:30px;"
+                                                    data-position="bottom" 
+                                                    data-tooltip="Supprimer le justificatif">
+                                                            <i class="material-icons no-rotation">delete</i>
+                                            </a>
+                                        {% endif %}
+                                    {% endfor %}
+                                {% endif %}
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+                <label class="collapsible col s1 center-align z-depth-0" style="border-color:transparent;">
+                    <input name="{{ligne.id}}"  value="refus" type="radio" required="required" /><span></span>
+                </label>
+                <label class="collapsible col s1 center-align z-depth-0" style="border-color:transparent;">
+                    <input name="{{ ligne.id }}" value="accept" type="radio" required="required" /><span></span>
+                </label>
+            {% endfor %}
+                    
+            
+
+
+            <!--<table class="responsive-table striped">
+                <thead>
+                <tr>
+                    <th>Intitule</th>
+                    <th>date</th>
+                    <th>Statut</th>
+                    <th>Montant</th>
+
+                    {%  if  noteDeFrais.statut == statusNotes[1] %}
+                    <th>Refus</th>
+                    <th>Acceptation</th>
+                    {% endif %}
+                </tr>
+                </thead>
+
+                <tbody>
+                {% for ligne in ligneDeFrais %}
                     <tr>
-                        <th>Intitule</th>
-                        <th>date</th>
-                        <th>Statut</th>
-                        <th>Montant</th>
+                        <td>{{ ligne.intitule }}</td>
+                        <td>{{ ligne.date|date("d/m/Y") }}</td>
+                        <td>{{ ligne.statutValidation }}</td>
+                        <td>{{ ligne.montant }}€</td>
 
                         {%  if  noteDeFrais.statut == statusNotes[1] %}
-                        <th>Refus</th>
-                        <th>Acceptation</th>
+                        <td><label><input name="{{ligne.id}}"  value="refus" type="radio" required="required"/><span></span></label></td>
+                        <td><label><input name="{{ ligne.id }}" value="accept" type="radio" required="required" /><span></span></label></td>
                         {% endif %}
                     </tr>
-                    </thead>
-
-                    <tbody>
-                    {% for ligne in ligneDeFrais %}
-                        <tr>
-                            <td>{{ ligne.intitule }}</td>
-                            <td>{{ ligne.date|date("d/m/Y") }}</td>
-                            <td>{{ ligne.statutValidation }}</td>
-                            <td>{{ ligne.montant }}€</td>
-
-                            {%  if  noteDeFrais.statut == statusNotes[1] %}
-                            <td><label><input name="{{ligne.id}}"  value="refus" type="radio" required="required"/><span></span></label></td>
-                            <td><label><input name="{{ ligne.id }}" value="accept" type="radio" required="required" /><span></span></label></td>
-                            {% endif %}
-                        </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
-                {%  if  noteDeFrais.statut == statusNotes[1] %}
-                <input type="hidden" id="id" name="id" value="{{ noteDeFrais.id }}"/>
-                <div class="secondary-content"><button id="id1" class="btn waves-effect waves-light">Valider</button></div>
-            </form>
-            {% endif %}
-        </div>
+                {% endfor %}
+                </tbody>
+            </table>-->
+            <!--{%  if  noteDeFrais.statut == statusNotes[1] %}
+            <input type="hidden" id="id" name="id" value="{{ noteDeFrais.id }}"/>
+            <div class="secondary-content"><button id="id1" class="btn waves-effect waves-light">Valider</button></div>
+            {% endif %}-->
+        </form>
+        
     </div>
+{% endblock %}
 
+{% block javascripts %}
+    <script>
+        $(document).ready(function(){
+            $('.collapsible').collapsible();
+        });
+        $(document).ready(function(){
+            $('.modal').modal();
+        });
+        $(document).ready(function(){
+            $('.tooltipped').tooltip();
+        });
+    </script>
 {% endblock %}

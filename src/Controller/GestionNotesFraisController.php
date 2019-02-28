@@ -44,7 +44,6 @@ class GestionNotesFraisController extends AbstractController
      */
     public function index(): Response
     {
-
         $notesRepository = $this->getDoctrine()->getEntityManager()->getRepository('App\Entity\NoteDeFrais');
         $notesDeFraisEnAttente = $notesRepository->findByStatus(NoteDeFrais::STATUS[2]);
         $notesDeFraisPasses = array_merge($notesRepository->findByStatus(NoteDeFrais::STATUS[5]), $notesRepository->findByStatus(NoteDeFrais::STATUS[7])) ;

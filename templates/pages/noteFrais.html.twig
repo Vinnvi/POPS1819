@@ -7,30 +7,104 @@
 <div class="container mt-10">
   <ul class="collapsible">
     {% set i = 0 %}
-      {% set test = "Hello world" %}
     {% for note in noteDeFrais%}
+        {% set montantTotal = 0 %}
       {% if(i == 0) %}
       <li class="active">
       {% else %}
           <li>
       {% endif %}
-        <div class="collapsible-header blue lighten-2">Note de Frais de {{note.mois}} / {{note.annee}} <i class="large material-icons">expand_more</i> Statut de la note de frais : {{noteDeFrais[i].statut}} </div>
+        <div class="collapsible-header blue lighten-2">Note de Frais de {{note.mois}} / {{note.annee}} <i class="large material-icons">expand_more</i> Statut : {{noteDeFrais[i].statut}} </div>
         <div class="collapsible-body">
-          <ul class="collapsible">
-            {% if note.statut == status[0] %}
-            <a class="waves-effect waves-light modalAjout btn modal-trigger" data-id="{{note.mois}}/{{note.annee}}"  href="#ajoutLigneFraisModal">Ajouter une ligne de frais <i class="material-icons right">add</i></a>
+            {% if mesLignesDeFrais[i] is empty %}
+                <h5 class="p-2 center-align">Cette note n'a pas de ligne.</h5>
+            {% else %}
+                <div class="row blue lighten-5 m-0 p-1 center-align">
+                    <div class="col s2"><b>Intitulé</b></div>
+                    <div class="col s2"><b>Projet</b></div>
+                    <div class="col s1"><b>Montant</b></div>
+                    <div class="col s2 toReduceOrExpendIfRemoveMode"><b>Type</b></div>
+                    <div class="col s2 "><b>Date</b></div>
+                    <div class="col s2"><b>Status</b></div>
+                    <div class="col s1">Avance</div>
+                    <div class="col s1 suppressionMode" hidden="true"></div>
+                </div>
+                
+                <ul class="collapsible">
+                    {% for ligne in mesLignesDeFrais[i] %}
+                        {% set montantTotal = montantTotal + ligne.montant %}
+                        <li>
+                            <div class="collapsible-header row m-0 center-align">
+                                <div class="col s2">{{ ligne.intitule }}</div>
+                                <div class="col s2">{{ ligne.projet }}</div>
+                                <div class="col s1">{{ ligne.montant }}€</div>
+                                <div class="col s2 toReduceOrExpendIfRemoveMode">{{ ligne.type }}</div>
+                                <div class="col s2">{{ ligne.date|date("Y-m-d") }}</div>
+                                <div class="col s2">{{ ligne.statutValidation }}</div>
+                                <div class="col s1">
+                                    {% if ligne.avance %}
+                                        A
+                                    {% endif %}
+                                </div>
+                                <label class="col s1 suppressionMode" hidden="true">
+                                    <input type="checkbox" class="filled-in red" />
+                                    <span></span>
+                                </label>
+                            </div>
+                            <div class="collapsible-body row">
+                                <div class="col s8 valign-wrapper">
+                                    <p style="margin-right:5%;"><b>Justificatif:</b></p>
+                                    {% if ligne.justificatif == "" %}
+                                        <span> Il n'y a pas de justificatif associé à cette ligne</span>
+                                    {% elseif ligne.justificatif == "Perdu" %}
+                                        <div class="card orange">
+                                            <div class="card-content white-text">
+                                                <span>Justificatif perdu</span>
+                                            </div>
+                                        </div>
+                                    {% else %}
+                                        <div class="card">
+                                            <div class="card-image p-1">
+                                                <img id="imageProfil" src="{{ligne.justificatif}}" class="responsive-img" style="width:100px; margin:auto;"/>
+                                            </div>
+                                            <div class="card-content p-1">
+                                                <span>{{ ligne.justificatif|split('/')|last }}</span>
+                                            </div>
+                                        </div>
+                                        <a class="btn-floating btn waves-effect waves-light red justificatifModal modal-trigger tooltipped" 
+                                                data-id="{{ligne.id}}" 
+                                                href="#suppressionJustificatifModal" 
+                                                style="margin-left:5px;"
+                                                data-position="bottom" 
+                                                data-tooltip="Supprimer le justificatif">
+                                                        <i class="material-icons no-rotation">delete</i>
+                                        </a>
+                                    {% endif %}
+                                </div>
+                                <div class="col s4">
+                                    {% if noteDeFrais[i].statut != "validee compta" %}
+                                        <a class="waves-effect waves-light modalModification btn modal-trigger right" data-id="{{ligne.id}}/{{ligne.montant}}/{{ligne.intitule}}/{{ligne.projet}}/{{ligne.type}}/{{ligne.date|date("Y-m-d")}}"  href="#modificationLigneFraisModal">Modifier la ligne</a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </li>
+                    {% endfor %}
+                    
+                </ul>
             {% endif %}
-            <div class="right" style="padding-right: 10px;padding-top:5px" > Demandes d'avance</div>
-            {% for ligne in mesLignesDeFrais[i] %}
-                <li>
-                  <div style="display:block" class="collapsible-header"> {{ligne.intitule}} <div class="secondary-content"> <input mdx-no-collapse class="no-collapse" type="checkbox" /><span></span> </div> </div>
-                  <div class="collapsible-body">
-                    Mission : {{ligne.mission}},   Montant : {{ligne.montant}} euros,   date : {{ ligne.date|date("Y-m-d") }},   statut : {{ligne.statutValidation}}
-                    <a class="waves-effect waves-light modalModification btn modal-trigger" data-id="{{ligne.id}}/{{ligne.montant}}/{{ligne.intitule}}/{{ligne.mission}}/{{ligne.date|date("Y-m-d")}}"  href="#modificationLigneFraisModal">Modifier</a>
-                  </div>
-                </li>
-            {% endfor %}
-          </ul>
+
+            {% if noteDeFrais[i].statut != "validee compta" %}
+                <a class="waves-effect waves-light modalModification btn modal-trigger green suppressionMode" data-id="{{note.mois}}/{{note.annee}}"  href="#modificationLigneFraisModal">Ajouter une ligne de frais <i class="material-icons right">add</i></a>
+                <a class="waves-effect waves-light btn red" id="supprimmerLigneFraisBouton">Supprimer une ligne</a>
+            {% endif %}
+   
+            <input type="checkbox" class="suppressionMode" />
+            <!--<a class="waves-effect waves-light btn red suppressionMode" >LA<i class="material-icons right">add</i></a>-->
+            {% if mesLignesDeFrais[i] is not empty %}
+                <div class="collapsible-header row m-0 center-align">
+                    <h5>Montant total de la note de frais: {{ montantTotal }}€</h5>
+                </div>
+            {% endif %}
         </div>
       </li>
     {% set i = 1 %}
@@ -38,119 +112,153 @@
   </ul>
 </div>
 
-  <!-- modal to add new lignesDeFrais -->
+  <!-- modal to add modif/new lignesDeFrais -->
   <!-- Modal Structure -->
-  <div id="modificationLigneFraisModal" class="modal myModal">
-      <div class="container mt-4">
-          <form method="post" action="{{ path('modif.ligne') }}">
-              <div class="modal-content" id="modal-content">
-                  <h5>Modification d'une ligne de frais</h5>
-                  <div id="container">
-                      <div class="section">
-                          <div class="input-field">
-                              <select name="ligneIntitule" id="ligneIntitule">
-                                  {% for type in typesPaiements %}
-                                      <option value="{{type}}">{{type}}</option>
-                                  {% endfor %}
-                              </select>
-                          </div>
-                      </div>
-                      <div class="section">
-                          <input type="text" class="datepicker" id="ligneDate" name="ligneDate">
-                      </div>
+  <div id="modificationLigneFraisModal" class="modal">
+        <form method="post" action="{{ path('modif.ligne') }}" enctype="multipart/form-data">
+            <div class="modal-content" id="modal-content">
+                <h5 name="titreModal" id="titreModal">Modification d'une ligne de frais</h5>
+                <input type="hidden" name="isCreation" id="isCreation" value=""/>
+                <input type="hidden" name="creationMois" id="creationMois" value=""/>
+                <input type="hidden" name="creationAnnee" id="creationAnnee" value=""/>
 
-                      <div class="section">
-                          <div class="input-field">
-                              <input placeholder="montant" id="ligneMontant" name="ligneMontant" type="integer" class="validate">
-                          </div>
-                      </div>
+                <div id="container">
 
-                      <div class="section">
-                          <div class="file-field input-field">
-                              <div class="btn">
-                                  <span>Justificatif</span>
-                                  <input type="file">
-                              </div>
-                              <div class="file-path-wrapper">
-                                  <input class="file-path validate" type="text">
-                              </div>
-                          </div>
-                      </div>
+                    <div class="section row">
 
-                      <div class="section">
-                          <div class="input-field">
-                              <input id="ligneMission" name="ligneMission" type="text" class="validate">
-                          </div>
-                          <div class="input-field">
-                              <select name="projet" id="projet">
-                                  {% for project in projectsAvailables %}
-                                      {% if project != null %}
-                                      <option value="{{project[0].id}}">{{project[0].nom}}</option>
-                                      {% endif %}
-                                  {% endfor %}
-                              </select>
-                              <input type="hidden" name="ligneId" id="ligneId" value=""/>
-                          </div>
-                      </div>
-                  </div>
-              </div>
-              <div class="modal-footer">
-                  <a href="#!" class="modal-close waves-effect waves-green btn-flat"><i class="material-icons left">clear</i>Annuler</a>
-                  <button type="submit" class="btn btn-primary">Enregistrer<i class="material-icons right">check</i></button>
-              </div>
-          </form>
-      </div>
+                        <div class="input-field col s6 row valign-wrapper">
+                            <span class="col s3 center-align"><b>Intitulé</b></span>
+                            <input id="ligneIntitule" name="ligneIntitule" type="text" class="validate col s9" aria-required="true" required="true">
+                        </div>
+
+                        <div class="input-field col s6 valign-wrapper">
+                            <span class="col s3 center-align" style="margin-left:0;"><b>Type</b></span>
+                            <select name="ligneType" id="ligneType" class="col s9">
+                                {% for type in typesPaiements %}
+                                    <option value="{{type}}">{{type}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="section row">
+                        <div class="input-field col s6 row valign-wrapper">
+                            <span class="col s3 center-align"><b>Date</b></span>
+                            <input type="text" class="datepicker" id="ligneDate" name="ligneDate">
+                        </div>
+
+                        <div class="input-field col s6 row valign-wrapper">
+                            <span class="col s3 center-align"  style="margin-left:0;"><b>Montant</b></span>
+                            <input placeholder="montant" id="ligneMontant" name="ligneMontant" type="integer" class="validate">
+                        </div>
+                    </div>
+
+                    <div class="section row">
+                        <div class="input-field col s6 row valign-wrapper">
+                            <span class="col s3 center-align" style="margin-left:0;"><b>Projet</b></span>
+                            <select name="projet" id="projet">
+                                {% for project in projectsAvailables %}
+                                    {% if project != null %}
+                                    <option value="{{project[0].id}}">{{project[0].nom}}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                            <input type="hidden" name="ligneId" id="ligneId" value=""/>
+                        </div>
+
+                        <div class="file-field input-field col s6 row valign-wrapper">
+                            <span class="col s3 center-align"  style="margin-left:0;"><b>Justificatif</b></span>
+                            <div class="btn">
+                                <span>Upload</span>
+                                <input id="inputFile" type="file" name="justificatifUpload">
+                            </div>
+                            <div class="file-path-wrapper">
+                                <input class="file-path validate" id="idJustificatif"  name="idJustificatif" type="text" placeholder="Justificatif">
+                            </div>
+                            <a class="waves-effect waves-light btn-small red tooltipped perteJustificatifClic" data-position="bottom" data-tooltip="Justificatif perdu" style="margin-left:5px;"><i class="material-icons p-0">warning</i></a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a href="#!" class="modal-close waves-effect waves-light btn red"><i class="material-icons left">clear</i>Annuler</a>
+                <button type="submit" class="waves-effect waves-light btn green">Enregistrer<i class="material-icons right">check</i></button>
+            </div>
+        </form>
   </div>
 
-    <div id="ajoutLigneFraisModal" class="modal myModal">
-        <h4>Ajout d'une ligne de frais</h4>
-        <div class="container mt-4">
-            {{ form_start(form) }}
-            {{ form_row(form.intitule) }}
-            {{ form_row(form.mission) }}
-            {{ form_row(form.montant) }}
-            {{ form_row(form.date, { 'attr': {'class': 'browser-default'} }) }}
-            {{ form_row(form.Projet) }}
-            <input type="hidden" name="moisNote" id="moisNote">
-            <input type="hidden" name="anneeNote" id="anneeNote">
-            <div style="  text-align: right">
-                <button class="btn btn-primary" style="margin-top: 5px">Enregistrer</button>
+  <!-- modal to add modif/new lignesDeFrais -->
+  <!-- Modal Structure -->
+  <div id="suppressionJustificatifModal" class="modal center-align">
+        <form method="post" action="{{ path('suppresion.justificatif') }}" enctype="multipart/form-data">
+            <div class="modal-content" id="modal-content">
+                <h5>Etes-vous sûr de supprimer le justificatif ?</h5>
+                <input type="hidden" name="idLigneASuppJustificatif" id="idLigneASuppJustificatif" value=""/>
             </div>
-            {{ form_end(form) }}
-        </div>
-    </div>
-
+            <div class="modal-footer row">
+                <div class="col s6 center-align">
+                    <a href="#!" class="modal-close waves-effect waves-light btn red" style="margin:auto;">Non</a>
+                </div>
+                <div class="col s6 center-align">
+                    <button type="submit" class="waves-effect waves-light btn green" style="margin:auto;">Oui</button>
+                </div>
+            </div>
+        </form>
+  </div>
 {% endblock %}
 
 {% block javascripts %}
-  <script>
+    <script>
+        $(document).ready(function(){
+        $('.collapsible').collapsible();
+        });
+        $(document).ready(function(){
+        $('.modal').modal();
+        });
+        $(document).ready(function(){
+            $('.tooltipped').tooltip();
+        });
+    </script>
+
+    <script>
     $(document).ready(function(){
-      $('.collapsible').collapsible();
+        $('.datepicker').datepicker({
+        autoClose: true,
+        format: 'yyyy-mm-dd',
+        });
     });
-  </script>
+    </script>
 
+    <script>
+        $(document).ready(function(){
+        $('select').formSelect();
+        });
+    </script>
 
-  <script>
-    $(document).ready(function(){
-      $('.modal').modal();
-    });
-  </script>
+    <script>
+        $(".modal-content #ligneMontant").change(function(){
+            var A = document.getElementById('ligneMontant');
+            if(A.value < 0){
+                //A.classList.add('MyClass'); TODO
+                A.style.borderColor = "red";
+            }else{
+                A.style.borderColor = "transparent";
+                //A.classList.remove('MyClass'); TODO 
+            }
+        });
+        $(".modal-content #ligneIntitule").change(function(){
+            var A = document.getElementById('ligneIntitule');
 
-  <script>
-  $(document).ready(function(){
-    $('.datepicker').datepicker({
-      autoClose: true,
-      format: 'yyyy-mm-dd',
-    });
-  });
+            if(A.value.length == 0){
+                console.log(A.value.length);
+                A.classList.add('invalid');
+            }else{
+                A.classList.remove('valid');
+            }
+        });
+    </script>
 
-  </script>
-
-  <script>
-    $(document).ready(function(){
-      $('select').formSelect();
-    });
-  </script>
     <script>
         $(document).on("click", ".modalAjout", function () {
             var date = $(this).data('id').split('/');
@@ -158,14 +266,68 @@
             document.getElementById('anneeNote').value = date[1];
         });
     </script>
+
+    <!--Perte d'un justificatif BOUTON-->
+    <script>
+        $(document).on("click", ".perteJustificatifClic", function () {
+            document.getElementById('idJustificatif').value = "Perdu";
+        });
+    </script>
+
     <script>
         $(document).on("click", ".modalModification", function () {
             var data = $(this).data('id').split('/');
-            $(".modal-content #ligneId").val( data[0] );
-            $(".modal-content #ligneMontant").val( data[1] );
-            //$(".modal-content #ligneIntitule").val( data[2] );
-            $(".modal-content #ligneMission").val( data[3] );
-            $(".modal-content #ligneDate").val( data[4] );
+            if(data.length > 2){
+                $(".modal-content #isCreation").val( false );
+                $(".modal-content #titreModal").text( "Modification d'une ligne de frais" );
+                $(".modal-content #ligneId").val( data[0] );
+                $(".modal-content #ligneMontant").val( data[1] );
+                $(".modal-content #ligneIntitule").val( data[2] );
+                $(".modal-content #ligneProjet").val( data[3] );
+                $(".modal-content #ligneType").val( data[4] );
+                $(".modal-content #ligneDate").val( data[5] );
+            }else{
+                $(".modal-content #isCreation").val( true );
+                $(".modal-content #creationMois").val( data[0] );
+                $(".modal-content #creationAnnee").val( data[1] );
+                $(".modal-content #titreModal").text( "Création d'une ligne de frais" );
+                $(".modal-content #ligneId").val(1);
+                $(".modal-content #ligneMontant").val(0);
+                $(".modal-content #ligneIntitule").val("");
+                $(".modal-content #ligneDate").val("{{ "now"|date("Y-m-d") }}");
+            }
         });
+        $(document).on("click", ".justificatifModal", function () {
+            var data = $(this).data('id');
+            $(".modal-content #idLigneASuppJustificatif").val(data);
+        });
+    </script>
+
+    <script>
+    $( "#supprimmerLigneFraisBouton" ).on( "click", function() {
+        var tab = document.getElementsByClassName("suppressionMode");
+        var tab2 = document.getElementsByClassName("toReduceOrExpendIfRemoveMode");
+        if($("#supprimmerLigneFraisBouton").text() == "Annuler la suppression"){
+            $("#supprimmerLigneFraisBouton").text( "Supprimer une ligne" );
+            for(i=0; i<tab2.length; i++){
+                tab2[i].classList.add('s2');
+                tab2[i].classList.remove('s1');
+            }  
+        }else{
+            $("#supprimmerLigneFraisBouton").text( "Annuler la suppression" );
+            for(i=0; i<tab2.length; i++){
+                tab2[i].classList.add('s1');
+                tab2[i].classList.remove('s2');
+            }
+        }
+
+        for(i=0; i<tab.length; i++){
+            if(tab[i].getAttribute("hidden") == null){
+                tab[i].setAttribute("hidden", true);
+            }else{
+                tab[i].removeAttribute("hidden");
+            }     
+        }
+    });
     </script>
 {% endblock %}

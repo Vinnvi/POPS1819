@@ -147,6 +147,4 @@ class GestionNotesFraisController extends AbstractController
 
         return $this->redirectToRoute('app_gestionNotesFrais');
     }
-
-
 }

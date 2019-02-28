@@ -26,10 +26,7 @@ final class Version20181209101958 extends AbstractMigration
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
         $this->addSql('ALTER TABLE ligne_de_frais DROP FOREIGN KEY FK_A92D02FBC18272');
-        $this->addSql('DROP TABLE projet');
-        $this->addSql('ALTER TABLE ligne_de_frais DROP FOREIGN KEY FK_A92D02FB26ED0855');
-        $this->addSql('DROP INDEX IDX_A92D02FB26ED0855 ON ligne_de_frais');
         $this->addSql('DROP INDEX IDX_A92D02FBC18272 ON ligne_de_frais');
-        $this->addSql('ALTER TABLE ligne_de_frais DROP note_id, DROP projet_id');
+        $this->addSql('ALTER TABLE ligne_de_frais DROP projet_id');
     }
 }

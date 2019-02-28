@@ -64,6 +64,8 @@ class Projet
     public function __construct()
     {
         $this->collabos = new ArrayCollection();
+        $this->setStatus(Projet::STATUS[0]);
+        $this->setDescription('Pas de description.');
     }
 
     public function getId(): ?int
@@ -167,9 +169,9 @@ class Projet
         return $this->status;
     }
 
-    public function setStatus(int $status): self
+    public function setStatus(?string $status): self
     {
-        $this->status = $this->STATUS[$status];
+        $this->status = $status;
         return $this;
     }
 }

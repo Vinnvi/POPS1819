@@ -28,7 +28,7 @@ class CongeRepository extends ServiceEntityRepository
           ->andWhere('c.id_collabo = :val')
           ->setParameter('val', $idCollabo)
           ->addOrderBy('c.date_debut', 'DESC')
-          ->setMaxResults(10)
+          ->setMaxResults(15)
           ->getQuery()
           ->getResult()
       ;
@@ -42,7 +42,7 @@ class CongeRepository extends ServiceEntityRepository
           ->andWhere('c.id_service = :val')
           ->setParameter('val', $idService)
           ->addOrderBy('c.date_debut', 'DESC')
-          ->setMaxResults(10)
+          ->setMaxResults(15)
           ->getQuery()
           ->getResult()
       ;

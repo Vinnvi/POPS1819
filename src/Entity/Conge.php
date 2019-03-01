@@ -18,47 +18,47 @@ class Conge
    /**
     * @ORM\Column(type="integer")
     */
-    private $id_collabo;
+    public $id_collabo;
 
     /**
      * @ORM\Column(type="integer")
      */
-     private $id_service;
+     public $id_service;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $type;
+    public $type;
 
     /**
      * @ORM\Column(type="date")
      */
-    private $date_debut;
+    public $date_debut;
 
     /**
      * @ORM\Column(type="boolean")
      */
-    private $debut_matin;
+    public $debut_matin;
 
     /**
      * @ORM\Column(type="date")
      */
-    private $date_fin;
+    public $date_fin;
 
     /**
      * @ORM\Column(type="boolean")
      */
-    private $fin_matin;
+    public $fin_matin;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $statut;
+    public $statut;
 
     /**
      * @ORM\Column(type="integer")
      */
-    private $duree;
+    public $duree;
 
     const STATUS = [
         0 => 'En cours',

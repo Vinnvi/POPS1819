@@ -18,7 +18,7 @@ table, th, td {
 #btnConge{
   margin-bottom: 5% !important;
 }
-#rowTable{
+#rowTable,#tableCongesService{
   margin-top : 4%;
   background-color: transparent !important;
 }

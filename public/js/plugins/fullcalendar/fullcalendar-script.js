@@ -33,6 +33,13 @@
       editable: true,
       droppable: true, // this allows things to be dropped onto the calendar
       eventLimit: true, // allow "more" link when too many events
+      businessHours: {
+        // days of week. an array of zero-based day of week integers (0=Sunday)
+        dow: [ 1, 2, 3, 4, 5 ], // Monday - Thursday
+
+        start: '10:00', // a start time (10am in this example)
+        end: '18:00', // an end time (6pm in this example)
+      },
       events: [
         {
           title: 'All Day Event',
@@ -41,8 +48,8 @@
         },
         {
           title: 'Long Event',
-          start: '2015-05-07',
-          end: '2015-05-10',
+          start: '2019-02-02',
+          end: '2019-02-03',
           color: '#e91e63'
         },
         {
@@ -96,5 +103,12 @@
         }
       ]
     });
+
+
+
+    // congesService.forEach(function (conge){
+    //   {% if(conge.id_collabo != app.user.id) %}
+    // }
+    // end for
 
   });

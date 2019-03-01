@@ -41,6 +41,7 @@ class CalendarCongesController extends AbstractController
         'congesService' => $congesService]));
     }
 
+
     /**
      * @Route("/mesCongesAfterDemande", name="modif.demandeConge")
      * @return \Symfony\Component\HttpFoundation\Response
@@ -69,7 +70,7 @@ class CalendarCongesController extends AbstractController
       {
         dump(gettype($_POST['dateDebutConge']));
         $newConge->setId_collabo($collaborateurId);
-        $newConge->setId_service(3);
+        $newConge->setId_service($this->getUser()->getService()->getId());
         $newConge->setType($_POST['typeConge']);
         $newConge->setDate_debut($_POST['dateDebutConge']);
         $newConge->setDebut_matin($_POST['timeCongeDebut']);

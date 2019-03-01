@@ -14,9 +14,16 @@
         //initialize all modals
         $('.modal').modal();
         $('input[type=date]').each(function(){
-        this.type="text";
+          this.type="text";
+        });
+        $('input[type=date]').datepicker({dateFormat: 'dd-mm-yy'});
       });
-      $('input[type=date]').datepicker({dateFormat: 'dd-mm-yy'});
+    </script>
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        var tableCongesService = document.querySelector('.table_congesService');
+        var listCongesService = tableCongesService.dataset.congesService;
+        console.log(listCongesService);
       });
     </script>
     <!-- Script for DatePickers -->
@@ -79,7 +86,7 @@
 
                   </div>
                   <!-- Table donnees -->
-                  <div id="rowTable">
+                  <div class="table_congesService" data-conges-service="{{congesService|json_encode|e('html_attr') }}">
                     <table class="striped">
                       <thead>
                         <tr id="rowCongesBottom">

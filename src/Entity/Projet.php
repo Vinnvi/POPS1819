@@ -133,6 +133,8 @@ class Projet
     {
         if (!$this->collabos->contains($collabo)) {
             $this->collabos[] = $collabo;
+            $collabo->addProjet($this);
+
         }
 
         return $this;

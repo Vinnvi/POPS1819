@@ -17,8 +17,8 @@
                         </div>
                         <div class="card-action">
                             <a class="modalAjout modal-trigger" data-id="{{ mission.id }}/{{ mission.nom }}/{{ mission.description }}/{{ mission.dateDebut|date("Y-m-d") }}/{{ mission.dateFin|date("Y-m-d") }}" href="#modalAjout"><i class="material-icons">edit</i></a>
-                            <a href="#"><i class="material-icons">face</i></a>
-                            <a href="#"><i class="material-icons">delete</i></a>
+                            <a href="{{ path('gestion.Mission',{id: mission.id}) }}"><i class="material-icons">assignment</i>Détails</a>
+                            <a href="#" ><i class="material-icons">timer</i></a>
                         </div>
                     </div>
                 </div>
@@ -57,22 +57,30 @@
                         <a href="#!" class="modal-close waves-effect waves-light btn red" style="margin:auto;">Annuler</a>
                     </div>
                     <div class="col s6 center-align">
-                        <button type="submit" class="waves-effect waves-light btn green" style="margin:auto;">Ajouter le projet</button>
+                        <button type="submit" class="waves-effect waves-light btn green" style="margin:auto;">Valider</button>
                     </div>
                 </div>
             </form>
         </div>
     </div>
+
+
+    <div class="js-user-rating" data-time="{{ dateActuelle|date("Y-m-d")}}">
+        <!-- ... -->
+    </div>
 {% endblock %}
 
 {% block javascripts %}
     <script>
+        var time = $('.js-user-rating').data('time');
+
         $(document).ready(function(){
             $('.modal').modal();
             $('.datepicker').datepicker({
                 format: 'yyyy-mm-dd',
                 container: document.getElementById("modalAjout"),
                 autoClose: true,
+                minDate: new Date(2019, 10 - 1, 25),
             });
         });
     </script>
@@ -88,4 +96,5 @@
 
         });
     </script>
+
 {% endblock %}

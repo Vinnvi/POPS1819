@@ -7,6 +7,7 @@ use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Validator\Constraints\DateTime;
 use Twig\Environment;
 
 class gestionMissionsController extends AbstractController
@@ -42,10 +43,17 @@ class gestionMissionsController extends AbstractController
     public function index(): Response
     {
         $toutesLesMissions = $this->repository->findByService($this->getUser()->getService());
+        $dateActuelle = new \DateTime();
 
+
+        //Recuperation de tous les collaborateurs
+        $collaboRepository = $this->getDoctrine()->getEntityManager()->getRepository('App\Entity\Collaborateur');
+        $collaborateurs = $collaboRepository->findAll();
 
         return new Response($this->twig->render('pages/gestionMissions/gestionMissionsHome.html.twig',[
             'missions' => $toutesLesMissions,
+            'collaborateurs' => $collaborateurs,
+            'dateActuelle' => $dateActuelle,
             ]));
     }
 
@@ -90,6 +98,85 @@ class gestionMissionsController extends AbstractController
 
 
         return $this->redirectToRoute('app_gestionMissions');
+    }
+
+    /**
+     * @Route("/gestionMissions/details/{id}", name="gestion.Mission")
+     * @param Projet $projet
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function gestionMission(Projet $projet){
+        $collaboRepository = $this->getDoctrine()->getEntityManager()->getRepository('App\Entity\Collaborateur');
+
+        $collabos = $collaboRepository->findAll();
+        $collabosDuProjet = array();
+        $collabosPasDuProjet = array();
+        foreach ($collabos as $collabo){
+            if($collabo->getProjets()->contains($projet)){
+                array_push($collabosDuProjet,$collabo);
+            }
+            else{
+                array_push($collabosPasDuProjet,$collabo);
+            }
+        }
+
+        $ligneRepository = $this->getDoctrine()->getEntityManager()->getRepository('App\Entity\LigneDeFrais');
+        //$lignesATraiter = $ligneRepository->findBy
+
+
+        return new Response($this->twig->render('pages/gestionMissions/gestionMissionsDetails.html.twig',[
+            'mission' => $projet,
+            'collabosProjet' => $collabosDuProjet,
+            'collabosPasProjet' => $collabosPasDuProjet,
+        ]));
+    }
+
+    /**
+     * @Route("/gestionMissions/ajoutCollabos", name="ajout.collabos")
+     */
+    public function ajoutCollabos(){
+        $projet = $this->repository->findOneById($_POST['projet']);
+        if(isset($_POST['choix'])){
+
+            $collaboRepository = $this->getDoctrine()->getEntityManager()->getRepository('App\Entity\Collaborateur');
+
+            foreach ($_POST['choix'] as $idCollabo){
+                $collabo = $collaboRepository->findOneById($idCollabo);
+                if($collabo != null){
+                    $collabo->addProjet($projet);
+                    $projet->addCollabo($collabo);
+                }
+            }
+
+            $this->em->flush();
+        }
+
+        return $this->redirectToRoute('gestion.Mission',array('id' => $projet->getId()));
+
+    }
+
+    /**
+     * @Route("/gestionMissions/suppressionCollabos", name="suppression.collabos")
+     */
+    public function suppressionCollabos(){
+        $projet = $this->repository->findOneById($_POST['projet']);
+        if(isset($_POST['choix'])){
+            $projet = $this->repository->findOneById($_POST['projet']);
+            $collaboRepository = $this->getDoctrine()->getEntityManager()->getRepository('App\Entity\Collaborateur');
+
+            foreach ($_POST['choix'] as $idCollabo){
+                $collabo = $collaboRepository->findOneById($idCollabo);
+                if($collabo != null){
+                    $collabo->removeProjet($projet);
+                    $projet->removeCollabo($collabo);
+                }
+            }
+
+            $this->em->flush();
+        }
+
+        return $this->redirectToRoute('gestion.Mission',array('id' => $projet->getId()));
+
     }
 
 }

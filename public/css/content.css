@@ -39,6 +39,14 @@ transform: rotate(180deg);
   margin: 0px;
 }
 
+.m-1 {
+  margin: 10px;
+}
+
+.m-2 {
+  margin: 20px;
+}
+
 .no-rotation{
   transform: rotate(0deg) !important;
 }

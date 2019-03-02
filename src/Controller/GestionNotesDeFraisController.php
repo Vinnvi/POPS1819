@@ -15,7 +15,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
 use App\Repository\NoteDeFraisRepository;
 
-class GestionNotesAdminController extends AbstractController
+class GestionNotesDeFraisController extends AbstractController
 {
     /**
      * @var Environment
@@ -44,12 +44,16 @@ class GestionNotesAdminController extends AbstractController
     }
 
     /**
-     * @Route("/gestionNotesDeFraisChef", name="index")
+     * @Route("/gestionNotesDeFrais", name="index")
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function index(): Response
     {
-        $serviceRepository = $this->getDoctrine()->getEntityManager()->getRepository('App\Entity\Service');
+        $notesRepository = $this->getDoctrine()->getEntityManager()->getRepository('App\Entity\NoteDeFrais');
+        $notesDeFraisEnAttente = $notesRepository->findByStatus(NoteDeFrais::STATUS[2]);
+        $notesDeFraisPasses = array_merge($notesRepository->findByStatus(NoteDeFrais::STATUS[5]), $notesRepository->findByStatus(NoteDeFrais::STATUS[7]));
+
+        /*$serviceRepository = $this->getDoctrine()->getEntityManager()->getRepository('App\Entity\Service');
         //On recupere le(s) service(s) du chef
         $servicesIds = $serviceRepository->findByChefId($this->getUser()->getId());
 
@@ -74,17 +78,17 @@ class GestionNotesAdminController extends AbstractController
             $notesValideesRefusees = array_merge($notesValideesRefusees, $noteRepository->findByStatusAndCollabo(NoteDeFrais::STATUS[2],$collaborateur->getId()));
             $notesValideesRefusees = array_merge($notesValideesRefusees, $noteRepository->findByStatusAndCollabo(NoteDeFrais::STATUS[3],$collaborateur->getId()));
         }
-        usort($notesValideesRefusees,array($this,"comparator"));
+        usort($notesValideesRefusees,array($this,"comparator"));*/
 
-        return $this->render('pages/gestionNotesFraisChef.html.twig',
+        return $this->render('pages/gestionNotesFrais.html.twig',
             [
-                'notesDeFraisEnAttente' => $notesEnAttente,
-                'notesValideesRefusees' => $notesValideesRefusees,
+                'notesDeFraisEnAttente' => $notesDeFraisEnAttente,
+                'notesValideesRefusees' => $notesDeFraisPasses,
             ]);
     }
 
     /**
-     * @Route("/gestionNotesDeFraisChef/details/{id}", name="gestionNotesChef.details")
+     * @Route("/gestionNotesDeFrais/details/{id}", name="gestionNotes.details")
      * @param NoteDeFrais $notesDeFrais
      * @return \Symfony\Component\HttpFoundation\Response
      */
@@ -94,7 +98,7 @@ class GestionNotesAdminController extends AbstractController
         $LigneRepository = $this->getDoctrine()->getEntityManager()->getRepository('App\Entity\LigneDeFrais');
         $lignesDeFrais =  $LigneRepository->findByNoteId($noteDeFrais->getId());
 
-        return $this->render('pages/gestionNotesFraisChefDetails.html.twig',[
+        return $this->render('pages/gestionNotesFraisDetails.html.twig',[
             'noteDeFrais' => $noteDeFrais,
             'ligneDeFrais' => $lignesDeFrais,
             'statusNotes' => NoteDeFrais::STATUS,
@@ -125,12 +129,12 @@ class GestionNotesAdminController extends AbstractController
         }
         $this->em->flush();
 
-        return $this->redirectToRoute('app_gestionNotesFraisAdmin');
+        return $this->redirectToRoute('app_gestionNotesFrais');
     }
 
 
     /**
-     * @Route("/gestionNotesDeFrais/validationDetails/", name="validation.lignes.chef.details")
+     * @Route("/gestionNotesDeFrais/validationDetails/", name="validation.lignes.details")
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      * @throws \Exception
      */
@@ -143,11 +147,11 @@ class GestionNotesAdminController extends AbstractController
             $LigneDeFrais = $LigneRepository->findOneByID($key);
             if($LigneDeFrais != null){
                 if($value == "refus"){
-                    $LigneDeFrais->setStatutValidation(LigneDeFrais::STATUS[3]);
+                    $LigneDeFrais->setStatutValidation(LigneDeFrais::STATUS[7]);
                     $ok = false;
                 }
                 else{
-                    $LigneDeFrais->setStatutValidation(LigneDeFrais::STATUS[2]);
+                    $LigneDeFrais->setStatutValidation(LigneDeFrais::STATUS[5]);
                 }
                 $LigneDeFrais->setLastModif(new \DateTime());
             }
@@ -157,10 +161,10 @@ class GestionNotesAdminController extends AbstractController
         if(isset($_POST['id'])){
             $notesDeFrais = $noteRepository->findOneByID($_POST['id']);
             if($ok){
-                $notesDeFrais->setStatut(NoteDeFrais::STATUS[2]);
+                $notesDeFrais->setStatut(NoteDeFrais::STATUS[5]);
             }
             else{
-                $notesDeFrais->setStatut(NoteDeFrais::STATUS[3]);
+                $notesDeFrais->setStatut(NoteDeFrais::STATUS[7]);
             }
             $notesDeFrais->setLastModif(new \DateTime());
         }
@@ -168,7 +172,7 @@ class GestionNotesAdminController extends AbstractController
         $this->em->flush();
 
 
-        return $this->redirectToRoute('app_gestionNotesFraisAdmin');
+        return $this->redirectToRoute('app_gestionNotesDeFrais');
     }
 
 

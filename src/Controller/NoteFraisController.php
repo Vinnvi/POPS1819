@@ -189,5 +189,30 @@ class NoteFraisController extends AbstractController
       $this->getDoctrine()->getEntityManager()->persist($LignedeFraisModifiee);
       $this->getDoctrine()->getEntityManager()->flush();
       return $this->redirectToRoute('app_noteFrais');
-    } 
+    }
+
+    /**
+     * @Route("/mesNotesDeFrais/envoyer/{id}", name="envoyer.note")
+     * @param NoteDeFrais $notesDeFrais
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function envoyerNote(NoteDeFrais $noteDeFrais)
+    {
+        //Récupération des lignes de frais relatives à la note
+        $LigneRepository = $this->getDoctrine()->getEntityManager()->getRepository('App\Entity\LigneDeFrais');
+        $lignesDeFrais =  $LigneRepository->findByNoteId($noteDeFrais->getId());
+        //Validation des lignes
+        foreach ($lignesDeFrais as $key => $value){
+          $LigneDeFrais = $LigneRepository->findOneByID($value->getId());
+          if($LigneDeFrais != null){
+              $LigneDeFrais->setStatutValidation(LigneDeFrais::STATUS[1]);
+              $LigneDeFrais->setLastModif(new \DateTime());
+              $this->em->persist($LigneDeFrais);
+          }
+        }
+        $noteDeFrais->setStatut(NoteDeFrais::STATUS[1]);
+        $this->em->persist($noteDeFrais);
+        $this->em->flush();
+        return $this->redirectToRoute('app_noteFrais');
+    }
 }

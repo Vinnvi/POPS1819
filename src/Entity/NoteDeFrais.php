@@ -145,4 +145,15 @@ class NoteDeFrais
 
         return $this;
     }
+
+    public function isModifiable(): ?bool
+    {
+        if(                                    $this->statut == NoteDeFrais::STATUS[0] 
+                                            || $this->statut == NoteDeFrais::STATUS[3]
+                                            || $this->statut == NoteDeFrais::STATUS[7]
+                                            || $this->statut == NoteDeFrais::STATUS[6]){
+            return true;
+        }
+        return false;
+    }
 }

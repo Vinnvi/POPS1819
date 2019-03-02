@@ -228,4 +228,15 @@ class LigneDeFrais
 
         return $this;
     }
+
+    public function isModifiable(): ?bool
+    {
+        if(                                    $this->statutValidation == LigneDeFrais::STATUS[0] 
+                                            || $this->statutValidation == LigneDeFrais::STATUS[3]
+                                            || $this->statutValidation == LigneDeFrais::STATUS[7]
+                                            || $this->statutValidation == LigneDeFrais::STATUS[6]){
+            return true;
+        }
+        return false;
+    }
 }

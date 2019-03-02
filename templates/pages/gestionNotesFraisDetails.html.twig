@@ -1,40 +1,112 @@
 {% extends 'topBar.html.twig' %}
 {% block title %}Detail Note de Frais{% endblock %}
 {% block body %}
-    <div class="container">
-        <div class="col l8 m12 s12 push-l2">
-            <h5>Détails de la note de frais {{ noteDeFrais.collabo.nom }} {{ noteDeFrais.collabo.prenom }} du {{ noteDeFrais.mois }} {{ noteDeFrais.annee }}</h5>
-            <form method="post" action="{{ path('validation.lignes.details') }}">
-            <table class="responsive-table striped">
-                <thead>
-                <tr>
-                    <th>Intitule</th>
-                    <th>date</th>
-                    <th>Statut</th>
-                    <th>Montant</th>
-                    <th>Refus</th>
-                    <th>Acceptation</th>
-                </tr>
-                </thead>
+    <div class="row p-2">
+        <h5 class="p-1 center-align">Détails de la note de frais <b>{{ noteDeFrais.collabo.nom }} {{ noteDeFrais.collabo.prenom }}</b> du <b>{{ noteDeFrais.mois }}-{{ noteDeFrais.annee }}</b></h5>
+        {% dump statusNotes %}
+        {%  if  noteDeFrais.statut == statusNotes[2] %}
+        <form method="post" action="{{ path('validation.lignes.details') }}">
+        {% endif %}
+            {% set montantTotal = 0 %}
+            <div class="row col s10 blue lighten-4 m-0 p-2 center-align ">
+                <div class="col s2"><b>Intitulé</b></div>
+                <div class="col s2"><b>Projet</b></div>
+                <div class="col s1"><b>Montant</b></div>
+                <div class="col s2"><b>Type</b></div>
+                <div class="col s2"><b>Date</b></div>
+                <div class="col s2"><b>Status</b></div>
+                <div class="col s1">Avance</div>
+            </div>
+            <div class="row col s1 red lighten-4 center-align m-0"><b>Refuser</b></div>
+            <div class="row col s1 green lighten-4 center-align m-0"><b>Accepter</b></div>
 
-                <tbody>
-                    {% for ligne in ligneDeFrais %}
-                        <tr>
-                                <td>{{ ligne.intitule }}</td>
-                                <td>{{ ligne.date|date("d/m/Y") }}</td>
-                                <td>{{ ligne.statutValidation }}</td>
-                                <td>{{ ligne.montant }}€</td>
+            {% if ligneDeFrais is empty %}
+                <h5 class="center-align p-2">Cette note n'a pas de lignes associées</h5>
+            {% endif %}
+            {% for ligne in ligneDeFrais %}
+                <ul class="collapsible col s10 row m-0">
+                    {% set montantTotal = montantTotal + ligne.montant %}
+                    <li>
+                        <div class="collapsible-header row m-0 center-align">
+                            <div class="col s2">{{ ligne.intitule }}</div>
+                            <div class="col s2">{{ ligne.projet }}</div>
+                            <div class="col s1">{{ ligne.montant }}€</div>
+                            <div class="col s2">{{ ligne.type }}</div>
+                            <div class="col s2">{{ ligne.date|date("Y-m-d") }}</div>
+                            <div class="col s2">{{ ligne.statutValidation }}</div>
+                            <div class="col s1">
+                                {% if ligne.avance %}
+                                    A
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="collapsible-body row m-0">
+                            <div class="col s8 valign-wrapper">
+                                <p style="margin-right:5%;"><b>Justificatif:</b></p>
+                                {% if ligne.justificatif is empty %}
+                                    <span> Il n'y a pas de justificatif associé à cette ligne</span>
+                                {% else %}
+                                    {% for justi in ligne.justificatif %}
+                                        {% if justi == "Perdu" %}
+                                            <div class="card orange">
+                                                <div class="card-content white-text">
+                                                    <span>Justificatif perdu</span>
+                                                </div>
+                                            </div>
+                                        {% else %}
+                                            <div class="card" style="margin-right:20px;">
+                                                <div class="card-image p-1">
+                                                    <img id="imageProfil" src="/{{ justi }}" class="responsive-img" style="width:100px; margin:auto;"/>
+                                                </div>
+                                                <div class="card-content p-1">
+                                                    <span>{{ justi|split('/')|last }}</span>
+                                                </div>
+                                            </div>
+                                        {% endif %}
+                                    {% endfor %}
+                                {% endif %}
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+                <label class="collapsible col s1 center-align z-depth-0" style="border-color:transparent;">
+                    <input name="{{ligne.id}}"  value="refus" type="radio" required="required" 
+                            {% if noteDeFrais.statut != statusNotes[2] %}
+                                disabled="disabled"
+                            {% endif %}
+                            /><span></span>
+                </label>
+                <label class="collapsible col s1 center-align z-depth-0" style="border-color:transparent;">
+                    <input name="{{ ligne.id }}" value="accept" type="radio" required="required"
+                            {% if noteDeFrais.statut != statusNotes[2] %}
+                                disabled="disabled"
+                            {% endif %}
+                            /><span></span>
+                </label>
+            {% endfor %}
 
-                                <td><label><input name="{{ligne.id}}"  value="refus" type="radio" required="required"/><span></span></label></td>
-                                <td><label><input name="{{ ligne.id }}" value="accept" type="radio" required="required" /><span></span></label></td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-            <input type="hidden" id="id" name="id" value="{{ noteDeFrais.id }}"/>
-            <div class="secondary-content"><button id="id1" class="btn waves-effect waves-light">Valider</button></div>
-            </form>
-        </div>
+            <div class="secondary-content col s12 m-2">
+                <a href="{{ path('app_gestionNotesDeFrais') }}" class="waves-effect waves-light btn red left"><i class="material-icons left">clear</i>Annuler</a>
+                {%  if  noteDeFrais.statut == statusNotes[2] %}
+                    <input type="hidden" id="id" name="id" value="{{ noteDeFrais.id }}"/>
+                    <button id="id1" class="btn green waves-effect waves-light right">Confirmer</button>
+                {% endif %}
+            </div>
+        </form>
+        
     </div>
+{% endblock %}
 
+{% block javascripts %}
+    <script>
+        $(document).ready(function(){
+            $('.collapsible').collapsible();
+        });
+        $(document).ready(function(){
+            $('.modal').modal();
+        });
+        $(document).ready(function(){
+            $('.tooltipped').tooltip();
+        });
+    </script>
 {% endblock %}

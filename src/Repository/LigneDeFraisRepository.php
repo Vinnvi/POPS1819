@@ -58,9 +58,23 @@ class LigneDeFraisRepository extends ServiceEntityRepository
             ->setMaxResults(100)
             ->getQuery()
             ->getResult();
-        ;
+
     }
 
+
+    public function findLignesChef($projet)
+    {
+        return $this->createQueryBuilder('l')
+            ->andWhere('l.Projet = :val')
+            ->andWhere('l.statutValidation = :val2')
+            ->setParameter('val', $projet)
+            ->setParameter('val2', LigneDeFrais::STATUS[1])
+            ->setMaxResults(100)
+            ->getQuery()
+            ->getResult();
+
+
+    }
     /*
     public function findOneBySomeField($value): ?LigneDeFrais
     {

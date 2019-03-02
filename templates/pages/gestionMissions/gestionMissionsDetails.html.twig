@@ -1,0 +1,125 @@
+{% extends 'topBar.html.twig' %}
+{% block title %} {{ mission.nom }} {% endblock %}
+{% block body %}
+    <div class="container">
+        <div class="row">
+            <ul class="collection with-header">
+                <li class="collection-header">
+                    <h4 class="center-align">{{ mission.nom }}</h4>
+                    Description : {{ mission.description }} <br>
+                    Du {{ mission.dateDebut|date("d-m-Y") }} au {{ mission.dateFin|date("d-m-Y") }}.
+                </li>
+                {% if lignesATraiter == null  %}
+                    <li class="collection-item">
+                        Vous n'avez aucune ligne à traiter pour cette mission.
+                    </li>
+                {% else %}
+                    {% for ligne in lignesATraiter %}
+                        <li class="collection-item">
+                            <div class="secondary-content">
+                                Collaborateur : {{ ligne.note.collabo.nom }} {{ ligne.note.collabo.prenom }}
+                            </div>
+                            {{ ligne.intitule }} <br>
+                            Montant : {{ ligne.montant }} <br>
+                            Type : {{ ligne.type }}
+                            <div class="secondary-content">
+                                <form action="{{ path('valider.ligne') }}" method="post">
+                                    <input type="hidden" name="ligne" value="{{ ligne.id }}"/>
+                                    <input type="hidden" name="mission" value="{{ mission.id }}"/>
+                                    <input type="hidden" name="decision" id="decision" value=""/>
+                                    <button type="submit" onclick="$('#decision').val('refuser');" class="waves-effect waves-light btn-small red" style="margin:auto;">Refuser</button>
+                                    <button type="submit" onclick="$('#decision').val('valider');" class="waves-effect waves-light btn-small green" style="margin:auto;">Valider</button>
+                                </form>
+                            </div>
+                        </li>
+
+                    {% endfor %}
+                {% endif %}
+                <li class="collection-item">
+                    <a class="waves-effect waves-light btn modal-trigger green" href="#ajoutCollaborateur" >Ajouter un collaborateur</a>
+                    <a class="waves-effect waves-light btn modal-trigger red" href="#supprimerCollaborateur" >Supprimer un collaborateur</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div id="ajoutCollaborateur" class="modal">
+        <div class="row">
+            <form method="post" action="{{ path('ajout.collabos') }}" class="col s12">
+                <div class="modal-content">
+                    <ul class="collection">
+                        {% for collaborateur in collabosPasProjet %}
+                        <li class="collection-item">
+                            {{ collaborateur.nom }} {{ collaborateur.prenom }} - {{ collaborateur.service.nom }} : {{ collaborateur.roleEntreprise }}
+                            <div class="secondary-content">
+                                <div class="switch">
+                                    <label>
+                                        <input name="choix[]" value="{{ collaborateur.id }}" type="checkbox"/>
+                                        <span class="lever"></span>
+                                        Ajout au projet
+                                    </label>
+                                </div>
+                            </div>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    <input type="hidden" name="projet" value="{{ mission.id }}"/>
+                </div>
+                <div class="modal-footer">
+                    <div class="col s6 center-align">
+                        <a href="#!" class="modal-close waves-effect waves-light btn red" style="margin:auto;">Annuler</a>
+                    </div>
+                    <div class="col s6 center-align">
+                        <button type="submit" class="waves-effect waves-light btn green" style="margin:auto;">Valider</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="supprimerCollaborateur" class="modal">
+        <div class="row">
+            <form method="post" action="{{ path('suppression.collabos') }}" class="col s12">
+                <div class="modal-content">
+                    <ul class="collection">
+                        {% for collaborateur in collabosProjet %}
+                            <li class="collection-item">
+                                {{ collaborateur.nom }} {{ collaborateur.prenom }} - {{ collaborateur.service.nom }} : {{ collaborateur.roleEntreprise }}
+                                <div class="secondary-content">
+                                    <div class="switch">
+                                        <label>
+                                            <input name="choix[]" value="{{ collaborateur.id }}" type="checkbox"/>
+                                            <span class="lever"></span>
+                                            Suppression du projet
+                                        </label>
+                                    </div>
+                                </div>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                    <input type="hidden" name="projet" value="{{ mission.id }}"/>
+                </div>
+                <div class="modal-footer">
+                    <div class="col s6 center-align">
+                        <a href="#!" class="modal-close waves-effect waves-light btn red" style="margin:auto;">Annuler</a>
+                    </div>
+                    <div class="col s6 center-align">
+                        <button type="submit" class="waves-effect waves-light btn green" style="margin:auto;">Valider</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+
+
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        $(document).ready(function() {
+            $('.modal').modal();
+        });
+    </script>
+{% endblock %}

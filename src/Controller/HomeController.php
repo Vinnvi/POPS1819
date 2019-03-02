@@ -19,7 +19,6 @@ class HomeController extends AbstractController
 
     public function index(): Response
     {
-
       // CODE TOPBAR
       $listeCollaborateurs = $this->getDoctrine()->getEntityManager()->getRepository('App\Entity\Collaborateur')->findAll();
       $listeCollaborateursPrenomNom = array();

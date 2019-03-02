@@ -64,18 +64,6 @@ class ProjetRepository extends ServiceEntityRepository
 
     }
 
-    // /**
-    //  * @return Projet[] Returns an array of Projet objects
-    //  */
-
-    public function findAll()
-    {
-        return $this->createQueryBuilder('p')
-            ->setMaxResults(100)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
 
     public function findLast3EmergencyProjectByCollaboId($id)
     {
@@ -93,15 +81,15 @@ class ProjetRepository extends ServiceEntityRepository
     }
 
 
-    /*
-    public function findOneBySomeField($value): ?Projet
+
+    public function findOneById($id): ?Projet
     {
         return $this->createQueryBuilder('p')
-            ->andWhere('p.exampleField = :val')
-            ->setParameter('val', $value)
+            ->andWhere('p.id = :val')
+            ->setParameter('val', $id)
             ->getQuery()
             ->getOneOrNullResult()
         ;
     }
-    */
+
 }

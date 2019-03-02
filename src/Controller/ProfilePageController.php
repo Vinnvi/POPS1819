@@ -4,7 +4,6 @@ namespace App\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Twig\Environment;
 use App\Entity\ProfilePage;
-use App\Repository\ProfilePageRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 

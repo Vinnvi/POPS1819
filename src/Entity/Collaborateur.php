@@ -71,7 +71,7 @@ class Collaborateur implements UserInterface,EquatableInterface
     private $ServiceChef;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Projet",fetch="EAGER")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Projet")
      */
     private $projets;
 
@@ -98,10 +98,11 @@ class Collaborateur implements UserInterface,EquatableInterface
     public function __construct()
     {
         $this->ServiceChef = new ArrayCollection();
-        $this->projet = new ArrayCollection();
+        $this->projets = new ArrayCollection();
         $this->setRoles('ROLE_USER');
         $this->setRoleEntreprise(Collaborateur::STATUS[0]);
-        $this->setProfilePicPath('');
+        $this->setSalt('');
+        $this->setProfilePicPath('images/profile_pics/anonym_picture.jpg');
         $this->setBackgroundPicPath('');
         $this->notifications = new ArrayCollection();
     }
@@ -281,6 +282,29 @@ class Collaborateur implements UserInterface,EquatableInterface
     {
         return $this->projets;
     }
+
+
+    public function addProjet(Projet $projet): self
+    {
+        if (!$this->projets->contains($projet)) {
+            $this->projets[] = $projet;
+        }
+
+        return $this;
+    }
+
+    public function removeProjet(Projet $projet): self
+    {
+        if ($this->projets->contains($projet)) {
+            $this->projets->removeElement($projet);
+            // set the owning side to null (unless already changed)
+        }
+        return $this;
+    }
+
+
+
+
 
     public function getEmail(): ?string
     {

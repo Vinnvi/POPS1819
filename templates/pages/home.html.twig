@@ -1,8 +1,10 @@
 {% extends 'topBar.html.twig' %}
-{% block title %}Mes notes de frais{% endblock %}
+
+{% block title %}{{ app.user.nom }} {{ app.user.prenom }}{% endblock %}
 {% block stylesheets %}
   <link rel="stylesheet" type="text/css" href="/css/topBar.css">
 {% endblock %}
+
 {% block body %}
 <div class="row p-2">
     <div class="card-panel col s8">

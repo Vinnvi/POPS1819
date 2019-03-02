@@ -1,6 +1,7 @@
 <?php
 namespace App\Controller;
 
+use App\Entity\LigneDeFrais;
 use App\Entity\Projet;
 use App\Repository\ProjetRepository;
 use Doctrine\Common\Persistence\ObjectManager;
@@ -121,13 +122,14 @@ class gestionMissionsController extends AbstractController
         }
 
         $ligneRepository = $this->getDoctrine()->getEntityManager()->getRepository('App\Entity\LigneDeFrais');
-        //$lignesATraiter = $ligneRepository->findBy
+        $lignesATraiter = $ligneRepository->findLignesChef($projet->getId());
 
 
         return new Response($this->twig->render('pages/gestionMissions/gestionMissionsDetails.html.twig',[
             'mission' => $projet,
             'collabosProjet' => $collabosDuProjet,
             'collabosPasProjet' => $collabosPasDuProjet,
+            'lignesATraiter' => $lignesATraiter,
         ]));
     }
 
@@ -175,6 +177,28 @@ class gestionMissionsController extends AbstractController
             $this->em->flush();
         }
 
+        return $this->redirectToRoute('gestion.Mission',array('id' => $projet->getId()));
+
+    }
+
+    /**
+     * @Route("/gestionMissions/validationLigne", name="valider.ligne")
+     */
+    public function validerLigne(){
+        if(isset($_POST['ligne'])){
+            $ligneRepository = $this->getDoctrine()->getEntityManager()->getRepository('App\Entity\LigneDeFrais');
+            $ligne = $ligneRepository->findOneById($_POST['ligne']);
+            if($_POST['decision'] == "refuser"){
+                $ligne->setStatutValidation(LigneDeFrais::STATUS[3]);
+            }
+            else{
+                $ligne->setStatutValidation(LigneDeFrais::STATUS[2]);
+            }
+            $ligne->setLastModif(new \DateTime());
+            $this->em->flush();
+        }
+
+        $projet = $this->repository->findOneById($_POST['mission']);
         return $this->redirectToRoute('gestion.Mission',array('id' => $projet->getId()));
 
     }

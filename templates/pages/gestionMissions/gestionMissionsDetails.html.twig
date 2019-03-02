@@ -9,9 +9,32 @@
                     Description : {{ mission.description }} <br>
                     Du {{ mission.dateDebut|date("d-m-Y") }} au {{ mission.dateFin|date("d-m-Y") }}.
                 </li>
-                <li class="collection-item">
+                {% if lignesATraiter == null  %}
+                    <li class="collection-item">
+                        Vous n'avez aucune ligne à traiter pour cette mission.
+                    </li>
+                {% else %}
+                    {% for ligne in lignesATraiter %}
+                        <li class="collection-item">
+                            <div class="secondary-content">
+                                Collaborateur : {{ ligne.note.collabo.nom }} {{ ligne.note.collabo.prenom }}
+                            </div>
+                            {{ ligne.intitule }} <br>
+                            Montant : {{ ligne.montant }} <br>
+                            Type : {{ ligne.type }}
+                            <div class="secondary-content">
+                                <form action="{{ path('valider.ligne') }}" method="post">
+                                    <input type="hidden" name="ligne" value="{{ ligne.id }}"/>
+                                    <input type="hidden" name="mission" value="{{ mission.id }}"/>
+                                    <input type="hidden" name="decision" id="decision" value=""/>
+                                    <button type="submit" onclick="$('#decision').val('refuser');" class="waves-effect waves-light btn-small red" style="margin:auto;">Refuser</button>
+                                    <button type="submit" onclick="$('#decision').val('valider');" class="waves-effect waves-light btn-small green" style="margin:auto;">Valider</button>
+                                </form>
+                            </div>
+                        </li>
 
-                </li>
+                    {% endfor %}
+                {% endif %}
                 <li class="collection-item">
                     <a class="waves-effect waves-light btn modal-trigger green" href="#ajoutCollaborateur" >Ajouter un collaborateur</a>
                     <a class="waves-effect waves-light btn modal-trigger red" href="#supprimerCollaborateur" >Supprimer un collaborateur</a>

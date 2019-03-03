@@ -99,6 +99,11 @@ class Collaborateur implements UserInterface,EquatableInterface
      */
     private $conge;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Conge", mappedBy="collabo")
+     */
+    private $conges;
+
     const STATUS = [
         0 => 'Collaborateur',
         1 => 'Chef de service',
@@ -114,6 +119,7 @@ class Collaborateur implements UserInterface,EquatableInterface
         $this->setProfilePicPath('images/profile_pics/anonym_picture.jpg');
         $this->setBackgroundPicPath('images/profile_pics/backgroundProfil.png');
         $this->notifications = new ArrayCollection();
+        $this->conges = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -372,6 +378,37 @@ class Collaborateur implements UserInterface,EquatableInterface
     public function setConge(int $conge): self
     {
         $this->conge = $conge;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Conge[]
+     */
+    public function getConges(): Collection
+    {
+        return $this->conges;
+    }
+
+    public function addConge(Conge $conge): self
+    {
+        if (!$this->conges->contains($conge)) {
+            $this->conges[] = $conge;
+            $conge->setCollabo($this);
+        }
+
+        return $this;
+    }
+
+    public function removeConge(Conge $conge): self
+    {
+        if ($this->conges->contains($conge)) {
+            $this->conges->removeElement($conge);
+            // set the owning side to null (unless already changed)
+            if ($conge->getCollabo() === $this) {
+                $conge->setCollabo(null);
+            }
+        }
 
         return $this;
     }

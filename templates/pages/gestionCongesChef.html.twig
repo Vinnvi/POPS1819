@@ -16,8 +16,14 @@
                     <li class="tab col s6"><a class="active" href="#demandesEnCours">Demandes en cours</a></li>
                     <li class="tab col s6"><a href="#HistoriqueDemandes">Historique des demandes</a></li>
                 </ul>
-                <div id="demandesEnCours" class="col s12">Bah voilà les demandes en cours</div>
-                <div id="HistoriqueDemandes" class="col s12">Bah voilà l'historique</div>
+                <div id="demandesEnCours" class="col s12">
+                    {% if congesEnAttente == null %}
+                        Il n'y a aucune demande en attente
+                    {% endif %}
+                </div>
+                <div id="HistoriqueDemandes" class="col s12">
+                    Bah voilà l'historique
+                </div>
             </div>
 
         </div>

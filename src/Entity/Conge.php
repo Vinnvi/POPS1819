@@ -60,6 +60,16 @@ class Conge
      */
     public $duree;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Service", inversedBy="conges")
+     */
+    private $service;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Collaborateur", inversedBy="conges")
+     */
+    private $collabo;
+
     const STATUS = [
         0 => 'En cours',
         1 => 'En attente chef',
@@ -171,6 +181,30 @@ class Conge
     public function setDuree(int $duree): self
     {
         $this->duree = $duree;
+
+        return $this;
+    }
+
+    public function getService(): ?Service
+    {
+        return $this->service;
+    }
+
+    public function setService(?Service $service): self
+    {
+        $this->service = $service;
+
+        return $this;
+    }
+
+    public function getCollabo(): ?Collaborateur
+    {
+        return $this->collabo;
+    }
+
+    public function setCollabo(?Collaborateur $collabo): self
+    {
+        $this->collabo = $collabo;
 
         return $this;
     }

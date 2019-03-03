@@ -42,11 +42,12 @@ class GestionCongesChefController extends AbstractController
     {
 
         $congesRepository = $this->getDoctrine()->getEntityManager()->getRepository('App\Entity\Conge');
-
+        $congesEnAttente = $congesRepository->findByServiceAndStatut($this->getUser()->getService()->getId(),Conge::STATUS[1]);
+        dump($congesEnAttente);
 
         return $this->render('pages/gestionCongesChef.html.twig',
             [
-
+                'congesEnAttente' => $congesEnAttente
             ]);
     }
 

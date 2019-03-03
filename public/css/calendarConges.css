@@ -1,5 +1,6 @@
+/* ------------- PARTIE GENERALE ------------- */
 body {
-    background-image: url("/images/background_login.png");
+    background-image: url("/images/background_calendar.png");
 }
 table, th, td {
   border: 1px solid white;
@@ -11,16 +12,38 @@ table, th, td {
     max-width: 100% !important;
     width: 98%;
 }
-
+#content .container .row {
+    margin-bottom: 0;
+}
+span{
+  margin-bottom : 40px;
+}
+/* ------------- PARTIE FULL CALENDAR ------------- */
 #mainCalendar{
   color : white;
+}
+.fc-time{
+   display : none;
+}
+.dayConge {
+  background-color: #6e7c93 !important;
+  /* display:none; */
+}
+.fc-month-view .fc-event-container{
+    /* display: none; */
+}
+.hideWeekend {
+  /* display:none;  */
+}
+/* ------------- PARTIE CONGES ------------- */
+#divFiltersCalendar{
+  color:white;
 }
 #btnConge{
   margin-bottom: 5% !important;
 }
-#rowTable{
+#rowTable,#tableCongesService{
   margin-top : 4%;
-  background-color: transparent !important;
 }
 #data-table-row-grouping{
   margin-left : 3%;
@@ -41,17 +64,6 @@ table, th, td {
 #congePart{
   width : 50%;
 }
-#content .container .row {
-    margin-bottom: 0;
-}
-#external-events .fc-event {
-    color: #fff;
-    text-decoration: none;
-    padding: 5px;
-    margin-bottom: 10px;
-    cursor: all-scroll;
-    border: none;
-}
 #rowCongesBottom{
   background-color: #143a77;
   color : white;
@@ -65,13 +77,6 @@ table, th, td {
   color : black;
   border-color : black;
 }
-h4.header {
-    font-size: 1.4rem;
-    font-weight: 400;
-    text-transform: uppercase;
-    line-height: 2.508rem;
-    margin: 1.14rem 0 0.912rem 0;
-}
 input[type="date"]::-webkit-input-placeholder{
     visibility: hidden !important;
 }
@@ -83,6 +88,14 @@ input::-webkit-calendar-picker-indicator{
   margin-top : 0;
   margin-left : 5%;
   margin-right : 5%;
+}
+/* ------------- PARTIE HEADER ------------- */
+h4.header {
+    font-size: 1.4rem;
+    font-weight: 400;
+    text-transform: uppercase;
+    line-height: 2.508rem;
+    margin: 1.14rem 0 0.912rem 0;
 }
 h5.header {
     font-size: 1rem;

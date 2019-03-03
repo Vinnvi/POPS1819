@@ -14,9 +14,61 @@
         //initialize all modals
         $('.modal').modal();
         $('input[type=date]').each(function(){
-        this.type="text";
+          this.type="text";
+        });
+        $('input[type=date]').datepicker({dateFormat: 'dd-mm-yy'});
       });
-      $('input[type=date]').datepicker({dateFormat: 'dd-mm-yy'});
+    </script>
+    <script>
+      $(document).ready(function() {
+        var listConges = JSON.parse('{{congesService | json_encode() | raw}}');
+        var arrayLength = listConges.length;
+        for (var i = 0; i < arrayLength; i++) {
+          var type = listConges[i].type;
+          var dateDebut = new Date(listConges[i].date_debut.date);
+          var dateFin = new Date(listConges[i].date_fin.date);
+          if(listConges[i].debut_matin){
+            dateDebut = new Date(dateDebut.getFullYear(), dateDebut.getMonth(), dateDebut.getDate(),0,0,0);
+          }
+          else{
+            dateDebut = new Date(dateDebut.getFullYear(), dateDebut.getMonth(), dateDebut.getDate(),12,0,0);
+          }
+          if(listConges[i].id_collabo == ('{{app.user.id}}')){
+            if(listConges[i].statut == "En Attente")
+            {
+              var color = '#e2b14d';
+            }
+            else{
+              var color = '#3ebc4d';
+            }
+            var newEvent = {
+                id : 'myConge',
+                title: type,
+                start : dateDebut,
+                end : dateFin,
+                color: color
+            };
+            $('#calendar').fullCalendar( 'renderEvent', newEvent , true);
+          }
+          else{
+            if(listConges[i].statut == "En Attente")
+            {
+              var color = '#f7fcd4';
+            }
+            else{
+              var color = '#d7f7db';
+            }
+            var newEvent = {
+                id : 'congeService',
+                title: type,
+                start : dateDebut,
+                end : dateFin,
+                color: color
+            };
+            $('#calendar').fullCalendar( 'renderEvent', newEvent , true);
+          }
+        }
+
       });
     </script>
     <!-- Script for DatePickers -->
@@ -57,29 +109,33 @@
             <div id="full-calendar">
               <div class="row">
                 <!-- Left part -->
-                <div class="col s12 m3 l2">
-                  <div id="external-events">
-                    <h4 class="header"><font color="white">Draggable Events</font></h4>
-                    <div class="fc-event cyan ui-draggable ui-draggable-handle">Factures Mai</div>
-                    <div class="fc-event teal ui-draggable ui-draggable-handle">Appeler Valérie</div>
-                    <div class="fc-event cyan darken-1 ui-draggable ui-draggable-handle">Dinner avec l'équipe</div>
-                    <div class="fc-event cyan accent-4 ui-draggable ui-draggable-handle">Meeting avec la Support Team</div>
-                    <div class="fc-event teal accent-4 ui-draggable ui-draggable-handle">Demander Augmentation</div>
-                    <div class="fc-event light-blue accent-3 ui-draggable ui-draggable-handle">Design iOS App</div>
-                    <div class="fc-event light-blue accent-4 ui-draggable ui-draggable-handle">Oummar&Co Party</div>
-                    <p>
-                      <input type="checkbox" id="drop-remove"/>
-                      <label for="drop-remove">remove after drop</label>
-                    </p>
+                <div class="col s12 m2 l1">
+                  <div id="divFiltersCalendar" class="section">
+                  <h4 class="header">Filtrer</h4>
+                  <div class="row">
+                    <div class="col s12 m8 l9">
+                      <form action="#">
+                        <label>
+                            <input type="checkbox" class="checkbox-white" type="checkbox" id = "displayService"/>
+                            <span style="color:white">Congés Service</span>
+                        </label>
+                        <div class="row"></div>
+                        <label>
+                            <input type="checkbox" id = "displaySelf"/>
+                            <span style="color:white">Mes congés</span>
+                        </label>
+                      </form>
+                    </div>
                   </div>
                 </div>
+                </div>
                 <!-- Calendrier -->
-                <div id="mainCalendar" class="col s12 m6 l7">
+                <div id="mainCalendar" class="col s12 m7 l8">
                   <div id="calendar" class="fc fc-ltr fc-unthemed">
 
                   </div>
                   <!-- Table donnees -->
-                  <div id="rowTable">
+                  <div class="table_congesService" data-conges-service="{{congesService|json_encode|e('html_attr') }}">
                     <table class="striped">
                       <thead>
                         <tr id="rowCongesBottom">
@@ -116,7 +172,7 @@
                   </div>
                 </div>
                 <!-- Right part -->
-                <div id="rightPart" class="col s12 m3 l3">
+                <div id="rightPart" class="table_mesConges col s12 m3 l3" data-mes-conges="{{mesConges|json_encode|e('html_attr') }}">
                   <div class="row">
                     <div id="rttPart" class="col s1 m1 l1">
                       <h5 class="header">RTT :</h5>

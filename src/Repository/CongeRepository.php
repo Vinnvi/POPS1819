@@ -61,15 +61,15 @@ class CongeRepository extends ServiceEntityRepository
             ->getResult()
             ;
     }
-    /*
-    public function findOneBySomeField($value): ?Conge
+
+    public function findOneById($id): ?Conge
     {
         return $this->createQueryBuilder('c')
-            ->andWhere('c.exampleField = :val')
-            ->setParameter('val', $value)
+            ->andWhere('c.id_conge = :val')
+            ->setParameter('val', $id)
             ->getQuery()
             ->getOneOrNullResult()
         ;
     }
-    */
+
 }

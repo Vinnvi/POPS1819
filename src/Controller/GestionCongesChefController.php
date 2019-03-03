@@ -7,6 +7,7 @@ use App\Entity\NoteDeFrais;
 use App\Entity\LigneDeFrais;
 use App\Entity\Service;
 use App\Entity\Conge;
+use App\Repository\CongeRepository;
 use PhpParser\Node\Expr\Array_;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Twig\Environment;
@@ -27,11 +28,17 @@ class GestionCongesChefController extends AbstractController
      */
     private $em;
 
+    /**
+     * @var CongeRepository
+     */
+    private $repository;
 
-    public function __construct(Environment $twig,ObjectManager $em)
+
+    public function __construct(Environment $twig,CongeRepository $repository, ObjectManager $em)
     {
         $this->twig = $twig;
         $this->em = $em;
+        $this->repository = $repository;
     }
 
     /**
@@ -49,6 +56,25 @@ class GestionCongesChefController extends AbstractController
             [
                 'congesEnAttente' => $congesEnAttente
             ]);
+    }
+
+
+    /**
+     * @Route("/gestionNotesDeFrais", name="valider.conges")
+     */
+    public function validationConges(){
+        if(isset($_POST['decision']) and isset($_POST['demande'])){
+            $conge = $this->repository->findOneById($_POST['demande']);
+            if($_POST['decision'] == "valider"){
+                $conge->setStatut(Conge::STATUS[2]);
+            }
+            else{
+                $conge->setStatut(Conge::STATUS[2]);
+            }
+            $this->em->flush();
+        }
+
+        $this->redirectToRoute('app_gestionDemandesDeCongesChef');
     }
 
 }

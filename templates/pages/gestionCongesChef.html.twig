@@ -19,13 +19,44 @@
                 <div id="demandesEnCours" class="col s12">
                     {% if congesEnAttente == null %}
                         Il n'y a aucune demande en attente
+                    {% else %}
+                        {% for demande in congesEnAttente %}
+                            <ul class="collapsible">
+                                <li>
+                                    <div class="collapsible-header" style="display: block">
+                                        <div class="right">
+                                            <img class="responsive-img"  height="50" width="50" src="{{ demande.collabo.profile_pic_path }}"/>
+                                        </div>
+                                        {{ demande.collabo.prenom }} {{ demande.collabo.nom }} <br>
+                                        {{ demande.type }} <br>
+                                        {{ demande.date_debut|date('d/m/Y') }} - {{ demande.date_fin|date('d/m/Y') }}
+
+                                    </div>
+                                    <div class="collapsible-body">
+                                        Demi-journées restantes : {{ demande.collabo.conge }} <br><br>
+                                        <form href="{{ path('valider.conges') }}" method="post">
+                                            <input type="hidden" name="decision" id="decision" value=""/>
+                                            <input type="hidden" name="demande" value="{{ demande.id_conge }}"/>
+
+                                            <div class="center-align">
+                                                <button type="submit" onclick="$('#decision').val('valider');" class="waves-effect waves-light btn-small green" style="margin:auto;">Valider</button>
+                                                <button type="submit" onclick="$('#decision').val('refuser');" class="waves-effect waves-light btn-small red" style="margin:auto;">Refuser</button>
+                                            </div>
+                                        </form>
+                                        <br><br>
+                                        <a href="#!">Historique des congés</a>
+
+                                    </div>
+
+                                </li>
+                            </ul>
+                        {% endfor%}
                     {% endif %}
                 </div>
                 <div id="HistoriqueDemandes" class="col s12">
-                    Bah voilà l'historique
+                    Historique vide
                 </div>
             </div>
-
         </div>
 {% endblock %}
 
@@ -36,6 +67,8 @@
     <script>
         $(document).ready(function(){
             $('.tabs').tabs();
+            $('.collapsible').collapsible();
+
         });
     </script>
 {% endblock %}

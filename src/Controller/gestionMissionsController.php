@@ -2,6 +2,7 @@
 namespace App\Controller;
 
 use App\Entity\LigneDeFrais;
+use App\Entity\NoteDeFrais;
 use App\Entity\Projet;
 use App\Repository\ProjetRepository;
 use Doctrine\Common\Persistence\ObjectManager;
@@ -190,9 +191,24 @@ class gestionMissionsController extends AbstractController
             $ligne = $ligneRepository->findOneById($_POST['ligne']);
             if($_POST['decision'] == "refuser"){
                 $ligne->setStatutValidation(LigneDeFrais::STATUS[3]);
+                $ligne->getNote()->setStatut(NoteDeFrais::STATUS[3]);
+
             }
             else{
                 $ligne->setStatutValidation(LigneDeFrais::STATUS[2]);
+                //vérification si la note est validée en fonction des status des lignes
+                $lignes = $ligneRepository->findByNoteID($ligne->getNote()->getId());
+                $ok = 1;
+                foreach ($lignes as $ligne){
+                    if($ligne->getStatutValidation() != LigneDeFrais::STATUS[2]){
+                        $ok = 0;
+                        break;
+                    }
+                }
+                if($ok == 1){
+                    $ligne->getNote()->setStatut(NoteDeFrais::STATUS[2]);
+                }
+
             }
             $ligne->setLastModif(new \DateTime());
             $this->em->flush();

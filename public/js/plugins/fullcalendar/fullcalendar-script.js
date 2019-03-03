@@ -29,9 +29,12 @@
         center: 'title',
         right: 'month,basicWeek,basicDay'
       },
+      hiddenDays: [ 0, 6 ],
       eventRender: function (event, element) {
           var start = moment(event.start);
           var end = moment(event.end);
+          var colorMyConge = '#e2b14d';
+          element.data('event-id',event.id);
           while( start.format('YYYY-MM-DD') != end.format('YYYY-MM-DD') ){
               var checkDay = new Date(start.format('YYYY-MM-DD'));
               var dataToFind = start.format('YYYY-MM-DD');
@@ -40,11 +43,13 @@
                 // $(element).css("display", "none");
               }
               else{
-                $("td[data-date='"+dataToFind+"']").addClass('dayConge');
+
               }
-              // if(event.title = "Conge"){
-              //   $(element).css("display", "none");
-              // }
+              if(event._id == "myConge"){
+                $("td[data-date='"+dataToFind+"']").addClass('dayConge');
+
+                // $("a[style='"+"background-color:#e2b14d;border-color:#e2b14d"+"']").addClass('test');
+              }
               start.add(1, 'd');
           }
 

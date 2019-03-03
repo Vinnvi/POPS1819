@@ -21,54 +21,8 @@
     </script>
     <script>
       $(document).ready(function() {
-        var listConges = JSON.parse('{{congesService | json_encode() | raw}}');
-        var arrayLength = listConges.length;
-        for (var i = 0; i < arrayLength; i++) {
-          var type = listConges[i].type;
-          var dateDebut = new Date(listConges[i].date_debut.date);
-          var dateFin = new Date(listConges[i].date_fin.date);
-          if(listConges[i].debut_matin){
-            dateDebut = new Date(dateDebut.getFullYear(), dateDebut.getMonth(), dateDebut.getDate(),0,0,0);
-          }
-          else{
-            dateDebut = new Date(dateDebut.getFullYear(), dateDebut.getMonth(), dateDebut.getDate(),12,0,0);
-          }
-          if(listConges[i].id_collabo == ('{{app.user.id}}')){
-            if(listConges[i].statut == "En Attente")
-            {
-              var color = '#e2b14d';
-            }
-            else{
-              var color = '#3ebc4d';
-            }
-            var newEvent = {
-                id : 'myConge',
-                title: type,
-                start : dateDebut,
-                end : dateFin,
-                color: color
-            };
-            $('#calendar').fullCalendar( 'renderEvent', newEvent , true);
-          }
-          else{
-            if(listConges[i].statut == "En Attente")
-            {
-              var color = '#f7fcd4';
-            }
-            else{
-              var color = '#d7f7db';
-            }
-            var newEvent = {
-                id : 'congeService',
-                title: type,
-                start : dateDebut,
-                end : dateFin,
-                color: color
-            };
-            $('#calendar').fullCalendar( 'renderEvent', newEvent , true);
-          }
-        }
-
+        render_congesSelf()
+        render_congesService();
       });
     </script>
     <!-- Script for DatePickers -->
@@ -87,7 +41,88 @@
     function form_submit() {
       document.getElementById("formConge").submit();
     }
-    </script>
+    function render_congesSelf(){
+      var listConges = JSON.parse('{{mesConges | json_encode() | raw}}');
+      var arrayLength = listConges.length;
+      for (var i = 0; i < arrayLength; i++) {
+        var type = listConges[i].type;
+        var dateDebut = new Date(listConges[i].date_debut.date);
+        var dateFin = new Date(listConges[i].date_fin.date);
+        if(listConges[i].debut_matin){
+          dateDebut = new Date(dateDebut.getFullYear(), dateDebut.getMonth(), dateDebut.getDate(),0,0,0);
+        }
+        else{
+          dateDebut = new Date(dateDebut.getFullYear(), dateDebut.getMonth(), dateDebut.getDate(),12,0,0);
+        }
+        if(listConges[i].collabo.id == ('{{app.user.id}}')){
+          if(listConges[i].statut == "En Attente")
+          {
+            var color = '#e2b14d';
+          }
+          else{
+            var color = '#3ebc4d';
+          }
+          var newEvent = {
+              id : 'myConge',
+              title: type,
+              start : dateDebut,
+              end : dateFin,
+              color: color
+          };
+          $('#calendar').fullCalendar( 'renderEvent', newEvent , true);
+        }
+      }
+    }
+    function render_congesService(){
+      var listConges = JSON.parse('{{congesService | json_encode() | raw}}');
+      var arrayLength = listConges.length;
+      for (var i = 0; i < arrayLength; i++) {
+        var type = listConges[i].type;
+        var dateDebut = new Date(listConges[i].date_debut.date);
+        var dateFin = new Date(listConges[i].date_fin.date);
+        if(listConges[i].debut_matin){
+          dateDebut = new Date(dateDebut.getFullYear(), dateDebut.getMonth(), dateDebut.getDate(),0,0,0);
+        }
+        else{
+          dateDebut = new Date(dateDebut.getFullYear(), dateDebut.getMonth(), dateDebut.getDate(),12,0,0);
+        }
+        if(listConges[i].collabo.id != ('{{app.user.id}}')){
+          if(listConges[i].statut == "En Attente")
+          {
+            type = type + " " + "(demande)";
+            var color = '#dbc12e';
+          }
+          else{
+            type = type + " " + listConges[i].collabo.Nom+" "+listConges[i].collabo.Prenom;
+            var color = '#d7f7db';
+          }
+          var newEvent = {
+              id : 'congeService',
+              title: type,
+              start : dateDebut,
+              end : dateFin,
+              color: color
+          };
+          $('#calendar').fullCalendar( 'renderEvent', newEvent , true);
+        }
+      }
+    }
+    // $('input[name=checkbox]')
+     $("#displaySelf").change(function(){
+      if($(this).is(':checked')) {
+        render_congesSelf()
+      } else {
+        $("#calendar").fullCalendar('removeEvents', 'myConge');
+      }
+    });
+    $("#displayService").change(function(){
+     if($(this).is(':checked')) {
+      render_congesService()
+     } else {
+      $("#calendar").fullCalendar('removeEvents', 'congeService');
+     }
+   });
+  </script>
     {% endblock %}
     {% block stylesheets %}
     <link rel="stylesheet" type="text/css" href="/css/topBar.css">
@@ -111,19 +146,32 @@
                 <!-- Left part -->
                 <div class="col s12 m2 l1">
                   <div id="divFiltersCalendar" class="section">
-                  <h4 class="header">Filtrer</h4>
+                  <h9 class="header">Filtres</h9>
+                  <h4 class="header">Events</h4>
                   <div class="row">
                     <div class="col s12 m8 l9">
                       <form action="#">
                         <label>
-                            <input type="checkbox" class="checkbox-white" type="checkbox" id = "displayService"/>
+                            <input type="checkbox" class="checkbox-white" type="checkbox" id = "displayService" checked/>
                             <span style="color:white">Congés Service</span>
                         </label>
                         <div class="row"></div>
                         <label>
-                            <input type="checkbox" id = "displaySelf"/>
+                            <input type="checkbox" id = "displaySelf" checked/>
                             <span style="color:white">Mes congés</span>
                         </label>
+                      </form>
+                    </div>
+                  </div>
+                  <h4 class="header">Couleurs</h4>
+                  <div class="row">
+                    <div class="col s12 m8 l9">
+                      <form action="#">
+                        <label>
+                            <input type="checkbox" class="checkbox-white" type="checkbox" id = "displayColorConge" checked/>
+                            <span style="color:white">Conge</span>
+                        </label>
+                        <div class="row"></div>
                       </form>
                     </div>
                   </div>
@@ -147,7 +195,7 @@
                       </thead>
                       <tbody>
                         {% for conge in congesService %}
-                          {% if(conge.id_collabo != app.user.id) %}
+                          {% if(conge.collabo.getId() != app.user.id) %}
                             {% if(conge.debut_matin) %}
                               {% set timeDebut = 'matin' %}
                             {% else %}
@@ -159,7 +207,7 @@
                               {% set timeFin = 'après-midi' %}
                             {% endif %}
                             <tr id="dataBottom" role="row" class="even">
-                              <td>{{conge.id_collabo}}</td>
+                              <td>{{conge.collabo.getNom()}} {{conge.collabo.getPrenom()}}</td>
                               <td>{{conge.date_debut|date("d-m-y")}} {{timeDebut}}</td>
                               <td>{{conge.date_fin|date("d-m-y")}} {{timeFin}}</td>
                               <td>{{conge.statut}}</td>

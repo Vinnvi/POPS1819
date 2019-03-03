@@ -48,19 +48,6 @@ class CongeRepository extends ServiceEntityRepository
       ;
     }
 
-
-    public function findByServiceAndStatut($serviceId,$Statut){
-        return $this->createQueryBuilder('c')
-            ->andWhere('c.service = :val')
-            ->andWhere('c.statut = :val2')
-            ->setParameter('val', $serviceId)
-            ->setParameter('val2', $Statut)
-            ->addOrderBy('c.date_debut', 'DESC')
-            ->setMaxResults(15)
-            ->getQuery()
-            ->getResult()
-            ;
-    }
     /*
     public function findOneBySomeField($value): ?Conge
     {

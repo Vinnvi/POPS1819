@@ -34,7 +34,7 @@ class CalendarCongesController extends AbstractController
     public function index(): Response
     {
       //recuperation des conges du collaborateur
-      $mesConges = $this->repository->findByCollaborateurId($this->getUser()->getId());
+      $mesConges = $this->repository->findByCollaborateurId($this->getUser());
       $congesService = $this->repository->findByServiceId($this->getUser()->getService());
       return new Response($this->twig->render('pages/calendarConges.html.twig',
         ['mesConges' => $mesConges,
@@ -64,14 +64,14 @@ class CalendarCongesController extends AbstractController
       // $this->getDoctrine()->getEntityManager()->persist($collaborateur[0]);
       // $this->getDoctrine()->getEntityManager()->flush();
       $collaborateurRepository = $this->getDoctrine()->getManager()->getRepository('App\Entity\Collaborateur');
-      $collaborateurId = $this->getUser()->getId();
+      $collaborateur = $this->getUser();
       $congeRepository = $this->getDoctrine()->getEntityManager()->getRepository('App\Entity\Conge');
       $newConge = new Conge();
       if(isset($_POST['timeCongeDebut']))
       {
         dump(gettype($_POST['dateDebutConge']));
-        $newConge->setId_collabo($collaborateurId);
-        $newConge->setId_service($this->getUser()->getService()->getId());
+        $newConge->setCollabo($collaborateur);
+        $newConge->setService($this->getUser()->getService());
         $newConge->setType($_POST['typeConge']);
         $newConge->setDate_debut($_POST['dateDebutConge']);
         $newConge->setDebut_matin($_POST['timeCongeDebut']);

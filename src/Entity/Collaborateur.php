@@ -17,17 +17,17 @@ class Collaborateur implements UserInterface,EquatableInterface
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      */
-    private $id;
+    public $id;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $Nom;
+    public $Nom;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $Prenom;
+    public $Prenom;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -37,7 +37,7 @@ class Collaborateur implements UserInterface,EquatableInterface
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $username;
+    public $username;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -63,12 +63,12 @@ class Collaborateur implements UserInterface,EquatableInterface
      * @ORM\ManyToOne(targetEntity="App\Entity\Service")
      * @ORM\JoinColumn(nullable=true)
      */
-    private $service;
+    public $service;
 
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\Service")
      */
-    private $ServiceChef;
+    public $ServiceChef;
 
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\Projet",fetch="EAGER")
@@ -78,7 +78,7 @@ class Collaborateur implements UserInterface,EquatableInterface
     /**
      * @ORM\Column(type="string", length=1024)
      */
-    private $email;
+    public $email;
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Notification", mappedBy="collaborateur")
      */
@@ -87,22 +87,22 @@ class Collaborateur implements UserInterface,EquatableInterface
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $role_entreprise;
+    public $role_entreprise;
 
     /**
      * @ORM\Column(type="integer")
      */
-    private $rtt;
+    public $rtt;
 
     /**
      * @ORM\Column(type="integer")
      */
-    private $conge;
+    public $conge;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Conge", mappedBy="collabo")
      */
-    private $conges;
+    public $conges;
 
     const STATUS = [
         0 => 'Collaborateur',

@@ -25,7 +25,7 @@ class CongeRepository extends ServiceEntityRepository
     public function findByCollaborateurId($idCollabo)
     {
       return $this->createQueryBuilder('c')
-          ->andWhere('c.id_collabo = :val')
+          ->andWhere('c.collabo = :val')
           ->setParameter('val', $idCollabo)
           ->addOrderBy('c.date_debut', 'DESC')
           ->setMaxResults(15)
@@ -39,7 +39,7 @@ class CongeRepository extends ServiceEntityRepository
     public function findByServiceId($idService)
     {
       return $this->createQueryBuilder('c')
-          ->andWhere('c.id_service = :val')
+          ->andWhere('c.service = :val')
           ->setParameter('val', $idService)
           ->addOrderBy('c.date_debut', 'DESC')
           ->setMaxResults(15)
@@ -51,7 +51,7 @@ class CongeRepository extends ServiceEntityRepository
 
     public function findByServiceAndStatut($serviceId,$Statut){
         return $this->createQueryBuilder('c')
-            ->andWhere('c.id_service = :val')
+            ->andWhere('c.service = :val')
             ->andWhere('c.statut = :val2')
             ->setParameter('val', $serviceId)
             ->setParameter('val2', $Statut)

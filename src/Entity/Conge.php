@@ -15,15 +15,6 @@ class Conge
      * @ORM\Column(type="integer")
      */
     public $id_conge;
-   /**
-    * @ORM\Column(type="integer")
-    */
-    public $id_collabo;
-
-    /**
-     * @ORM\Column(type="integer")
-     */
-     public $id_service;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -82,26 +73,6 @@ class Conge
     public function getId_conge(): ?int
     {
         return $this->id_conge;
-    }
-    public function getId_collabo(): ?int
-    {
-        return $this->id_collabo;
-    }
-    public function setId_collabo(int $id_collabo): self
-    {
-        $this->id_collabo = $id_collabo;
-
-        return $this;
-    }
-    public function getId_service(): ?int
-    {
-        return $this->id_service;
-    }
-    public function setId_service(int $id_service): self
-    {
-        $this->id_service = $id_service;
-
-        return $this;
     }
 
     public function getType(): ?string

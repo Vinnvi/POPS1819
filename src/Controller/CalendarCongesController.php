@@ -50,12 +50,12 @@ class CalendarCongesController extends AbstractController
       //get current collaborateur
       dump('ahhhh');
 
-      print_r($_POST['dateDebutConge']);
+      print_r($_POST['startDate']);
       $collaborateur = $this->getDoctrine()->getManager()->getRepository('App\Entity\Collaborateur');
       $collaborateur = $collaborateur->findById($this->getUser()->getId());
-      if( (isset($_POST['dateDebutConge']))&&(isset($_POST['dateFinConge'])) )
+      if( (isset($_POST['startDate']))&&(isset($_POST['endDate'])) )
       {
-        dump($_POST['dateDebutConge']);
+        dump($_POST['startDate']);
         // $collaborateur[0]->setEmail($_POST['mail']);
       }
       else{
@@ -69,13 +69,13 @@ class CalendarCongesController extends AbstractController
       $newConge = new Conge();
       if(isset($_POST['timeCongeDebut']))
       {
-        dump(gettype($_POST['dateDebutConge']));
+        dump(gettype($_POST['startDate']));
         $newConge->setCollabo($collaborateur);
         $newConge->setService($this->getUser()->getService());
         $newConge->setType($_POST['typeConge']);
-        $newConge->setDate_debut($_POST['dateDebutConge']);
+        $newConge->setDate_debut($_POST['startDate']);
         $newConge->setDebut_matin($_POST['timeCongeDebut']);
-        $newConge->setDate_fin($_POST['dateFinConge']);
+        $newConge->setDate_fin($_POST['endDate']);
         $newConge->setFin_matin($_POST['timeCongeFin']);
         $newConge->setStatut('En Attente');
         $newConge->setDuree(16);

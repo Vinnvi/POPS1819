@@ -34,6 +34,9 @@
           var start = moment(event.start);
           var end = moment(event.end);
           var colorMyConge = '#e2b14d';
+          if($("#displayColorConge").is(':checked')) {
+            $(".dayConge").css("background-color", "#c12600");
+          }
           element.data('event-id',event.id);
           while( start.format('YYYY-MM-DD') != end.format('YYYY-MM-DD') ){
               var checkDay = new Date(start.format('YYYY-MM-DD'));
@@ -54,10 +57,22 @@
           }
 
       },
+      dayClick: function(date, allDay, jsEvent, view) {
+        $('#calendar').fullCalendar('clientEvents', function(event) {
+          // match the event date with clicked date if true render clicked date events
+          if ( moment(date).format('YYYY-MM-DD') >= moment(event._start).format('YYYY-MM-DD') && moment(date).format('YYYY-MM-DD') <= moment(event._end).format('YYYY-MM-DD') ) {
+            console.log("test");
+            console.log(event.title);
+            // if you have subarray i mean array within array then
+            // console.log(event.subarray[0].yoursubarrayKey);
+          }
+        });
+      },
       defaultDate: $('#calendar').fullCalendar('today'),
       editable: true,
       droppable: true, // this allows things to be dropped onto the calendar
       eventLimit: true, // allow "more" link when too many events
+      selectable: true,
       views: {
         month: {
           eventLimit: 2 // adjust to 6 only for agendaWeek/agendaDay

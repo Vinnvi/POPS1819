@@ -18,6 +18,12 @@ table, th, td {
 span{
   margin-bottom : 40px;
 }
+.space{
+  margin-bottom : 40px;
+}
+.space2{
+  margin-bottom : 60px;
+}
 /* ------------- PARTIE FULL CALENDAR ------------- */
 #mainCalendar{
   color : white;
@@ -26,7 +32,7 @@ span{
    display : none;
 }
 .dayConge {
-  background-color: #c12600 !important;
+  /* background-color: #c12600 !important; */
   /* display:none; */
 }
 .fc-month-view .fc-event-container{

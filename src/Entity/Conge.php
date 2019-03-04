@@ -61,6 +61,11 @@ class Conge
      */
     public $collabo;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $commentaire;
+
     const STATUS = [
         0 => 'En cours',
         1 => 'En attente chef',
@@ -176,6 +181,18 @@ class Conge
     public function setCollabo(?Collaborateur $collabo): self
     {
         $this->collabo = $collabo;
+
+        return $this;
+    }
+
+    public function getCommentaire(): ?string
+    {
+        return $this->commentaire;
+    }
+
+    public function setCommentaire(?string $commentaire): self
+    {
+        $this->commentaire = $commentaire;
 
         return $this;
     }

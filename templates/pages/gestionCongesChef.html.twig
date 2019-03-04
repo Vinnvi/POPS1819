@@ -5,6 +5,7 @@
 {% endblock %}
 
 {% block body %}
+        {% set salarie = null %}
         <div class="row">
             <div class="col s12 m8 l8">
                 <div id='calendar'>
@@ -34,17 +35,18 @@
                                     </div>
                                     <div class="collapsible-body">
                                         Demi-journées restantes : {{ demande.collabo.conge }} <br><br>
-                                        <form href="{{ path('valider.conges') }}" method="post">
+                                        <form action="{{ path('valider.conges') }}" method="post">
                                             <input type="hidden" name="decision" id="decision" value=""/>
                                             <input type="hidden" name="demande" value="{{ demande.id_conge }}"/>
 
-                                            <div class="center-align">
-                                                <button type="submit" onclick="$('#decision').val('valider');" class="waves-effect waves-light btn-small green" style="margin:auto;">Valider</button>
-                                                <button type="submit" onclick="$('#decision').val('refuser');" class="waves-effect waves-light btn-small red" style="margin:auto;">Refuser</button>
-                                            </div>
+
+                                            <button type="submit" onclick="$('#decision').val('valider');" class="waves-effect waves-light btn-small green" style="margin:auto;">Valider</button>
                                         </form>
+                                        <a class="waves-effect waves-light btn modalRefus modal-trigger red" data-id="{{ demande.id_conge }}" href="#modalRefus">Refuser</a>
+
+
                                         <br><br>
-                                        <a href="#!">Historique des congés</a>
+                                        <a class="modalHistorique modal-trigger" data-id="{{ demande.collabo.id }}" href="#modalHistorique">Historique des congés</a>
 
                                     </div>
 
@@ -58,6 +60,39 @@
                 </div>
             </div>
         </div>
+
+        <div id="modalHistorique" class="modal">
+            <div class="modal-content">
+                <h4>Historique des demandes</h4>
+            </div>
+            <div class="modal-footer">
+                <a href="#!" class="modal-close waves-effect waves-green btn-flat">Quitter</a>
+            </div>
+        </div>
+
+        <div id="modalRefus" class="modal">
+            <div class="row">
+                <form method="post" action="{{ path('valider.conges') }}">
+                    <div class="modal-content">
+                        <h4>Refus de la demande de conges</h4>
+                        <input type="hidden" name="decision" value="refuser"/>
+                        <input type="hidden" name="demande" id="demande">
+                        <textarea name="motif" class="materialize-textarea"></textarea>
+
+                    </div>
+                    <div class="modal-footer">
+                        <div class="col s6 center-align">
+                            <a href="#!" class="modal-close waves-effect waves-light btn red" style="margin:auto;">Annuler</a>
+                        </div>
+                        <div class="col s6 center-align">
+                            <button type="submit" class="waves-effect waves-light btn green" style="margin:auto;">Valider</button>
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+
+        </div>
 {% endblock %}
 
 {% block javascripts %}
@@ -68,7 +103,18 @@
         $(document).ready(function(){
             $('.tabs').tabs();
             $('.collapsible').collapsible();
+            $('.modal').modal();
+            $(document).on("click", ".modalHistorique", function () {
+                var data = $(this).data('id');
 
+            });
+
+            $(document).on("click", ".modalRefus", function () {
+                var data = $(this).data('id');
+                alert(data)
+                $(".modal-content #demande").val( data );
+
+            });
         });
     </script>
 {% endblock %}

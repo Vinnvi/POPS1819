@@ -61,7 +61,7 @@ class NoteDeFrais
     public function __construct($mois, $annee, $collabo)
     {
         $this->setMontant(0);
-        $this->setStatut("En cours");
+        $this->setStatut(NoteDeFrais::STATUS[0]);
         $this->setMois($mois);
         $this->setAnnee($annee);
         $this->setCollabo($collabo);

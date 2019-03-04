@@ -21,7 +21,31 @@
                             </div>
                             {{ ligne.intitule }} <br>
                             Montant : {{ ligne.montant }} <br>
-                            Type : {{ ligne.type }}
+                            Type : {{ ligne.type }}<br>
+                            {% if ligne.justificatif is empty %}
+                                <span> Il n'y a pas de justificatif associé à cette ligne</span>
+                            {% else %}
+                                {% for justi in ligne.justificatif %}
+                                    {% if justi == "Perdu" %}
+                                        <div class="card orange">
+                                            <div class="card-content white-text">
+                                                <span>Justificatif perdu</span>
+                                            </div>
+                                        </div>
+                                    {% else %}
+                                        <div class="card" style="margin-right:5px;">
+                                            <div class="card-image p-1">
+                                                <img id="imageProfil" src="{{ justi }}" class="responsive-img" style="width:100px; margin:auto;"/>
+                                            </div>
+                                            <div class="card-content p-1">
+                                                <span>{{ justi|split('/')|last }}</span>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                {% endfor %}
+                            {% endif %}
+
+
                             <div class="secondary-content">
                                 <form action="{{ path('valider.ligne') }}" method="post">
                                     <input type="hidden" name="ligne" value="{{ ligne.id }}"/>

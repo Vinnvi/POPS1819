@@ -33,6 +33,7 @@
       eventRender: function (event, element) {
           var start = moment(event.start);
           var end = moment(event.end);
+          end.add(1, 'd');
           var colorMyConge = '#e2b14d';
           if($("#displayColorConge").is(':checked')) {
             $(".dayConge").css("background-color", "#c12600");

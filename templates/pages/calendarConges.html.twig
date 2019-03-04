@@ -12,22 +12,48 @@
     <!-- ------------- Script Ready ------------- -->
     <script>
       $(document).ready(function() {
-        //initialize all modals
+        $('select').formSelect();
         $('.modal').modal();
-        $('input[type=date]').each(function(){
-          this.type="text";
-        });
-        $('input[type=date]').datepicker({dateFormat: 'dd-mm-yy'});
-        $("#endDate").attr("required", true);
         render_congesSelf()
         render_congesService();
+        var minDebut = new Date();
+        // var maxEnd = new Date(); maxEnd.setDate(maxEnd.getDate()+90)
+        $.datepicker.setDefaults({dateFormat: 'dd-mm-yy'});
+        $('#startDate').datepicker('option', {minDate: minDebut});
+        $('#endDate').datepicker('option', {minDate: minDebut});
+
       });
     </script>
     <!-- ------------- Script for DatePickers ------------- -->
     <script>
+      $('#startDate').datepicker({
+        // dateFormat: 'dd-mm-yy',
+        onSelect: function(dateStr) {
+          var min = $(this).datepicker('getDate') || new Date(); // Selected date or today if none
+          var max = new Date(min.getTime());
+          max.setMonth(min.getMonth() + 1); // Add one month
+          $('#endDate').datepicker('option', {minDate: min, maxDate: max});
+        }
+      });
+      $('#endDate').datepicker({
+        // dateFormat: 'dd-mm-yy',
+        onSelect: function(dateStr) {
+          var max = $(this).datepicker('getDate'); // Selected date or null if none
+          $('#startDate').datepicker('option', {maxDate: max});
+        },
+        onChange: function(dateStr) {
+          console.log("heeeere");
+        }
+      });
       $(document).ready(function(){
-        $('.datepicker').datepicker();
-        $('select').formSelect();
+        // $('.datepicker').datepicker();
+        $('input[type=date]').each(function(){
+          this.type="text";
+        });
+        // $('input[type=date]').datepicker({dateFormat: 'dd-mm-yy'});
+
+        $("#endDate").attr("required", true);
+
       });
     </script>
     <!-- ----- FUNCTIONS ----- -->
@@ -42,7 +68,7 @@
         var type = listConges[i].type;
         var dateDebut = new Date(listConges[i].date_debut.date);
         var dateFin = new Date(listConges[i].date_fin.date);
-        dateFin.setDate(dateFin.getDate()+1);
+        dateFin.setDate(dateFin.getDate());
         if(listConges[i].debut_matin){
           dateDebut = new Date(dateDebut.getFullYear(), dateDebut.getMonth(), dateDebut.getDate(),0,0,0);
         }
@@ -330,19 +356,19 @@
             <div id="container">
               <div class="row">
                 <div class="input-field col s6 m6 l6">
-                  <input name="startDate" type="date" autocomplete="off" class="datepicker" id="startDate" placeholder="Indiquez la date de début" required/>
+                  <input name="startDate" type="date" autocomplete="off" class="datepicker form-control" id="startDate" placeholder="Indiquez la date de début" required/>
                 </div>
                 <div class="input-field col s6 m6 l6">
                   <select name="timeCongeDebut" class="initialized" required>
                     <option value="" disabled="" selected="">Matin ou Après-Midi?</option>
-                    <option value="true">Matin</option>
-                    <option value="false">Après-Midi</option>
+                    <option value=true>Matin</option>
+                    <option value=false>Après-Midi</option>
                   </select>
                 </div>
               </div>
               <div class="row">
                 <div class="input-field col s6 m6 l6">
-                  <input name="endDate" type="date" autocomplete="off" class="datepicker" id="endDate" placeholder="Indiquez la date de Fin" required/>
+                  <input name="endDate" type="date" autocomplete="off" class="datepicker form-control" id="endDate" placeholder="Indiquez la date de Fin" required/>
                 </div>
                 <div class="input-field col s6 m6 l6">
                   <select name ="timeCongeFin" class="initialized" required>

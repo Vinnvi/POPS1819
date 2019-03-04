@@ -47,36 +47,23 @@ class CalendarCongesController extends AbstractController
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function demandeConge() : Response {
-      //get current collaborateur
-      dump('ahhhh');
-
-      print_r($_POST['startDate']);
-      $collaborateur = $this->getDoctrine()->getManager()->getRepository('App\Entity\Collaborateur');
-      $collaborateur = $collaborateur->findById($this->getUser()->getId());
-      if( (isset($_POST['startDate']))&&(isset($_POST['endDate'])) )
-      {
-        dump($_POST['startDate']);
-        // $collaborateur[0]->setEmail($_POST['mail']);
-      }
-      else{
-        dump('noooo');
-      }
-      // $this->getDoctrine()->getEntityManager()->persist($collaborateur[0]);
-      // $this->getDoctrine()->getEntityManager()->flush();
-      $collaborateurRepository = $this->getDoctrine()->getManager()->getRepository('App\Entity\Collaborateur');
+      // $collaborateur = $this->getDoctrine()->getManager()->getRepository('App\Entity\Collaborateur');
+      // $collaborateur = $collaborateur->findById($this->getUser()->getId());
+      // $collaborateurRepository = $this->getDoctrine()->getManager()->getRepository('App\Entity\Collaborateur');
       $collaborateur = $this->getUser();
-      $congeRepository = $this->getDoctrine()->getEntityManager()->getRepository('App\Entity\Conge');
+      // $congeRepository = $this->getDoctrine()->getEntityManager()->getRepository('App\Entity\Conge');
       $newConge = new Conge();
       if(isset($_POST['timeCongeDebut']))
       {
-        dump(gettype($_POST['startDate']));
         $newConge->setCollabo($collaborateur);
         $newConge->setService($this->getUser()->getService());
         $newConge->setType($_POST['typeConge']);
         $newConge->setDate_debut($_POST['startDate']);
-        $newConge->setDebut_matin($_POST['timeCongeDebut']);
+        if($_POST['timeCongeDebut'] == "true"){$newConge->setDebut_matin(true);}
+        else {$newConge->setDebut_matin(false);}
         $newConge->setDate_fin($_POST['endDate']);
-        $newConge->setFin_matin($_POST['timeCongeFin']);
+        if($_POST['timeCongeFin'] == "true"){$newConge->setFin_matin(true);}
+        else {$newConge->setFin_matin(false);}
         $newConge->setStatut('En Attente');
         $newConge->setDuree(16);
 

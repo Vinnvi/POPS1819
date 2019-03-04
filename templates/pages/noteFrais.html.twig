@@ -22,10 +22,22 @@
             <b style="margin-right:5px;margin-left:5px;">{{note.mois}} / {{note.annee}}</b> 
             Statut :
             <b style="margin-right:5px;margin-left:5px;">{{noteDeFrais[i].statut}}</b>
-            <i class="material-icons no-rotation right red-text darken-4">warning</i>
-            <span class="red-text darken-4 right">
-                <b>5 avance(s) non finalisée(s)</b>
-            </span>
+
+            <!-- Calcul des lignes en avance mais qui nécessite une modification -->
+            {% set ligneAvanceExeptJustificatif = 0 %}
+            {% for ligne in mesLignesDeFrais[i] %}
+                {% if ligne.statutValidation == "valideeExceptJustificatif" %}
+                    {% set ligneAvanceExeptJustificatif = ligneAvanceExeptJustificatif + 1 %} 
+                {% endif %}
+            {% endfor %}
+            
+            <!-- Affichage du warning sur l'avance -->
+            {% if ligneAvanceExeptJustificatif > 0 %}
+                <i class="material-icons no-rotation right red-text darken-4">warning</i>
+                <span class="red-text darken-4 right">
+                    <b>{{ ligneAvanceExeptJustificatif }} avance(s) non finalisée(s)</b>
+                </span>
+            {% endif %}
         </div>
         <div class="collapsible-body">
             {% if mesLignesDeFrais[i] is empty %}
@@ -43,7 +55,10 @@
                 </div>
                 
                 <ul class="collapsible">
+                    {% set ligneEnData = "" %}
                     {% for ligne in mesLignesDeFrais[i] %}
+                        {% set ligneEnData = ligneEnData ~ "/"~ligne.intitule~"\\"~ligne.type~"\\"~ligne.montant  %}
+
                         {% if ligne.avance %}{% set montantAvance = montantAvance + ligne.montant %}
                         {% else %}{% set montantNAvance = montantNAvance + ligne.montant %}{% endif %}
                         <li>
@@ -129,8 +144,11 @@
                         </div>
                 {% endif %}
                 {% if noteDeFrais[i].isModifiable() %}
+                    {% dump ligneEnData %}
                     <div class="right">
-                        <a class="waves-effect waves-light btn grey darken-1">Demande d'avance</a>
+                        <a class="modalDemandeAvance modal-trigger waves-effect waves-light btn grey darken-1" href="#demandeAvanceModal"
+                                data-id="{{ ligneEnData }}"
+                                >Demande d'avance</a>
                         <a class="waves-effect waves-light btn orange" href="{{ path('envoyer.note', {id: note.id}) }}">Envoyer la note</a>
                     </div>
                 {% endif %}
@@ -236,6 +254,35 @@
             </div>
         </form>
   </div>
+
+    <!-- modal pour ajouter un demande d'avance lignesDeFrais -->
+    <!-- Modal Structure -->
+    <div id="demandeAvanceModal" class="modal">
+            <form method="post" action="{{ path('envoyer.avance') }}" enctype="multipart/form-data">
+                <div class="modal-content" id="modal-content">
+                    <h5>Demande d'avance</h5>
+                    <div class="divider m-2"></div>
+                    <!--<input type="hidden" name="idLigneASuppJustificatif" id="idLigneASuppJustificatif" value=""/>-->
+                    <div>
+                        <div class="row blue lighten-5 m-0 p-1 center-align">
+                            <div class="col s3"><b>Intitulé</b></div>
+                            <div class="col s3"><b>Type</b></div>
+                            <div class="col s3"><b>Montant</b></div>
+                            <div class="col s3"><b>Demande d'avance</b></div>
+                        </div>
+                        <div id="CorpsLigneAvance"></div>
+                    </div>
+                </div>
+                <div class="modal-footer row">
+                    <div class="col s6 center-align">
+                        <a href="#!" class="modal-close waves-effect waves-light btn red" style="margin:auto;">Annuler</a>
+                    </div>
+                    <div class="col s6 center-align">
+                        <button type="submit" class="waves-effect waves-light btn green" style="margin:auto;">Envoyer la demande d'avance</button>
+                    </div>
+                </div>
+            </form>
+    </div>
 {% endblock %}
 
 {% block javascripts %}
@@ -298,6 +345,41 @@
             document.getElementById('anneeNote').value = date[1];
         });
     </script>
+
+    <!--ouverture modal demande d'avance BOUTON-->
+    <script>
+        $(document).on("click", ".modalDemandeAvance", function () {
+            var data = $(this).data('id').split('/');
+            for(i=0; i<data.length; i++){
+                data[i] = data[i].split('\\');
+            }
+            if(data.length >= 2){
+                var body = "";
+                for(i=1; i<data.length; i++){
+                    body += "<div class='collapsible-header row m-0 center-align'>"+
+                        "<div class='col s3'>"+data[i][0]+"</div>"+
+                        "<div class='col s3'>"+data[i][1]+"</div>"+
+                        "<div class='col s3'>"+data[i][2]+"€</div>"+
+                        "<div class='col s3 row m-0'>"+
+                            "<label class='col s4'>"+
+                                "<input type='checkbox' class='filled-in red' />"+
+                                "<span></span>"+
+                            "</label>"+
+                            "<div class='col s8 valign-wrapper'>"+
+                                "<input type='number' name='quantity' min='0' max="+data[i][2]*0.8+">"+
+                            "</div>"+
+                        "</div>"+
+                    "</div>"
+                }
+                document.getElementById('CorpsLigneAvance').innerHTML = body;
+                    
+            }
+            else{
+                document.getElementById('CorpsLigneAvance').innerHTML = "";
+            }
+        });
+    </script>
+
 
     <!--Perte d'un justificatif BOUTON-->
     <script>

@@ -54,12 +54,12 @@ class Conge
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Service", inversedBy="conges")
      */
-    private $service;
+    public $service;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Collaborateur", inversedBy="conges")
      */
-    private $collabo;
+    public $collabo;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)

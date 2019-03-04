@@ -79,7 +79,7 @@
           dateFin = new Date(dateFin.getFullYear(), dateFin.getMonth(), dateFin.getDate(),12,0,0);
         }
         else{
-          dateFin = new Date(dateFin.getFullYear(), dateFin.getMonth(), dateFin.getDate(),0,0,0);
+          dateFin = new Date(dateFin.getFullYear(), dateFin.getMonth(), dateFin.getDate()+1,0,0,0);
         }
         if(listConges[i].collabo.id == ('{{app.user.id}}')){
           if(listConges[i].statut == "En Attente")
@@ -107,7 +107,7 @@
         var type = listConges[i].type;
         var dateDebut = new Date(listConges[i].date_debut.date);
         var dateFin = new Date(listConges[i].date_fin.date);
-        dateFin.setDate(dateFin.getDate()+1);
+        dateFin.setDate(dateFin.getDate());
         if(listConges[i].debut_matin){
           dateDebut = new Date(dateDebut.getFullYear(), dateDebut.getMonth(), dateDebut.getDate(),0,0,0);
         }
@@ -118,7 +118,7 @@
           dateFin = new Date(dateFin.getFullYear(), dateFin.getMonth(), dateFin.getDate(),12,0,0);
         }
         else{
-          dateFin = new Date(dateFin.getFullYear(), dateFin.getMonth(), dateFin.getDate(),0,0,0);
+          dateFin = new Date(dateFin.getFullYear(), dateFin.getMonth(), dateFin.getDate()+1,0,0,0);
         }
         if(listConges[i].collabo.id != ('{{app.user.id}}')){
           if(listConges[i].statut == "En Attente")

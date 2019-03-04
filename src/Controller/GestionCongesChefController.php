@@ -3,12 +3,8 @@
 namespace App\Controller;
 
 
-use App\Entity\NoteDeFrais;
-use App\Entity\LigneDeFrais;
-use App\Entity\Service;
 use App\Entity\Conge;
 use App\Repository\CongeRepository;
-use PhpParser\Node\Expr\Array_;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Twig\Environment;
 use Doctrine\Common\Persistence\ObjectManager;
@@ -42,15 +38,17 @@ class GestionCongesChefController extends AbstractController
     }
 
     /**
-     * @Route("/gestionNotesDeFrais", name="index")
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return Response
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
      */
+
     public function index(): Response
     {
 
         $congesRepository = $this->getDoctrine()->getEntityManager()->getRepository('App\Entity\Conge');
         $congesEnAttente = $congesRepository->findByServiceAndStatut($this->getUser()->getService()->getId(),Conge::STATUS[1]);
-        dump($congesEnAttente);
 
         return $this->render('pages/gestionCongesChef.html.twig',
             [
@@ -60,9 +58,10 @@ class GestionCongesChefController extends AbstractController
 
 
     /**
-     * @Route("/gestionNotesDeFrais", name="valider.conges")
+     * @Route("/gestionDemandesDeCongesChef/validationConges", name="valider.conges")
+     * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function validationConges(){
+    public function validationConges() : Response{
         if(isset($_POST['decision']) and isset($_POST['demande'])){
             $conge = $this->repository->findOneById($_POST['demande']);
             if($_POST['decision'] == "valider"){
@@ -70,11 +69,13 @@ class GestionCongesChefController extends AbstractController
             }
             else{
                 $conge->setStatut(Conge::STATUS[2]);
+                if(isset($_POST['motif']))
+                $conge->setCommentaire($_POST['motif']);
             }
             $this->em->flush();
         }
 
-        $this->redirectToRoute('app_gestionDemandesDeCongesChef');
+        return $this->redirectToRoute('app_gestionDemandesDeCongesChef');
     }
 
 }

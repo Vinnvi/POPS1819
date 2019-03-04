@@ -9,11 +9,13 @@
     <script src='js/plugins/fullcalendar/lib/moment.min.js' type="text/javascript"></script>
     <script src='js/plugins/fullcalendar/js/fullcalendar.min.js' type="text/javascript"></script>
     <script src="js/plugins/fullcalendar/fullcalendar-script.js" type="text/javascript"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
     <!-- ------------- Script Ready ------------- -->
     <script>
       $(document).ready(function() {
         $('select').formSelect();
         $('.modal').modal();
+        $('#data-table-row-grouping').DataTable({"paging":true, "lengthChange": true,"lengthMenu": [4, 8, 12, "All"]});
         render_congesSelf()
         render_congesService();
         var minDebut = new Date();
@@ -163,14 +165,15 @@
       }
     });
   </script>
-    {% endblock %}
-    {% block stylesheets %}
+  {% endblock %}
+  {% block stylesheets %}
     <link rel="stylesheet" type="text/css" href="/css/topBar.css">
     <link rel="stylesheet" type="text/css" href="/css/calendarConges.css">
     <link rel="stylesheet" type="text/css" href="/css/loader.css">
     <link rel="stylesheet" type="text/css" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
     <!-- <link href="js/plugins/chartist-js/chartist.min.css" type="text/css" rel="stylesheet"> -->
     <link rel="stylesheet" href="js/plugins/fullcalendar/css/fullcalendar.min.css" type="text/css">
+    <link rel="stylesheet" type="text/css" href="/css/dataTables.css">
   {% endblock %}
 {% endblock %}
 {% block body %}
@@ -282,13 +285,13 @@
                     </div>
                   </div>
                   <div class="row">
-                    <table id="data-table-row-grouping" class="display dataTable" cellspacing="0" width="100%" role="grid" aria-describedby="data-table-row-grouping_info" style="width: 100%;">
+                    <table id="data-table-row-grouping" class="display dataTable" data-page-length='8'>
                       <thead>
                           <tr id="rowCongesRight" role="row">
-                            <th class="sorting" tabindex="0" aria-controls="data-table-row-grouping" rowspan="1" colspan="1" aria-label="Name: activate to sort column ascending" style="width: 49px;">Type</th>
-                            <th class="sorting" tabindex="0" aria-controls="data-table-row-grouping" rowspan="1" colspan="1" aria-label="Start date: activate to sort column ascending" style="width: 59px;">Du-</th>
-                            <th class="sorting" tabindex="0" aria-controls="data-table-row-grouping" rowspan="1" colspan="1" aria-label="Start date: activate to sort column ascending" style="width: 59px;">Au-</th>
-                            <th class="sorting" tabindex="0" aria-controls="data-table-row-grouping" rowspan="1" colspan="1" aria-label="Position: activate to sort column ascending" style="width: 52px;">Statut</th>
+                            <th>Type</th>
+                            <th>Du-</th>
+                            <th>Au-</th>
+                            <th>Statut</th>
                           </tr>
                       </thead>
                       <tbody>

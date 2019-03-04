@@ -54,8 +54,11 @@ span{
 #data-table-row-grouping{
   margin-left : 3%;
 }
+#data-table-row-grouping_length{
+  display : block !important;
+}
 #rightPart{
-  color: white;
+  color: white !important;
   text-align: center;
 }
 #calendarBox{
@@ -94,6 +97,13 @@ input::-webkit-calendar-picker-indicator{
   margin-top : 0;
   margin-left : 5%;
   margin-right : 5%;
+}
+/* ------------- PARTIE DATATABLES ------------- */
+.dataTables_info{
+  color : white !important;
+}
+.dataTables_filter{
+  color : white !important;
 }
 /* ------------- PARTIE HEADER ------------- */
 h4.header {

@@ -69,7 +69,10 @@
                                         {{ conge.collabo.prenom }} {{ conge.collabo.nom }} <br>
                                         {{ conge.type }} <br>
                                         {{ conge.date_debut|date('d/m/Y') }} - {{ conge.date_fin|date('d/m/Y') }}<br>
-                                        {{ conge.statut }}
+                                        {{ conge.statut }} <br>
+                                        {% if conge.commentaire != null %}
+                                            Motif : {{ conge.commentaire }}
+                                        {% endif %}
 
                                     </div>
                                 </li>

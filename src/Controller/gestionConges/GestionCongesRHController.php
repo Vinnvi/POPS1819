@@ -91,8 +91,12 @@ class GestionCongesRHController extends AbstractController
             }
             else{
                 $conge->setStatut(Conge::STATUS[5]);
-                if(isset($_POST['motif']))
+                if(isset($_POST['motif'])){
                     $conge->setCommentaire($_POST['motif']);
+                }
+                else{
+                    $conge->setCommentaire(null);
+                }
             }
             $this->em->flush();
         }

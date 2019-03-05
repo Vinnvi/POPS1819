@@ -35,7 +35,7 @@
                                     </div>
                                     <div class="collapsible-body">
                                         Demi-journées restantes : {{ demande.collabo.conge }} <br><br>
-                                        <form action="{{ path('valider.conges') }}" method="post">
+                                        <form action="{{ path('valider.conges.chef') }}" method="post">
                                             <input type="hidden" name="decision" id="decision" value=""/>
                                             <input type="hidden" name="demande" value="{{ demande.id_conge }}"/>
 
@@ -94,7 +94,7 @@
 
         <div id="modalRefus" class="modal">
             <div class="row">
-                <form method="post" action="{{ path('valider.conges') }}">
+                <form method="post" action="{{ path('valider.conges.chef') }}">
                     <div class="modal-content">
                         <h4>Refus de la demande de conges</h4>
                         <input type="hidden" name="decision" value="refuser"/>

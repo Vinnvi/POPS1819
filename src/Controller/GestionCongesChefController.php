@@ -4,6 +4,7 @@ namespace App\Controller;
 
 
 use App\Entity\Conge;
+use App\Entity\Notification;
 use App\Repository\CongeRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Twig\Environment;
@@ -59,14 +60,26 @@ class GestionCongesChefController extends AbstractController
 
 
     /**
-     * @Route("/gestionDemandesDeCongesChef/validationConges", name="valider.conges")
+     * @Route("/gestionDemandesDeCongesChef/validationConges", name="valider.conges.chef")
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function validationConges() : Response{
         if(isset($_POST['decision']) and isset($_POST['demande'])){
             $conge = $this->repository->findOneById($_POST['demande']);
+
+            //Ajout de la notification
+            $notification = new Notification();
+            $notification->setCollaborateur($conge->getCollabo());
+            $notification->setCategorie(Notification::CATEGORIE[1]);
+            $notification->setDescription("(Chef)".$conge->getType()." du ".$conge->getDate_debut()->format("d/m/Y")." au ".$conge->getDate_fin()->format("d/m/Y"));
+            $notification->setDate(new \DateTime());
+            $notification->setPersonnel(true);
+            $notification->setCumulable(false);
+            $notification->setVu(false);
+
             if($_POST['decision'] == "valider"){
                 $conge->setStatut(Conge::STATUS[2]);
+                $notification->setStatut(Notification::STATUT[0]);
             }
             else{
                 $conge->setStatut(Conge::STATUS[3]);
@@ -74,9 +87,13 @@ class GestionCongesChefController extends AbstractController
                     $conge->setCommentaire($_POST['motif']);
                 }
                 else{
-                    $conge->setCommentaire(null);
+                    $conge->setCommentaire('Pas de motif');
                 }
+                $notification->setStatut(Notification::STATUT[3]);
+                $notification->setDescription($notification->getDescription()." Motif : ".$conge->getCommentaire());
             }
+            $conge->getCollabo()->addNotification($notification);
+            $this->em->persist($notification);
             $this->em->flush();
         }
 

@@ -10,13 +10,14 @@ use Doctrine\ORM\Mapping as ORM;
 class Notification
 {
 
-    private const STATUT = [
+    const STATUT = [
         0 => 'OK',
         1 => 'EN_ATTENTE',
         2 => 'ACTION_NECESSAIRE',
+        3 => 'REFUS',
     ];
 
-    private const CATEGORIE = [
+    const CATEGORIE = [
         0 => 'Note de frais',
         1 => 'D. de congés',
         2 => 'D. d\'information',
@@ -81,9 +82,9 @@ class Notification
         return $this->categorie;
     }
 
-    public function setCategorie(int $categorie): self
+    public function setCategorie(string $categorie): self
     {
-        $this->categorie = $this->CATEGORIE[$categorie];
+        $this->categorie = $categorie;
 
         return $this;
     }
@@ -105,10 +106,9 @@ class Notification
         return $this->statut;
     }
 
-    public function setStatut(int $statut): self
+    public function setStatut(string $statut): self
     {
-        $this->statut = $this->STATUT[$statut];
-
+        $this->statut = $statut;
         return $this;
     }
 

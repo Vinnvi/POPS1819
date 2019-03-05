@@ -4,6 +4,7 @@ namespace App\Controller\gestionConges;
 
 
 use App\Entity\Conge;
+use App\Entity\Notification;
 use App\Repository\CongeRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Twig\Environment;
@@ -86,8 +87,22 @@ class GestionCongesRHController extends AbstractController
     public function validationConges() : Response{
         if(isset($_POST['decision']) and isset($_POST['demande'])){
             $conge = $this->repository->findOneById($_POST['demande']);
+
+            //Ajout de la notification
+            $notification = new Notification();
+            $notification->setCollaborateur($conge->getCollabo());
+            $notification->setCategorie(Notification::CATEGORIE[1]);
+            $notification->setDescription("(RH)".$conge->getType()." du ".$conge->getDate_debut()->format("d/m/Y")." au ".$conge->getDate_fin()->format("d/m/Y"));
+            $notification->setDate(new \DateTime());
+            $notification->setPersonnel(true);
+            $notification->setCumulable(false);
+            $notification->setVu(false);
+
+
             if($_POST['decision'] == "valider"){
                 $conge->setStatut(Conge::STATUS[4]);
+                $notification->setStatut(Notification::STATUT[0]);
+                $notification->setDescription("ACCEPTATION ".$notification->getDescription());
             }
             else{
                 $conge->setStatut(Conge::STATUS[5]);
@@ -95,9 +110,14 @@ class GestionCongesRHController extends AbstractController
                     $conge->setCommentaire($_POST['motif']);
                 }
                 else{
-                    $conge->setCommentaire(null);
+                    $conge->setCommentaire('Aucun motif');
                 }
+                $notification->setStatut(Notification::STATUT[3]);
+                $notification->setDescription("REFUS ".$notification->getDescription()." Motif : ".$conge->getCommentaire());
+
             }
+            $conge->getCollabo()->addNotification($notification);
+            $this->em->persist($notification);
             $this->em->flush();
         }
 

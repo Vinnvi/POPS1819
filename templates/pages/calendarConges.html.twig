@@ -2,10 +2,7 @@
 {% block title %} Calendrier de Congés {% endblock %}
 {% block head %}
   {% block javascripts %}
-    <!-- <script src="js/vendor/modernizr-2.6.2.min.js"></script> -->
-    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js" type="text/javascript"></script> -->
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js" type="text/javascript"></script>
-    <!-- <script src="js/plugins/chartist-js/chartist.min.js" type="text/javascript" ></script> -->
     <script src='js/plugins/fullcalendar/lib/moment.min.js' type="text/javascript"></script>
     <script src='js/plugins/fullcalendar/js/fullcalendar.min.js' type="text/javascript"></script>
     <script src="js/plugins/fullcalendar/fullcalendar-script.js" type="text/javascript"></script>
@@ -30,8 +27,8 @@
         document.getElementById("calculConge").style.display = "none";
         document.getElementById("impossibleConge").style.display = "none";
         document.getElementById("validConge").style.display = "none";
-        document.getElementById("valueValidDemande").innerHTML = PrcA;
-        document.getElementById("PrcA").value = PrcA;
+        // $('.tooltipped').tooltip();
+        $( document ).tooltip();
       });
     </script>
     <!-- ------------- Script for DatePickers ------------- -->
@@ -93,19 +90,26 @@
         else{
           dateFin = new Date(dateFin.getFullYear(), dateFin.getMonth(), dateFin.getDate()+1,0,0,0);
         }
+        var displayDebut = ('0' + dateDebut.getDate()).slice(-2) + "-" + ('0' + (dateDebut.getMonth() + 1)).slice(-2) + "-" + dateDebut.getFullYear() + " " + ('0' + dateDebut.getHours()).slice(-2)+":00";
+        var displayFin = ('0' + dateFin.getDate()).slice(-2) + "-" + ('0' + (dateFin.getMonth() + 1)).slice(-2) + "-" + dateFin.getFullYear() + " " + ('0' + dateFin.getHours()).slice(-2)+":00";
+        var displayStatut="";
         if(listConges[i].collabo.id == ('{{app.user.id}}')){
           if(listConges[i].statut == "En Attente")
           {
             var color = '#e2b14d';
+            displayStatut = " en attente";
           }
           else{
             var color = '#3ebc4d';
+            displayStatut = " validé";
           }
+          var description = "Votre "+ type + displayStatut +" du "+displayDebut+" au "+displayFin;
           var newEvent = {
               id : 'myConge',
               title: type,
               start : dateDebut,
               end : dateFin,
+              description : description,
               color: color
           };
           $('#calendar').fullCalendar( 'renderEvent', newEvent , true);
@@ -119,6 +123,7 @@
         var type = listConges[i].type;
         var dateDebut = new Date(listConges[i].date_debut.date);
         var dateFin = new Date(listConges[i].date_fin.date);
+        var description = "";
         dateFin.setDate(dateFin.getDate());
         if(listConges[i].debut_matin){
           dateDebut = new Date(dateDebut.getFullYear(), dateDebut.getMonth(), dateDebut.getDate(),0,0,0);
@@ -132,21 +137,26 @@
         else{
           dateFin = new Date(dateFin.getFullYear(), dateFin.getMonth(), dateFin.getDate()+1,0,0,0);
         }
+        var displayDebut = ('0' + dateDebut.getDate()).slice(-2) + "-" + ('0' + (dateDebut.getMonth() + 1)).slice(-2) + "-" + dateDebut.getFullYear() + " " + ('0' + dateDebut.getHours()).slice(-2)+":00";
+        var displayFin = ('0' + dateFin.getDate()).slice(-2) + "-" + ('0' + (dateFin.getMonth() + 1)).slice(-2) + "-" + dateFin.getFullYear() + " " + ('0' + dateFin.getHours()).slice(-2)+":00";
         if(listConges[i].collabo.id != ('{{app.user.id}}')){
           if(listConges[i].statut == "En Attente")
           {
             type = type + " " + "(demande)";
             var color = '#dbc12e';
+            description = "Demande en attente de validation par un membre de votre service du "+displayDebut+" au "+displayFin;
           }
           else{
             type = type + " " + listConges[i].collabo.Nom+" "+listConges[i].collabo.Prenom;
             var color = '#d7f7db';
+            description = "Congé validé pour" + listConges[i].collabo.Nom + " "+ listConges[i].collabo.Prenom+" du "+displayDebut+" au "+displayFin;;
           }
           var newEvent = {
               id : 'congeService',
               title: type,
               start : dateDebut,
               end : dateFin,
+              description: description,
               color: color
           };
           $('#calendar').fullCalendar( 'renderEvent', newEvent , true);

@@ -27,36 +27,36 @@
       header: {
         left: 'prev,next today',
         center: 'title',
-        right: 'month,basicWeek,basicDay'
+        right: 'month,basicWeek,basicDay, agendaWeek'
       },
+      allDaySlot: false,
+      minTime: "08:00:00",
+      maxTime: "17:00:00",
+      displayEventTime: false,
       hiddenDays: [ 0, 6 ],
       eventRender: function (event, element) {
-          var start = moment(event.start);
-          var end = moment(event.end);
-          end.add(1, 'd');
-          var colorMyConge = '#e2b14d';
-          if($("#displayColorConge").is(':checked')) {
-            $(".dayConge").css("background-color", "#c12600");
-          }
-          element.data('event-id',event.id);
-          while( start.format('YYYY-MM-DD') != end.format('YYYY-MM-DD') ){
-              var checkDay = new Date(start.format('YYYY-MM-DD'));
-              var dataToFind = start.format('YYYY-MM-DD');
-              if(checkDay.getDay() == 0 || checkDay.getDay() == 6){
-                $("td[data-date='"+dataToFind+"']").addClass('hideWeekend');
-                // $(element).css("display", "none");
-              }
-              else{
-
-              }
-              if(event._id == "myConge"){
-                $("td[data-date='"+dataToFind+"']").addClass('dayConge');
-
-                // $("a[style='"+"background-color:#e2b14d;border-color:#e2b14d"+"']").addClass('test');
-              }
-              start.add(1, 'd');
-          }
-
+        element.attr("title",event.description);
+        var start = moment(event.start);
+        var end = moment(event.end);
+        end.add(1, 'd');
+        var colorMyConge = '#e2b14d';
+        if($("#displayColorConge").is(':checked')) {
+          $(".dayConge").css("background-color", "#c12600");
+        }
+        element.data('event-id',event.id);
+        while( start.format('YYYY-MM-DD') != end.format('YYYY-MM-DD') ){
+            var checkDay = new Date(start.format('YYYY-MM-DD'));
+            var dataToFind = start.format('YYYY-MM-DD');
+            if(checkDay.getDay() == 0 || checkDay.getDay() == 6){
+              $("td[data-date='"+dataToFind+"']").addClass('hideWeekend');
+            }
+            else{
+            }
+            if(event._id == "myConge"){
+              $("td[data-date='"+dataToFind+"']").addClass('dayConge');
+            }
+            start.add(1, 'd');
+        }
       },
       dayClick: function(date, allDay, jsEvent, view) {
         $('#calendar').fullCalendar('clientEvents', function(event) {
@@ -68,6 +68,9 @@
             // console.log(event.subarray[0].yoursubarrayKey);
           }
         });
+      },
+      eventClick: function(calEvent, jsEvent, view) {
+        console.log("test ici");
       },
       defaultDate: $('#calendar').fullCalendar('today'),
       editable: true,

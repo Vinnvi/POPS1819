@@ -29,7 +29,7 @@ span{
   color : white;
 }
 .fc-time{
-   display : none;
+   /* display : none; */
 }
 .dayConge {
   /* background-color: #c12600 !important; */

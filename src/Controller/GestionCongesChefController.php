@@ -49,10 +49,11 @@ class GestionCongesChefController extends AbstractController
 
         $congesRepository = $this->getDoctrine()->getEntityManager()->getRepository('App\Entity\Conge');
         $congesEnAttente = $congesRepository->findByServiceAndStatut($this->getUser()->getService()->getId(),Conge::STATUS[1]);
-
+        $congesPassees = array_merge($congesRepository->findByServiceAndStatut($this->getUser()->getService()->getId(),Conge::STATUS[2],$congesRepository->findByServiceAndStatut($this->getUser()->getService()->getId(),Conge::STATUS[3])));
         return $this->render('pages/gestionCongesChef.html.twig',
             [
-                'congesEnAttente' => $congesEnAttente
+                'congesEnAttente' => $congesEnAttente,
+                'congesPassees' =>$congesPassees,
             ]);
     }
 
@@ -68,9 +69,13 @@ class GestionCongesChefController extends AbstractController
                 $conge->setStatut(Conge::STATUS[2]);
             }
             else{
-                $conge->setStatut(Conge::STATUS[2]);
-                if(isset($_POST['motif']))
-                $conge->setCommentaire($_POST['motif']);
+                $conge->setStatut(Conge::STATUS[3]);
+                if(isset($_POST['motif'])){
+                    $conge->setCommentaire($_POST['motif']);
+                }
+                else{
+                    $conge->setCommentaire(null);
+                }
             }
             $this->em->flush();
         }

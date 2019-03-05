@@ -62,6 +62,17 @@ class CongeRepository extends ServiceEntityRepository
             ;
     }
 
+    public function findByStatut($Statut){
+        return $this->createQueryBuilder('c')
+            ->andWhere('c.statut = :val2')
+            ->setParameter('val2', $Statut)
+            ->addOrderBy('c.date_debut', 'DESC')
+            ->setMaxResults(15)
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
     public function findOneById($id): ?Conge
     {
         return $this->createQueryBuilder('c')
@@ -70,6 +81,38 @@ class CongeRepository extends ServiceEntityRepository
             ->getQuery()
             ->getOneOrNullResult()
         ;
+    }
+
+    public function findByDate($dateDebut,$dateFin){
+        return $this->createQueryBuilder('c')
+            ->andWhere('c.statut = :val')
+            ->andWhere('c.date_debut < :val2 and c.date_fin > :val2')
+            ->orWhere('c.date_debut > :val2 and c.date_debut < :val3')
+            ->setParameter('val', Conge::STATUS[4])
+            ->setParameter('val2', $dateDebut)
+            ->setParameter('val3', $dateFin)
+            ->addOrderBy('c.date_debut', 'DESC')
+            ->setMaxResults(15)
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
+    public function findByDateAndService($dateDebut,$dateFin,$serviceId){
+        return $this->createQueryBuilder('c')
+            ->andWhere('c.statut = :val')
+            ->andWhere('c.service = :val4')
+            ->andWhere('c.date_debut < :val2 and c.date_fin > :val2')
+            ->orWhere('c.date_debut > :val2 and c.date_debut < :val3')
+            ->setParameter('val', Conge::STATUS[4])
+            ->setParameter('val2', $dateDebut)
+            ->setParameter('val3', $dateFin)
+            ->setParameter('val4', $serviceId)
+            ->addOrderBy('c.date_debut', 'DESC')
+            ->setMaxResults(15)
+            ->getQuery()
+            ->getResult()
+            ;
     }
 
 }

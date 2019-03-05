@@ -33,9 +33,9 @@ app_demandesDeConges:
   path: /mesDemandesDeConges
   controller: App\Controller\GestionNotesFraisController::index
 
-app_gestionDemandesDeConges:
-  path: /gestionDemandesDeConges
-  controller: App\Controller\GestionNotesFraisController::index
+app_gestionDemandesDeCongesRH:
+  path: /gestionDemandesDeCongesRH
+  controller: App\Controller\gestionConges\GestionCongesRHController::index
 
 app_gestionDemandesDeCongesChef:
   path: /gestionDemandesDeCongesChef

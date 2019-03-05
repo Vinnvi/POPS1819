@@ -1,0 +1,128 @@
+{% extends 'topBar.html.twig' %}
+{% block title %} Demande {{ demande.id_conge }} {% endblock %}
+{% block body %}
+
+    <div class="row" style="margin-left: 2%;margin-right: 2%;">
+        <ul class="collection with-header">
+            <li class="collection-header">
+                <div class="center">
+                    <h4>Demande de {{ demande.collabo.prenom }} {{ demande.collabo.nom }} - {{ demande.collabo.service.nom }}</h4>  <br>
+                    Date de début : {{ demande.date_debut|date('d/m/Y') }} - Date de fin : {{ demande.date_fin|date('d/m/Y') }} <br>
+                    Type de congés : {{ demande.type }}<br>
+                    <form action="{{ path('valider.conges') }}" method="post">
+                        <input type="hidden" name="decision" id="decision" value=""/>
+                        <input type="hidden" name="demande" value="{{ demande.id_conge }}"/>
+                        <button type="submit" onclick="$('#decision').val('valider');" class="waves-effect waves-light btn-small green" style="margin:auto;">Valider</button>
+                    </form>
+                    <a class="waves-effect waves-light btn modalRefus modal-trigger red" data-id="{{ demande.id_conge }}" href="#modalRefus">Refuser</a>
+                </div>
+            </li>
+        </ul>
+    </div>
+    <div class="row" style="margin-left: 2%;margin-right: 2%;">
+        <div class="col s12 m6 l6">
+            <ul class="collection with-header">
+                <li class="collection-header"><h4>Congés en attente du service {{ demande.collabo.service.nom }}</h4></li>
+                {% if congesAttenteService == null %}
+                    <li class="collection-item">
+                        Pas de demandes de congés pour ce service
+                    </li>
+                {% else %}
+                    {% for demande in congesAttenteService %}
+                        <li class="collection-item">
+                            Demande de {{ demande.collabo.nom }} {{ demande.collabo.prenom }} du {{ demande.date_debut|date('d/m/Y') }} au {{ demande.date_fin|date('d/m/Y') }}
+                        </li>
+                    {% endfor %}
+                {% endif %}
+            </ul>
+        </div>
+        <div class="col s12 m6 l6">
+            <ul class="collection with-header">
+                <li class="collection-header"><h4>Congés posés du service {{ demande.collabo.service.nom }} pour cette période</h4></li>
+                {% if congesValideesService == null %}
+                    <li class="collection-item">
+                        Pas de conges donnés sur cette période dans ce service
+                    </li>
+                {% else %}
+                    {% for conge in congesValideesService %}
+                        <li class="collection-item">
+                            Congés de {{ conge.collabo.nom }} {{ conge.collabo.prenom }} ({{ conge.collabo.service.nom }}) du {{ conge.date_debut|date('d/m/Y') }} au {{ conge.date_fin|date('d/m/Y') }}
+                        </li>
+                    {% endfor %}
+                {% endif %}
+            </ul>
+        </div>
+        <div class="col s12 m6 l6">
+            <ul class="collection with-header">
+                <li class="collection-header"><h4>Tous les congés en attente</h4></li>
+                {% if congesAttenteGlobal == null %}
+                    <li class="collection-item">
+                        Pas de demandes de congés pour le moment
+                    </li>
+                {% else %}
+                    {% for demande in congesAttenteService %}
+                        <li class="collection-item">
+                            Demande de {{ demande.collabo.nom }} {{ demande.collabo.prenom }} ({{ demande.collabo.service.nom }}) du {{ demande.date_debut|date('d/m/Y') }} au {{ demande.date_fin|date('d/m/Y') }}
+                        </li>
+                    {% endfor %}
+                {% endif %}
+            </ul>
+        </div>
+        <div class="col s12 m6 l6">
+            <ul class="collection with-header">
+                <li class="collection-header"><h4>Tous les congés de cette période</h4></li>
+                {% if congesValideesGlobale == null %}
+                    <li class="collection-item">
+                        Pas de conges donnés sur cette période
+                    </li>
+                {% else %}
+                    {% for conge in congesValideesGlobale %}
+                        <li class="collection-item">
+                            Congés de {{ conge.collabo.nom }} {{ conge.collabo.prenom }} ({{ conge.collabo.service.nom }}) du {{ conge.date_debut|date('d/m/Y') }} au {{ conge.date_fin|date('d/m/Y') }}
+                        </li>
+                    {% endfor %}
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+
+    <div id="modalRefus" class="modal">
+        <div class="row">
+            <form method="post" action="{{ path('valider.conges') }}">
+                <div class="modal-content">
+                    <h4>Refus de la demande de conges</h4>
+                    <input type="hidden" name="decision" value="refuser"/>
+                    <input type="hidden" name="demande" id="demande">
+                    <textarea id="motif" name="motif" class="materialize-textarea"></textarea>
+                    <label for="motif">Motif de refus</label>
+                </div>
+                <div class="modal-footer">
+                    <div class="col s6 center-align">
+                        <a href="#!" class="modal-close waves-effect waves-light btn red" style="margin:auto;">Annuler</a>
+                    </div>
+                    <div class="col s6 center-align">
+                        <button type="submit" class="waves-effect waves-light btn green" style="margin:auto;">Valider</button>
+                    </div>
+
+                </div>
+            </form>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        $(document).ready(function(){
+            $('.modal').modal();
+            $(document).on("click", ".modalHistorique", function () {
+                var data = $(this).data('id');
+            });
+
+            $(document).on("click", ".modalRefus", function () {
+                var data = $(this).data('id');
+                $(".modal-content #demande").val( data );
+            });
+        });
+    </script>
+{% endblock %}

@@ -46,7 +46,7 @@
 
 
                                         <br><br>
-                                        <a class="modalHistorique modal-trigger" data-id="{{ demande.collabo.id }}" href="#modalHistorique">Historique des congés</a>
+                                        <a class="modalHistorique modal-trigger" data-id="{{ demande.collabo|json_encode }}" href="#modalHistorique">Historique des congés</a>
 
                                     </div>
 
@@ -56,7 +56,26 @@
                     {% endif %}
                 </div>
                 <div id="HistoriqueDemandes" class="col s12">
-                    Historique vide
+                    {% if congesPassees == null %}
+                        Historique
+                    {% else %}
+                        {% for conge in congesPassees %}
+                            <ul class="collapsible">
+                                <li>
+                                    <div class="collapsible-header" style="display: block">
+                                        <div class="right">
+                                            <img class="responsive-img"  height="50" width="50" src="{{ conge.collabo.profile_pic_path }}"/>
+                                        </div>
+                                        {{ conge.collabo.prenom }} {{ conge.collabo.nom }} <br>
+                                        {{ conge.type }} <br>
+                                        {{ conge.date_debut|date('d/m/Y') }} - {{ conge.date_fin|date('d/m/Y') }}<br>
+                                        {{ conge.statut }}
+
+                                    </div>
+                                </li>
+                            </ul>
+                        {% endfor %}
+                    {% endif %}
                 </div>
             </div>
         </div>
@@ -77,7 +96,8 @@
                         <h4>Refus de la demande de conges</h4>
                         <input type="hidden" name="decision" value="refuser"/>
                         <input type="hidden" name="demande" id="demande">
-                        <textarea name="motif" class="materialize-textarea"></textarea>
+                        <textarea id="motif" name="motif" class="materialize-textarea"></textarea>
+                        <label for="motif">Motif de refus</label>
 
                     </div>
                     <div class="modal-footer">
@@ -91,27 +111,24 @@
                     </div>
                 </form>
             </div>
-
         </div>
 {% endblock %}
 
 {% block javascripts %}
-    <script src='js/plugins/fullcalendar/lib/moment.min.js' type="text/javascript"></script>
-    <script src='js/plugins/fullcalendar/js/fullcalendar.min.js' type="text/javascript"></script>
-    <script src="js/plugins/fullcalendar/fullcalendar-script.js" type="text/javascript"></script>
+    <script src='/js/plugins/fullcalendar/lib/moment.min.js' type="text/javascript"></script>
+    <script src='/js/plugins/fullcalendar/js/fullcalendar.min.js' type="text/javascript"></script>
+    <script src="/js/plugins/fullcalendar/fullcalendar-script.js" type="text/javascript"></script>
     <script>
         $(document).ready(function(){
             $('.tabs').tabs();
             $('.collapsible').collapsible();
             $('.modal').modal();
             $(document).on("click", ".modalHistorique", function () {
-                var data = $(this).data('id');
-
+                alert(data.result);
             });
 
             $(document).on("click", ".modalRefus", function () {
                 var data = $(this).data('id');
-                alert(data)
                 $(".modal-content #demande").val( data );
 
             });

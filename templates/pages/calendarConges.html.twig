@@ -9,11 +9,14 @@
     <script src='js/plugins/fullcalendar/lib/moment.min.js' type="text/javascript"></script>
     <script src='js/plugins/fullcalendar/js/fullcalendar.min.js' type="text/javascript"></script>
     <script src="js/plugins/fullcalendar/fullcalendar-script.js" type="text/javascript"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
     <!-- ------------- Script Ready ------------- -->
     <script>
       $(document).ready(function() {
         $('select').formSelect();
         $('.modal').modal();
+        $('#data-table-row-grouping').DataTable({"paging":true, "lengthChange": false,"lengthMenu": [4, 8, 12, "All"]});
+        $('#data-table-row-grouping-service').DataTable({"paging":true, "lengthChange": false,"lengthMenu": [4, 8, 12, "All"]});
         render_congesSelf()
         render_congesService();
         var minDebut = new Date();
@@ -21,7 +24,12 @@
         $.datepicker.setDefaults({dateFormat: 'dd-mm-yy'});
         $('#startDate').datepicker('option', {minDate: minDebut});
         $('#endDate').datepicker('option', {minDate: minDebut});
-
+        document.getElementById("modalRTT").style.display = "none";
+        document.getElementById("modalConge").style.display = "none";
+        document.getElementById("containerDemande").style.display = "none";
+        document.getElementById("calculConge").style.display = "none";
+        document.getElementById("impossibleConge").style.display = "none";
+        document.getElementById("validConge").style.display = "none";
       });
     </script>
     <!-- ------------- Script for DatePickers ------------- -->
@@ -33,6 +41,7 @@
           var max = new Date(min.getTime());
           max.setMonth(min.getMonth() + 1); // Add one month
           $('#endDate').datepicker('option', {minDate: min, maxDate: max});
+          checkDateDemandeConge();
         }
       });
       $('#endDate').datepicker({
@@ -40,6 +49,7 @@
         onSelect: function(dateStr) {
           var max = $(this).datepicker('getDate'); // Selected date or null if none
           $('#startDate').datepicker('option', {maxDate: max});
+          checkDateDemandeConge();
         },
         onChange: function(dateStr) {
           console.log("heeeere");
@@ -141,7 +151,58 @@
         }
       }
     }
-    $("#displaySelf").change(function(){
+    function checkDateDemandeConge(){
+      if($('#startDate').datepicker('getDate') != null && $('#endDate').datepicker('getDate') != null){
+        document.getElementById("calculConge").style.display = "block";
+        var timeDiff = Math.abs($('#endDate').datepicker('getDate').getTime() - $('#startDate').datepicker('getDate').getTime());
+        var dayDifference = Math.ceil(timeDiff / (1000 * 3600 * 24))+1;
+        var res = 2*dayDifference;
+        var selectTimeDebut = document.getElementById("timeCongeDebut");
+        var resTimeDebut = selectTimeDebut.options[selectTimeDebut.selectedIndex].value;
+        var selectTimeFin = document.getElementById("timeCongeFin");
+        var resTimeFin = selectTimeFin.options[selectTimeFin.selectedIndex].value;
+        if(resTimeDebut != "true"){res = res-1;}
+        if(resTimeFin == "true"){res = res-1;}
+        document.getElementById("valueCalculDemande").innerHTML = res;
+        var selectTypeConge = document.getElementById("typeConge");
+        var typeConge = selectTypeConge.options[selectTypeConge.selectedIndex].value;
+        if(typeConge == "RTT"){
+          if({{app.user.rtt}} >= res){
+            document.getElementById("impossibleConge").style.display = "none";
+            document.getElementById("validConge").style.display = "block";
+            var resAfter = {{app.user.rtt}} - res;
+            document.getElementById("valueValidDemande").innerHTML = resAfter;
+            document.getElementById("buttonDemandeConge").disabled = false;
+          }
+          else{
+            document.getElementById("impossibleConge").style.display = "block";
+            document.getElementById("validConge").style.display = "none";
+            document.getElementById("buttonDemandeConge").disabled = true;
+          }
+        }
+        else{
+          if({{app.user.conge}} >= res){
+            document.getElementById("impossibleConge").style.display = "none";
+            document.getElementById("validConge").style.display = "block";
+            var resAfter = {{app.user.conge}} - res;
+            document.getElementById("valueValidDemande").innerHTML = resAfter;
+            document.getElementById("buttonDemandeConge").disabled = false;
+          }
+          else{
+            document.getElementById("impossibleConge").style.display = "block";
+            document.getElementById("validConge").style.display = "none";
+            document.getElementById("buttonDemandeConge").disabled = true;
+          }
+        }
+      }
+      else{
+        document.getElementById("calculConge").style.display = "none";
+        document.getElementById("impossibleConge").style.display = "none";
+        document.getElementById("validConge").style.display = "none";
+        document.getElementById("buttonDemandeConge").disabled = true;
+      }
+
+    }$("#displaySelf").change(function(){
       if($(this).is(':checked')) {
         render_congesSelf()
       } else {
@@ -162,15 +223,37 @@
         $(".dayConge").css("background-color", "initial");
       }
     });
+    $("#typeConge").change(function(){
+      if (this.value == "RTT"){
+        document.getElementById("modalRTT").style.display = "block";
+        document.getElementById("modalConge").style.display = "none";
+        document.getElementById("containerDemande").style.display = "block";
+      }
+      else{
+        if (this.value == "Conge"){
+          document.getElementById("modalRTT").style.display = "none";
+          document.getElementById("modalConge").style.display = "block";
+          document.getElementById("containerDemande").style.display = "block";
+        }
+        else{
+          document.getElementById("modalRTT").style.display = "none";
+          document.getElementById("modalConge").style.display = "none";
+          document.getElementById("containerDemande").style.display = "none";
+        }
+      }
+    });
+    $("#timeCongeDebut").change(function(){checkDateDemandeConge();});
+    $("#timeCongeFin").change(function(){checkDateDemandeConge();});
+checkDateDemandeConge
   </script>
-    {% endblock %}
-    {% block stylesheets %}
+  {% endblock %}
+  {% block stylesheets %}
     <link rel="stylesheet" type="text/css" href="/css/topBar.css">
     <link rel="stylesheet" type="text/css" href="/css/calendarConges.css">
     <link rel="stylesheet" type="text/css" href="/css/loader.css">
     <link rel="stylesheet" type="text/css" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
-    <!-- <link href="js/plugins/chartist-js/chartist.min.css" type="text/css" rel="stylesheet"> -->
     <link rel="stylesheet" href="js/plugins/fullcalendar/css/fullcalendar.min.css" type="text/css">
+    <link rel="stylesheet" type="text/css" href="/css/dataTables.css">
   {% endblock %}
 {% endblock %}
 {% block body %}
@@ -222,17 +305,16 @@
                 <div id="mainCalendar" class="col s12 m7 l8">
                   <div id="calendar" class="fc fc-ltr fc-unthemed">
                   </div>
-                  <div class="space"></div>
                   <!-- Table donnees -->
-                  <div class="table_congesService" data-conges-service="{{congesService|json_encode|e('html_attr') }}">
-                    <table class="striped">
+                  <div  class="row">
+                    <table id="data-table-row-grouping-service" class="display dataTable" data-page-length='8'>
                       <thead>
-                        <tr id="rowCongesBottom">
-                          <th data-field="id">Nom</th>
-                          <th data-field="name">Date Début</th>
-                          <th data-field="price">Date Fin</th>
-                          <th data-field="price">Statut</th>
-                        </tr>
+                          <tr id="rowCongesRight" role="row">
+                            <th>Nom</th>
+                            <th>Date Début</th>
+                            <th>Date Fin</th>
+                            <th>Statut</th>
+                          </tr>
                       </thead>
                       <tbody>
                         {% for conge in congesService %}
@@ -247,7 +329,7 @@
                             {% else %}
                               {% set timeFin = 'après-midi' %}
                             {% endif %}
-                            <tr id="dataBottom" role="row" class="even">
+                            <tr id="dataBottom" role="row">
                               <td>{{conge.collabo.getNom()}} {{conge.collabo.getPrenom()}}</td>
                               <td>{{conge.date_debut|date("d-m-y")}} {{timeDebut}}</td>
                               <td>{{conge.date_fin|date("d-m-y")}} {{timeFin}}</td>
@@ -282,17 +364,16 @@
                     </div>
                   </div>
                   <div class="row">
-                    <table id="data-table-row-grouping" class="display dataTable" cellspacing="0" width="100%" role="grid" aria-describedby="data-table-row-grouping_info" style="width: 100%;">
+                    <table id="data-table-row-grouping" class="display dataTable" data-page-length='8'>
                       <thead>
                           <tr id="rowCongesRight" role="row">
-                            <th class="sorting" tabindex="0" aria-controls="data-table-row-grouping" rowspan="1" colspan="1" aria-label="Name: activate to sort column ascending" style="width: 49px;">Type</th>
-                            <th class="sorting" tabindex="0" aria-controls="data-table-row-grouping" rowspan="1" colspan="1" aria-label="Start date: activate to sort column ascending" style="width: 59px;">Du-</th>
-                            <th class="sorting" tabindex="0" aria-controls="data-table-row-grouping" rowspan="1" colspan="1" aria-label="Start date: activate to sort column ascending" style="width: 59px;">Au-</th>
-                            <th class="sorting" tabindex="0" aria-controls="data-table-row-grouping" rowspan="1" colspan="1" aria-label="Position: activate to sort column ascending" style="width: 52px;">Statut</th>
+                            <th>Type</th>
+                            <th>Du-</th>
+                            <th>Au-</th>
+                            <th>Statut</th>
                           </tr>
                       </thead>
                       <tbody>
-                        {% set i = 0 %}
                         {% for conge in mesConges %}
                           {% if(conge.debut_matin) %}
                             {% set timeDebut = 'matin' %}
@@ -304,22 +385,12 @@
                           {% else %}
                             {% set timeFin = 'après-midi' %}
                           {% endif %}
-                          {% if(i%2 == 0) %}
-                            <tr id="dataBottom" role="row" class="even">
-                              <td>{{conge.type}}</td>
-                              <td>{{conge.date_debut|date("d-m-y")}} {{timeDebut}}</td>
-                              <td>{{conge.date_fin|date("d-m-y")}} {{timeFin}}</td>
-                              <td>{{conge.statut}}</td>
-                            </tr>
-                          {% else %}
-                            <tr id="dataBottom" role="row" class="odd">
-                              <td>{{conge.type}}</td>
-                              <td>{{conge.date_debut|date("d-m-y")}} {{timeDebut}}</td>
-                              <td>{{conge.date_fin|date("d-m-y")}} {{timeFin}}</td>
-                              <td>{{conge.statut}}</td>
-                            </tr>
-                          {% endif %}
-                          {% set i = i+1 %}
+                          <tr id="dataBottom" role="row">
+                            <td>{{conge.type}}</td>
+                            <td>{{conge.date_debut|date("d-m-y")}} {{timeDebut}}</td>
+                            <td>{{conge.date_fin|date("d-m-y")}} {{timeFin}}</td>
+                            <td>{{conge.statut}}</td>
+                          </tr>
                         {% endfor %}
                       </tbody>
                     </table>
@@ -346,21 +417,31 @@
         <form method="POST" id="formConge" action="{{path('modif.demandeConge')}}" class="white">
           <div id="marginModal">
             <div class="select-wrapper">
-              <select name="typeConge" class="initialized" required>
+              <select id="typeConge" name="typeConge" class="initialized" required>
                 <option value="" disabled="" selected=""> RTT ou Congé ?</option>
                 <option value="RTT">RTT</option>
                 <option value="Conge">Conge</option>
               </select>
             </div>
+            <div class="row" id="modalRTT">
+              <h5 class="header">Demi-journées de RTT Restantes:</h5>
+              <h10 class="header">{{app.user.rtt}}</h10>
+            </div>
+            <div class="row" id="modalConge">
+              <h5 class="header">Demi-journées de Congé Restantes:</h5>
+              <h10 class="header">{{app.user.conge}}</h10>
+            </div>
             <h5>Date et durée du congé</h5>
-            <div id="container">
+            <div
+            id="containerDemande">
               <div class="row">
                 <div class="input-field col s6 m6 l6">
                   <input name="startDate" type="date" autocomplete="off" class="datepicker form-control" id="startDate" placeholder="Indiquez la date de début" required/>
                 </div>
+
                 <div class="input-field col s6 m6 l6">
-                  <select name="timeCongeDebut" class="initialized" required>
-                    <option value="" disabled="" selected="">Matin ou Après-Midi?</option>
+                  <select id="timeCongeDebut" name="timeCongeDebut" class="initialized" required>
+                    <!-- <option value="" disabled="" selected="">Matin ou Après-Midi?</option> -->
                     <option value=true>Matin</option>
                     <option value=false>Après-Midi</option>
                   </select>
@@ -371,12 +452,21 @@
                   <input name="endDate" type="date" autocomplete="off" class="datepicker form-control" id="endDate" placeholder="Indiquez la date de Fin" required/>
                 </div>
                 <div class="input-field col s6 m6 l6">
-                  <select name ="timeCongeFin" class="initialized" required>
-                    <option value="" disabled="" selected="">Matin ou Après-Midi?</option>
+                  <select id="timeCongeFin" name ="timeCongeFin" class="initialized" required>
+                    <!-- <option value="" disabled="" selected="">Matin ou Après-Midi?</option> -->
                     <option value=true>Matin</option>
                     <option value=false>Après-Midi</option>
                   </select>
                 </div>
+              </div>
+              <div class="row" id="calculConge">
+                <h11 class="header">Nombre de demi-journées nécessaire :</h11> <span id="valueCalculDemande">
+              </div>
+              <div class="row" id="impossibleConge">
+                <h11 class="header">Vous n'avez pas assez de jours restants</h11>
+              </div>
+              <div class="row" id="validConge">
+                <h11 class="header">Demi-journées restantes après validation :</h11> <span id="valueValidDemande">
               </div>
             </div>
             <!-- End Container -->
@@ -386,7 +476,7 @@
             <a href="#!" class="modal-close waves-effect waves-green btn-flat">
               <i class="material-icons left">clear</i>Annuler
             </a>
-            <button type="submit" form="formConge" class="btn btn-primary">Enregistrer
+            <button type="submit" form="formConge" id="buttonDemandeConge" class="btn btn-primary" disabled>Enregistrer
               <i class="material-icons right">check</i>
             </button>
           </div>

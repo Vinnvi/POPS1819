@@ -54,8 +54,11 @@ span{
 #data-table-row-grouping{
   margin-left : 3%;
 }
+#data-table-row-grouping_length{
+  display : block !important;
+}
 #rightPart{
-  color: white;
+  color: white !important;
   text-align: center;
 }
 #calendarBox{
@@ -79,12 +82,17 @@ span{
   color : white;
 }
 #dataBottom{
-  background-color: #edf3ff;
   color : black;
   border-color : black;
 }
 input[type="date"]::-webkit-input-placeholder{
     visibility: hidden !important;
+}
+input[type="search"]{
+    color : white;
+}
+table{
+  margin-left : 0!important;
 }
 input::-webkit-calendar-picker-indicator{
     display: none;
@@ -95,7 +103,17 @@ input::-webkit-calendar-picker-indicator{
   margin-left : 5%;
   margin-right : 5%;
 }
-/* ------------- PARTIE HEADER ------------- */
+/* ------------- PARTIE DATATABLES ------------- */
+.dataTables_info{
+  color : white !important;
+}
+.dataTables_filter{
+  color : white !important;
+}
+#modalRTT,#modalConge{
+  text-align : center;
+}
+/* ------------- PARTIE TEXTE ------------- */
 h4.header {
     font-size: 1.4rem;
     font-weight: 400;
@@ -127,4 +145,16 @@ h10.header {
     font-weight: 600;
     text-transform: uppercase;
     line-height: 1.508rem;
+}
+h11.header {
+    font-size: 1rem;
+    font-weight: 400;
+    text-transform: uppercase;
+    line-height: 1.508rem;
+    white-space:nowrap;
+    margin-top : 5%;
+}
+#verifConge,#validConge,#calculConge{
+  margin-top : 5px;
+  margin-bottom : 5px;
 }

@@ -65,9 +65,17 @@ class CalendarCongesController extends AbstractController
         if($_POST['timeCongeFin'] == "true"){$newConge->setFin_matin(true);}
         else {$newConge->setFin_matin(false);}
         $newConge->setStatut('En Attente');
-        $newConge->setDuree(16);
+        $newConge->setDuree((int)$_POST['inputDuree']);
+
+        if($_POST['typeConge']=="Conge"){
+          $collaborateur->setConge($collaborateur->getConge()-(int)$_POST['inputDuree']);
+        }
+        else{
+          $collaborateur->setRtt($collaborateur->getRtt()-(int)$_POST['inputDuree']);
+        }
 
         $this->getDoctrine()->getEntityManager()->persist($newConge);
+        $this->getDoctrine()->getEntityManager()->persist($collaborateur);
         $this->getDoctrine()->getEntityManager()->flush();
       }
       // }

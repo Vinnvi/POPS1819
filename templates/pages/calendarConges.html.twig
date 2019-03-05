@@ -30,6 +30,8 @@
         document.getElementById("calculConge").style.display = "none";
         document.getElementById("impossibleConge").style.display = "none";
         document.getElementById("validConge").style.display = "none";
+        document.getElementById("valueValidDemande").innerHTML = PrcA;
+        document.getElementById("PrcA").value = PrcA;
       });
     </script>
     <!-- ------------- Script for DatePickers ------------- -->
@@ -172,6 +174,7 @@
             document.getElementById("validConge").style.display = "block";
             var resAfter = {{app.user.rtt}} - res;
             document.getElementById("valueValidDemande").innerHTML = resAfter;
+            document.getElementById("inputDuree").value = res;
             document.getElementById("buttonDemandeConge").disabled = false;
           }
           else{
@@ -186,6 +189,7 @@
             document.getElementById("validConge").style.display = "block";
             var resAfter = {{app.user.conge}} - res;
             document.getElementById("valueValidDemande").innerHTML = resAfter;
+            document.getElementById("inputDuree").value = res;
             document.getElementById("buttonDemandeConge").disabled = false;
           }
           else{
@@ -228,12 +232,14 @@
         document.getElementById("modalRTT").style.display = "block";
         document.getElementById("modalConge").style.display = "none";
         document.getElementById("containerDemande").style.display = "block";
+        checkDateDemandeConge();
       }
       else{
         if (this.value == "Conge"){
           document.getElementById("modalRTT").style.display = "none";
           document.getElementById("modalConge").style.display = "block";
           document.getElementById("containerDemande").style.display = "block";
+          checkDateDemandeConge();
         }
         else{
           document.getElementById("modalRTT").style.display = "none";
@@ -415,6 +421,7 @@ checkDateDemandeConge
       <h4><b>Poser un Congé</b></h4>
       <div class="container">
         <form method="POST" id="formConge" action="{{path('modif.demandeConge')}}" class="white">
+          <input type="hidden" value="" name="inputDuree" id="inputDuree" />
           <div id="marginModal">
             <div class="select-wrapper">
               <select id="typeConge" name="typeConge" class="initialized" required>

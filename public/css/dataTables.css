@@ -47,9 +47,9 @@ table.dataTable {
   table.dataTable thead .sorting_desc_disabled {
     background-image: url("../images/sort_desc_disabled.png"); }
   table.dataTable tbody tr {
-    background-color: white; }
+    background-color: #edf3ff; }
     table.dataTable tbody tr.selected {
-      background-color: #b8002b; }
+      background-color: #59acff; }
   table.dataTable tbody th,
   table.dataTable tbody td {
     padding: 8px 10px; }
@@ -69,7 +69,7 @@ table.dataTable {
   table.dataTable.cell-border tbody tr:first-child td {
     border-top: none; }
   table.dataTable.stripe tbody tr.odd, table.dataTable.display tbody tr.odd {
-    background-color: #f9f9f9; }
+    background-color: #edf3ff; }
     table.dataTable.stripe tbody tr.odd.selected, table.dataTable.display tbody tr.odd.selected {
       background-color: #b30029; }
   table.dataTable.hover tbody tr:hover, table.dataTable.display tbody tr:hover {

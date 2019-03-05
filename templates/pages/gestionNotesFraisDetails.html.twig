@@ -3,8 +3,7 @@
 {% block body %}
     <div class="row p-2">
         <h5 class="p-1 center-align">Détails de la note de frais <b>{{ noteDeFrais.collabo.nom }} {{ noteDeFrais.collabo.prenom }}</b> du <b>{{ noteDeFrais.mois }}-{{ noteDeFrais.annee }}</b></h5>
-        {% dump statusNotes %}
-        {%  if  noteDeFrais.statut == statusNotes[2] %}
+        {%  if  noteDeFrais.statut == statusNotes[2] or noteDeFrais.statut == statusNotes[9] %}
         <form method="post" action="{{ path('validation.lignes.details') }}">
         {% endif %}
             {% set montantTotal = 0 %}
@@ -71,14 +70,14 @@
                 </ul>
                 <label class="collapsible col s1 center-align z-depth-0" style="border-color:transparent;">
                     <input name="{{ligne.id}}"  value="refus" type="radio" required="required" 
-                            {% if noteDeFrais.statut != statusNotes[2] %}
+                            {% if ligne.statutValidation != statusNotes[2] %}
                                 disabled="disabled"
                             {% endif %}
                             /><span></span>
                 </label>
                 <label class="collapsible col s1 center-align z-depth-0" style="border-color:transparent;">
                     <input name="{{ ligne.id }}" value="accept" type="radio" required="required"
-                            {% if noteDeFrais.statut != statusNotes[2] %}
+                            {% if ligne.statutValidation != statusNotes[2] %}
                                 disabled="disabled"
                             {% endif %}
                             /><span></span>
@@ -87,7 +86,7 @@
 
             <div class="secondary-content col s12 m-2">
                 <a href="{{ path('app_gestionNotesDeFrais') }}" class="waves-effect waves-light btn red left"><i class="material-icons left">clear</i>Annuler</a>
-                {%  if  noteDeFrais.statut == statusNotes[2] %}
+                {%  if  noteDeFrais.statut == statusNotes[2] or noteDeFrais.statut == statusNotes[9] %}
                     <input type="hidden" id="id" name="id" value="{{ noteDeFrais.id }}"/>
                     <button id="id1" class="btn green waves-effect waves-light right">Confirmer</button>
                 {% endif %}

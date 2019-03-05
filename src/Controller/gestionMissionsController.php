@@ -211,7 +211,12 @@ class gestionMissionsController extends AbstractController
             }
             if($noteAStatuer){
                 if($noteValidee){
-                    $ligne->getNote()->setStatut(NoteDeFrais::STATUS[2]);
+                    if($ligne->getNote()->getStatut() == NoteDeFrais::STATUS[1]){
+                        $ligne->getNote()->setStatut(NoteDeFrais::STATUS[2]);
+                    }
+                    else{
+                        $ligne->getNote()->setStatut(NoteDeFrais::STATUS[9]);
+                    }
                 }
                 else{
                     $ligne->getNote()->setStatut(NoteDeFrais::STATUS[3]);

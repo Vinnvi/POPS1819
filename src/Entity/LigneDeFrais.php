@@ -74,6 +74,11 @@ class LigneDeFrais
      */
     private $justificatif = [];
 
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    private $montantAvance;
+
     const STATUS = [
         0 => 'En cours',
         1 => 'En attente chef',
@@ -238,5 +243,17 @@ class LigneDeFrais
             return true;
         }
         return false;
+    }
+
+    public function getMontantAvance(): ?float
+    {
+        return $this->montantAvance;
+    }
+
+    public function setMontantAvance(?float $montantAvance): self
+    {
+        $this->montantAvance = $montantAvance;
+
+        return $this;
     }
 }

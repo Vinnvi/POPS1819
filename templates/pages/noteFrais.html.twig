@@ -26,8 +26,10 @@
             <!-- Calcul des lignes en avance mais qui nécessite une modification -->
             {% set ligneAvanceExeptJustificatif = 0 %}
             {% for ligne in mesLignesDeFrais[i] %}
-                {% if ligne.statutValidation == "valideeExceptJustificatif" %}
-                    {% set ligneAvanceExeptJustificatif = ligneAvanceExeptJustificatif + 1 %} 
+                {% if ligne.statutValidation == statusValisationLigne[6] %}
+                    {% set ligneAvanceExeptJustificatif = ligneAvanceExeptJustificatif + 1 %}
+                {% else %}
+                    
                 {% endif %}
             {% endfor %}
             
@@ -55,10 +57,9 @@
                 </div>
                 
                 <ul class="collapsible">
-                    {% set ligneEnData = "" %}
+                    {% set ligneEnData = note.id %}
                     {% for ligne in mesLignesDeFrais[i] %}
-                        {% set ligneEnData = ligneEnData ~ "/"~ligne.intitule~"\\"~ligne.type~"\\"~ligne.montant  %}
-
+                        {% if ligne.statutValidation != statusValisationLigne[6] %}{% set ligneEnData = ligneEnData ~ "/"~ligne.id~"\\"~ligne.intitule~"\\"~ligne.type~"\\"~ligne.montant~"\\"~ligne.avance %}{% endif %}
                         {% if ligne.avance %}{% set montantAvance = montantAvance + ligne.montant %}
                         {% else %}{% set montantNAvance = montantNAvance + ligne.montant %}{% endif %}
                         <li>
@@ -144,6 +145,7 @@
                         </div>
                 {% endif %}
                 {% if noteDeFrais[i].isModifiable() %}
+                    
                     {% dump ligneEnData %}
                     <div class="right">
                         <a class="modalDemandeAvance modal-trigger waves-effect waves-light btn grey darken-1" href="#demandeAvanceModal"
@@ -278,6 +280,7 @@
                         <a href="#!" class="modal-close waves-effect waves-light btn red" style="margin:auto;">Annuler</a>
                     </div>
                     <div class="col s6 center-align">
+                        <input type="hidden" id="noteDmandeAvanceId" name="noteDmandeAvanceId" value=""/>
                         <button type="submit" class="waves-effect waves-light btn green" style="margin:auto;">Envoyer la demande d'avance</button>
                     </div>
                 </div>
@@ -346,28 +349,31 @@
         });
     </script>
 
-    <!--ouverture modal demande d'avance BOUTON-->
+    <!-- modal demande d'avance -->
     <script>
         $(document).on("click", ".modalDemandeAvance", function () {
             var data = $(this).data('id').split('/');
             for(i=0; i<data.length; i++){
                 data[i] = data[i].split('\\');
             }
+            document.getElementById('noteDmandeAvanceId').value = data[0];
             if(data.length >= 2){
                 var body = "";
                 for(i=1; i<data.length; i++){
                     body += "<div class='collapsible-header row m-0 center-align'>"+
-                        "<div class='col s3'>"+data[i][0]+"</div>"+
                         "<div class='col s3'>"+data[i][1]+"</div>"+
-                        "<div class='col s3'>"+data[i][2]+"€</div>"+
+                        "<div class='col s3'>"+data[i][2]+"</div>"+
+                        "<div class='col s3'>"+data[i][3]+"€</div>"+
                         "<div class='col s3 row m-0'>"+
                             "<label class='col s4'>"+
-                                "<input type='checkbox' class='filled-in red' />"+
-                                "<span></span>"+
+                                "<input type='checkbox' class='filled-in red' id='avance."+data[i][0]+"' onclick='avanceCheckF("+data[i][0]+")' ";
+                    if(data[i][4] == 1){ body += "checked"; }
+                    body +=     "/><span></span>"+
                             "</label>"+
                             "<div class='col s8 valign-wrapper'>"+
-                                "<input type='number' name='quantity' min='0' max="+data[i][2]*0.8+">"+
-                            "</div>"+
+                                "<input type='number' id='montantAvance."+data[i][0]+"' name='montantAvance."+data[i][0]+"' min='0' max="+data[i][3]*0.8+"'";
+                    if(data[i][4] != 1){ body += " disabled"; }
+                    body += "></div>"+
                         "</div>"+
                     "</div>"
                 }
@@ -378,6 +384,16 @@
                 document.getElementById('CorpsLigneAvance').innerHTML = "";
             }
         });
+        function avanceCheckF(id) {
+            var check  = document.getElementById('avance.'+id);
+            var quantity  = document.getElementById('montantAvance.'+id);
+            if(check.checked){
+                quantity.disabled = false;
+            }
+            else{
+               quantity.disabled = true; 
+            }
+        }
     </script>
 
 

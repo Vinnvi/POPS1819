@@ -9,32 +9,257 @@
     <script src='js/plugins/fullcalendar/lib/moment.min.js' type="text/javascript"></script>
     <script src='js/plugins/fullcalendar/js/fullcalendar.min.js' type="text/javascript"></script>
     <script src="js/plugins/fullcalendar/fullcalendar-script.js" type="text/javascript"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
+    <!-- ------------- Script Ready ------------- -->
     <script>
       $(document).ready(function() {
-        //initialize all modals
-        $('.modal').modal();
-      });
-    </script>
-    <!-- Script for DatePickers -->
-    <script>
-      $(document).ready(function(){
-        $('.datepicker').datepicker();
-      });
-    </script>
-    <!-- Script for select Input -->
-    <script>
-      $(document).ready(function(){
         $('select').formSelect();
+        $('.modal').modal();
+        $('#data-table-row-grouping').DataTable({"paging":true, "lengthChange": false,"lengthMenu": [4, 8, 12, "All"]});
+        $('#data-table-row-grouping-service').DataTable({"paging":true, "lengthChange": false,"lengthMenu": [4, 8, 12, "All"]});
+        render_congesSelf()
+        render_congesService();
+        var minDebut = new Date();
+        // var maxEnd = new Date(); maxEnd.setDate(maxEnd.getDate()+90)
+        $.datepicker.setDefaults({dateFormat: 'dd-mm-yy'});
+        $('#startDate').datepicker('option', {minDate: minDebut});
+        $('#endDate').datepicker('option', {minDate: minDebut});
+        document.getElementById("modalRTT").style.display = "none";
+        document.getElementById("modalConge").style.display = "none";
+        document.getElementById("containerDemande").style.display = "none";
+        document.getElementById("calculConge").style.display = "none";
+        document.getElementById("impossibleConge").style.display = "none";
+        document.getElementById("validConge").style.display = "none";
+        document.getElementById("valueValidDemande").innerHTML = PrcA;
+        document.getElementById("PrcA").value = PrcA;
       });
     </script>
+    <!-- ------------- Script for DatePickers ------------- -->
+    <script>
+      $('#startDate').datepicker({
+        // dateFormat: 'dd-mm-yy',
+        onSelect: function(dateStr) {
+          var min = $(this).datepicker('getDate') || new Date(); // Selected date or today if none
+          var max = new Date(min.getTime());
+          max.setMonth(min.getMonth() + 1); // Add one month
+          $('#endDate').datepicker('option', {minDate: min, maxDate: max});
+          checkDateDemandeConge();
+        }
+      });
+      $('#endDate').datepicker({
+        // dateFormat: 'dd-mm-yy',
+        onSelect: function(dateStr) {
+          var max = $(this).datepicker('getDate'); // Selected date or null if none
+          $('#startDate').datepicker('option', {maxDate: max});
+          checkDateDemandeConge();
+        },
+        onChange: function(dateStr) {
+          console.log("heeeere");
+        }
+      });
+      $(document).ready(function(){
+        // $('.datepicker').datepicker();
+        $('input[type=date]').each(function(){
+          this.type="text";
+        });
+        // $('input[type=date]').datepicker({dateFormat: 'dd-mm-yy'});
+
+        $("#endDate").attr("required", true);
+
+      });
+    </script>
+    <!-- ----- FUNCTIONS ----- -->
+    <script>
+    // function form_submit() {
+    //   document.getElementById("formConge").submit();
+    // }
+    function render_congesSelf(){
+      var listConges = JSON.parse('{{mesConges | json_encode() | raw}}');
+      var arrayLength = listConges.length;
+      for (var i = 0; i < arrayLength; i++) {
+        var type = listConges[i].type;
+        var dateDebut = new Date(listConges[i].date_debut.date);
+        var dateFin = new Date(listConges[i].date_fin.date);
+        dateFin.setDate(dateFin.getDate());
+        if(listConges[i].debut_matin){
+          dateDebut = new Date(dateDebut.getFullYear(), dateDebut.getMonth(), dateDebut.getDate(),0,0,0);
+        }
+        else{
+          dateDebut = new Date(dateDebut.getFullYear(), dateDebut.getMonth(), dateDebut.getDate(),12,0,0);
+        }
+        if(listConges[i].fin_matin){
+          dateFin = new Date(dateFin.getFullYear(), dateFin.getMonth(), dateFin.getDate(),12,0,0);
+        }
+        else{
+          dateFin = new Date(dateFin.getFullYear(), dateFin.getMonth(), dateFin.getDate()+1,0,0,0);
+        }
+        if(listConges[i].collabo.id == ('{{app.user.id}}')){
+          if(listConges[i].statut == "En Attente")
+          {
+            var color = '#e2b14d';
+          }
+          else{
+            var color = '#3ebc4d';
+          }
+          var newEvent = {
+              id : 'myConge',
+              title: type,
+              start : dateDebut,
+              end : dateFin,
+              color: color
+          };
+          $('#calendar').fullCalendar( 'renderEvent', newEvent , true);
+        }
+      }
+    }
+    function render_congesService(){
+      var listConges = JSON.parse('{{congesService | json_encode() | raw}}');
+      var arrayLength = listConges.length;
+      for (var i = 0; i < arrayLength; i++) {
+        var type = listConges[i].type;
+        var dateDebut = new Date(listConges[i].date_debut.date);
+        var dateFin = new Date(listConges[i].date_fin.date);
+        dateFin.setDate(dateFin.getDate());
+        if(listConges[i].debut_matin){
+          dateDebut = new Date(dateDebut.getFullYear(), dateDebut.getMonth(), dateDebut.getDate(),0,0,0);
+        }
+        else{
+          dateDebut = new Date(dateDebut.getFullYear(), dateDebut.getMonth(), dateDebut.getDate(),12,0,0);
+        }
+        if(listConges[i].fin_matin){
+          dateFin = new Date(dateFin.getFullYear(), dateFin.getMonth(), dateFin.getDate(),12,0,0);
+        }
+        else{
+          dateFin = new Date(dateFin.getFullYear(), dateFin.getMonth(), dateFin.getDate()+1,0,0,0);
+        }
+        if(listConges[i].collabo.id != ('{{app.user.id}}')){
+          if(listConges[i].statut == "En Attente")
+          {
+            type = type + " " + "(demande)";
+            var color = '#dbc12e';
+          }
+          else{
+            type = type + " " + listConges[i].collabo.Nom+" "+listConges[i].collabo.Prenom;
+            var color = '#d7f7db';
+          }
+          var newEvent = {
+              id : 'congeService',
+              title: type,
+              start : dateDebut,
+              end : dateFin,
+              color: color
+          };
+          $('#calendar').fullCalendar( 'renderEvent', newEvent , true);
+        }
+      }
+    }
+    function checkDateDemandeConge(){
+      if($('#startDate').datepicker('getDate') != null && $('#endDate').datepicker('getDate') != null){
+        document.getElementById("calculConge").style.display = "block";
+        var timeDiff = Math.abs($('#endDate').datepicker('getDate').getTime() - $('#startDate').datepicker('getDate').getTime());
+        var dayDifference = Math.ceil(timeDiff / (1000 * 3600 * 24))+1;
+        var res = 2*dayDifference;
+        var selectTimeDebut = document.getElementById("timeCongeDebut");
+        var resTimeDebut = selectTimeDebut.options[selectTimeDebut.selectedIndex].value;
+        var selectTimeFin = document.getElementById("timeCongeFin");
+        var resTimeFin = selectTimeFin.options[selectTimeFin.selectedIndex].value;
+        if(resTimeDebut != "true"){res = res-1;}
+        if(resTimeFin == "true"){res = res-1;}
+        document.getElementById("valueCalculDemande").innerHTML = res;
+        var selectTypeConge = document.getElementById("typeConge");
+        var typeConge = selectTypeConge.options[selectTypeConge.selectedIndex].value;
+        if(typeConge == "RTT"){
+          if({{app.user.rtt}} >= res){
+            document.getElementById("impossibleConge").style.display = "none";
+            document.getElementById("validConge").style.display = "block";
+            var resAfter = {{app.user.rtt}} - res;
+            document.getElementById("valueValidDemande").innerHTML = resAfter;
+            document.getElementById("inputDuree").value = res;
+            document.getElementById("buttonDemandeConge").disabled = false;
+          }
+          else{
+            document.getElementById("impossibleConge").style.display = "block";
+            document.getElementById("validConge").style.display = "none";
+            document.getElementById("buttonDemandeConge").disabled = true;
+          }
+        }
+        else{
+          if({{app.user.conge}} >= res){
+            document.getElementById("impossibleConge").style.display = "none";
+            document.getElementById("validConge").style.display = "block";
+            var resAfter = {{app.user.conge}} - res;
+            document.getElementById("valueValidDemande").innerHTML = resAfter;
+            document.getElementById("inputDuree").value = res;
+            document.getElementById("buttonDemandeConge").disabled = false;
+          }
+          else{
+            document.getElementById("impossibleConge").style.display = "block";
+            document.getElementById("validConge").style.display = "none";
+            document.getElementById("buttonDemandeConge").disabled = true;
+          }
+        }
+      }
+      else{
+        document.getElementById("calculConge").style.display = "none";
+        document.getElementById("impossibleConge").style.display = "none";
+        document.getElementById("validConge").style.display = "none";
+        document.getElementById("buttonDemandeConge").disabled = true;
+      }
+
+    }$("#displaySelf").change(function(){
+      if($(this).is(':checked')) {
+        render_congesSelf()
+      } else {
+        $("#calendar").fullCalendar('removeEvents', 'myConge');
+      }
+    });
+    $("#displayService").change(function(){
+     if($(this).is(':checked')) {
+      render_congesService()
+     } else {
+      $("#calendar").fullCalendar('removeEvents', 'congeService');
+     }
+    });
+    $("#displayColorConge").change(function(){
+      if($(this).is(':checked')) {
+        $(".dayConge").css("background-color", "#c12600");
+      } else {
+        $(".dayConge").css("background-color", "initial");
+      }
+    });
+    $("#typeConge").change(function(){
+      if (this.value == "RTT"){
+        document.getElementById("modalRTT").style.display = "block";
+        document.getElementById("modalConge").style.display = "none";
+        document.getElementById("containerDemande").style.display = "block";
+        checkDateDemandeConge();
+      }
+      else{
+        if (this.value == "Conge"){
+          document.getElementById("modalRTT").style.display = "none";
+          document.getElementById("modalConge").style.display = "block";
+          document.getElementById("containerDemande").style.display = "block";
+          checkDateDemandeConge();
+        }
+        else{
+          document.getElementById("modalRTT").style.display = "none";
+          document.getElementById("modalConge").style.display = "none";
+          document.getElementById("containerDemande").style.display = "none";
+        }
+      }
+    });
+    $("#timeCongeDebut").change(function(){checkDateDemandeConge();});
+    $("#timeCongeFin").change(function(){checkDateDemandeConge();});
+checkDateDemandeConge
+  </script>
   {% endblock %}
   {% block stylesheets %}
     <link rel="stylesheet" type="text/css" href="/css/topBar.css">
     <link rel="stylesheet" type="text/css" href="/css/calendarConges.css">
     <link rel="stylesheet" type="text/css" href="/css/loader.css">
     <link rel="stylesheet" type="text/css" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
-    <!-- <link href="js/plugins/chartist-js/chartist.min.css" type="text/css" rel="stylesheet"> -->
     <link rel="stylesheet" href="js/plugins/fullcalendar/css/fullcalendar.min.css" type="text/css">
+    <link rel="stylesheet" type="text/css" href="/css/dataTables.css">
   {% endblock %}
 {% endblock %}
 {% block body %}
@@ -48,67 +273,93 @@
             <div id="full-calendar">
               <div class="row">
                 <!-- Left part -->
-                <div class="col s12 m3 l2">
-                  <div id="external-events">
-                    <h4 class="header"><font color="white">Draggable Events</font></h4>
-                    <div class="fc-event cyan ui-draggable ui-draggable-handle">Factures Mai</div>
-                    <div class="fc-event teal ui-draggable ui-draggable-handle">Appeler Valérie</div>
-                    <div class="fc-event cyan darken-1 ui-draggable ui-draggable-handle">Dinner avec l'équipe</div>
-                    <div class="fc-event cyan accent-4 ui-draggable ui-draggable-handle">Meeting avec la Support Team</div>
-                    <div class="fc-event teal accent-4 ui-draggable ui-draggable-handle">Demander Augmentation</div>
-                    <div class="fc-event light-blue accent-3 ui-draggable ui-draggable-handle">Design iOS App</div>
-                    <div class="fc-event light-blue accent-4 ui-draggable ui-draggable-handle">Oummar&Co Party</div>
-                    <p>
-                      <input type="checkbox" id="drop-remove">
-                      <label for="drop-remove">remove after drop</label>
-                    </p>
+                <div class="col s12 m2 l1">
+                  <div id="divFiltersCalendar" class="section">
+                  <div class="space2"></div>
+                  <h9 class="header">Filtres</h9>
+                  <h4 class="header">Events</h4>
+                  <div class="row">
+                    <div class="col s12 m8 l9">
+                      <form action="#">
+                        <label>
+                            <input type="checkbox" class="checkbox-white" type="checkbox" id = "displayService" checked/>
+                            <span style="color:white">Congés Service</span>
+                        </label>
+                        <div class="row"></div>
+                        <label>
+                            <input type="checkbox" id = "displaySelf" checked/>
+                            <span style="color:white">Mes congés</span>
+                        </label>
+                      </form>
+                    </div>
+                  </div>
+                  <h4 class="header">Couleurs</h4>
+                  <div class="row">
+                    <div class="col s12 m8 l9">
+                      <form action="#">
+                        <label>
+                            <input type="checkbox" class="checkbox-white" type="checkbox" id = "displayColorConge" checked/>
+                            <span style="color:white">Conge</span>
+                        </label>
+                        <div class="row"></div>
+                      </form>
+                    </div>
                   </div>
                 </div>
+                </div>
                 <!-- Calendrier -->
-                <div id="mainCalendar" class="col s12 m6 l7">
+                <div id="mainCalendar" class="col s12 m7 l8">
                   <div id="calendar" class="fc fc-ltr fc-unthemed">
-
                   </div>
                   <!-- Table donnees -->
-                  <div id="rowTable">
-                    <table class="striped">
+                  <div  class="row">
+                    <table id="data-table-row-grouping-service" class="display dataTable" data-page-length='8'>
                       <thead>
-                        <tr id="rowCongesBottom">
-                          <th data-field="id">Nom</th>
-                          <th data-field="name">Date Début</th>
-                          <th data-field="price">Date Fin</th>
-                          <th data-field="price">Statut</th>
-                        </tr>
+                          <tr id="rowCongesRight" role="row">
+                            <th>Nom</th>
+                            <th>Date Début</th>
+                            <th>Date Fin</th>
+                            <th>Statut</th>
+                          </tr>
                       </thead>
                       <tbody>
-                        <tr id="dataBottom">
-                          <td>Valérie Guimard</td>
-                          <td>08.12.18 matin</td>
-                          <td>09.12.18 soir</td>
-                          <td>Validé</td>
-                        </tr>
-                        <tr id="dataBottom">
-                          <td>Frédéric Voisin</td>
-                          <td>10.12.18 matin</td>
-                          <td>15.12.18 soir</td>
-                          <td>Validé</td>
-                        </tr>
+                        {% for conge in congesService %}
+                          {% if(conge.collabo.getId() != app.user.id) %}
+                            {% if(conge.debut_matin) %}
+                              {% set timeDebut = 'matin' %}
+                            {% else %}
+                              {% set timeDebut = 'après-midi' %}
+                            {% endif %}
+                            {% if(conge.fin_matin) %}
+                              {% set timeFin = 'matin' %}
+                            {% else %}
+                              {% set timeFin = 'après-midi' %}
+                            {% endif %}
+                            <tr id="dataBottom" role="row">
+                              <td>{{conge.collabo.getNom()}} {{conge.collabo.getPrenom()}}</td>
+                              <td>{{conge.date_debut|date("d-m-y")}} {{timeDebut}}</td>
+                              <td>{{conge.date_fin|date("d-m-y")}} {{timeFin}}</td>
+                              <td>{{conge.statut}}</td>
+                            </tr>
+                          {% else %}
+                          {% endif %}
+                        {% endfor %}
                       </tbody>
                     </table>
                   </div>
                 </div>
                 <!-- Right part -->
-                <div id="rightPart" class="col s12 m3 l3">
+                <div id="rightPart" class="table_mesConges col s12 m3 l3" data-mes-conges="{{mesConges|json_encode|e('html_attr') }}">
                   <div class="row">
                     <div id="rttPart" class="col s1 m1 l1">
                       <h5 class="header">RTT :</h5>
-                      <h10 class="header"> 50 </h10>
+                      <h10 class="header"> {{app.user.rtt}} </h10>
                       <h6 class="header"> jours restants </h6>
                     </div>
                     <div id="congePart" class="col s1 m1 l1">
                       <div class="row">
                         <h5 class="header">Congés payés :</h5>
-                        <h10 class="header"> 0 </h10>
+                        <h10 class="header"> {{app.user.conge}} </h10>
                         <h6 class="header"> jours restants </h6>
                       </div>
                     </div>
@@ -119,28 +370,34 @@
                     </div>
                   </div>
                   <div class="row">
-                    <table id="data-table-row-grouping" class="display dataTable" cellspacing="0" width="100%" role="grid" aria-describedby="data-table-row-grouping_info" style="width: 100%;">
+                    <table id="data-table-row-grouping" class="display dataTable" data-page-length='8'>
                       <thead>
                           <tr id="rowCongesRight" role="row">
-                            <th class="sorting" tabindex="0" aria-controls="data-table-row-grouping" rowspan="1" colspan="1" aria-label="Name: activate to sort column ascending" style="width: 49px;">Type</th>
-                            <th class="sorting" tabindex="0" aria-controls="data-table-row-grouping" rowspan="1" colspan="1" aria-label="Start date: activate to sort column ascending" style="width: 59px;">Du-</th>
-                            <th class="sorting" tabindex="0" aria-controls="data-table-row-grouping" rowspan="1" colspan="1" aria-label="Start date: activate to sort column ascending" style="width: 59px;">Au-</th>
-                            <th class="sorting" tabindex="0" aria-controls="data-table-row-grouping" rowspan="1" colspan="1" aria-label="Position: activate to sort column ascending" style="width: 52px;">Statut</th>
+                            <th>Type</th>
+                            <th>Du-</th>
+                            <th>Au-</th>
+                            <th>Statut</th>
                           </tr>
                       </thead>
                       <tbody>
-                        <tr id="dataBottom" role="row" class="odd">
-                          <td>RTT</td>
-                          <td>08.10.18</td>
-                          <td>10.10.18</td>
-                          <td>En cours</td>
-                        </tr>
-                        <tr id="dataBottom" role="row" class="even">
-                          <td>C.P.</td>
-                          <td>18.10.18</td>
-                          <td>23.10.18</td>
-                          <td>Validé</td>
-                        </tr>
+                        {% for conge in mesConges %}
+                          {% if(conge.debut_matin) %}
+                            {% set timeDebut = 'matin' %}
+                          {% else %}
+                            {% set timeDebut = 'après-midi' %}
+                          {% endif %}
+                          {% if(conge.fin_matin) %}
+                            {% set timeFin = 'matin' %}
+                          {% else %}
+                            {% set timeFin = 'après-midi' %}
+                          {% endif %}
+                          <tr id="dataBottom" role="row">
+                            <td>{{conge.type}}</td>
+                            <td>{{conge.date_debut|date("d-m-y")}} {{timeDebut}}</td>
+                            <td>{{conge.date_fin|date("d-m-y")}} {{timeFin}}</td>
+                            <td>{{conge.statut}}</td>
+                          </tr>
+                        {% endfor %}
                       </tbody>
                     </table>
                   </div>
@@ -160,55 +417,78 @@
   <!-- modal for asking conge -->
   <!-- Modal Structure -->
   <div id="demandeConge" class="modal">
-    <div class="modal-content">
-      <h4>Poser un Congé</h4>
-      <div class="container mt-4">
-        <form method="post" action="{{ path('modif.ligne') }}">
-          <div class="modal-content" id="modal-content">
+    <div class="modal-content teal lighten-2">
+      <h4><b>Poser un Congé</b></h4>
+      <div class="container">
+        <form method="POST" id="formConge" action="{{path('modif.demandeConge')}}" class="white">
+          <input type="hidden" value="" name="inputDuree" id="inputDuree" />
+          <div id="marginModal">
             <div class="select-wrapper">
-              <select class="initialized">
-                <option value="" disabled="" selected="">Choose your option</option>
-                <option value="1">RTT</option>
-                <option value="2">Conge</option>
+              <select id="typeConge" name="typeConge" class="initialized" required>
+                <option value="" disabled="" selected=""> RTT ou Congé ?</option>
+                <option value="RTT">RTT</option>
+                <option value="Conge">Conge</option>
               </select>
             </div>
+            <div class="row" id="modalRTT">
+              <h5 class="header">Demi-journées de RTT Restantes:</h5>
+              <h10 class="header">{{app.user.rtt}}</h10>
+            </div>
+            <div class="row" id="modalConge">
+              <h5 class="header">Demi-journées de Congé Restantes:</h5>
+              <h10 class="header">{{app.user.conge}}</h10>
+            </div>
             <h5>Date et durée du congé</h5>
-            <div id="container">
+            <div
+            id="containerDemande">
               <div class="row">
                 <div class="input-field col s6 m6 l6">
-                  <input id="dateDebut" type="text" class="datepicker">
-                  <label for="dateDebut" class="">Indiquez la date de début</label>
-                  </div>
+                  <input name="startDate" type="date" autocomplete="off" class="datepicker form-control" id="startDate" placeholder="Indiquez la date de début" required/>
+                </div>
+
                 <div class="input-field col s6 m6 l6">
-                  <select class="initialized">
-                    <option value="" disabled="" selected="">Choose your option</option>
-                    <option value="1">Matin</option>
-                    <option value="2">Après-Midi</option>
+                  <select id="timeCongeDebut" name="timeCongeDebut" class="initialized" required>
+                    <!-- <option value="" disabled="" selected="">Matin ou Après-Midi?</option> -->
+                    <option value=true>Matin</option>
+                    <option value=false>Après-Midi</option>
                   </select>
                 </div>
               </div>
               <div class="row">
                 <div class="input-field col s6 m6 l6">
-                  <input id="dateFin" type="text" class="datepicker">
-                  <label for="dateFin" class="form-control">Indiquez la date de Fin</label>
-                  </div>
+                  <input name="endDate" type="date" autocomplete="off" class="datepicker form-control" id="endDate" placeholder="Indiquez la date de Fin" required/>
+                </div>
                 <div class="input-field col s6 m6 l6">
-                  <select class="initialized">
-                    <option value="" disabled="" selected="">Choose your option</option>
-                    <option value="1">Matin</option>
-                    <option value="2">Après-Midi</option>
+                  <select id="timeCongeFin" name ="timeCongeFin" class="initialized" required>
+                    <!-- <option value="" disabled="" selected="">Matin ou Après-Midi?</option> -->
+                    <option value=true>Matin</option>
+                    <option value=false>Après-Midi</option>
                   </select>
                 </div>
+              </div>
+              <div class="row" id="calculConge">
+                <h11 class="header">Nombre de demi-journées nécessaire :</h11> <span id="valueCalculDemande">
+              </div>
+              <div class="row" id="impossibleConge">
+                <h11 class="header">Vous n'avez pas assez de jours restants</h11>
+              </div>
+              <div class="row" id="validConge">
+                <h11 class="header">Demi-journées restantes après validation :</h11> <span id="valueValidDemande">
               </div>
             </div>
             <!-- End Container -->
           </div>
           <!-- End Modal Content -->
           <div class="modal-footer">
-            <a href="#!" class="modal-close waves-effect waves-green btn-flat"><i class="material-icons left">clear</i>Annuler</a>
-            <button type="submit" class="btn btn-primary">Enregistrer<i class="material-icons right">check</i></button>
+            <a href="#!" class="modal-close waves-effect waves-green btn-flat">
+              <i class="material-icons left">clear</i>Annuler
+            </a>
+            <button type="submit" form="formConge" id="buttonDemandeConge" class="btn btn-primary" disabled>Enregistrer
+              <i class="material-icons right">check</i>
+            </button>
           </div>
         </form>
       </div>
     </div>
+  </div>
 {% endblock %}

@@ -8,6 +8,7 @@
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
         <link rel="icon" type="image/png" href="/images/logo_sans_texte.png" />
         {% block stylesheets %}
+            <link rel='stylesheet' href='fullcalendar/fullcalendar.css' />
         {% endblock %}
     </head>
     <body>
@@ -70,6 +71,9 @@
             {% if app.user.roleEntreprise == 'Chef de service' %}
               <a class="btn-flat waves-effect waves-light btn-large" href="{{ path('app_gestionMissions') }}"  name="action">Gestion des missions
                 <i class="material-icons right">people</i>
+              </a>
+              <a class="btn-flat waves-effect waves-light btn-large" href="{{ path('app_gestionDemandesDeCongesChef') }}"  name="action">Gestion des congés du service
+                <i class="material-icons right">beach_access</i>
               </a>
             {% endif %}
           </div>

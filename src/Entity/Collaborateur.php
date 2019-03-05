@@ -17,17 +17,17 @@ class Collaborateur implements UserInterface,EquatableInterface
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      */
-    private $id;
+    public $id;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $Nom;
+    public $Nom;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $Prenom;
+    public $Prenom;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -37,7 +37,7 @@ class Collaborateur implements UserInterface,EquatableInterface
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $username;
+    public $username;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -63,12 +63,12 @@ class Collaborateur implements UserInterface,EquatableInterface
      * @ORM\ManyToOne(targetEntity="App\Entity\Service")
      * @ORM\JoinColumn(nullable=true)
      */
-    private $service;
+    public $service;
 
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\Service")
      */
-    private $ServiceChef;
+    public $ServiceChef;
 
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\Projet")
@@ -78,7 +78,7 @@ class Collaborateur implements UserInterface,EquatableInterface
     /**
      * @ORM\Column(type="string", length=1024)
      */
-    private $email;
+    public $email;
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Notification", mappedBy="collaborateur")
      */
@@ -87,7 +87,22 @@ class Collaborateur implements UserInterface,EquatableInterface
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $role_entreprise;
+    public $role_entreprise;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    public $rtt;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    public $conge;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Conge", mappedBy="collabo")
+     */
+    public $conges;
 
     const STATUS = [
         0 => 'Collaborateur',
@@ -103,8 +118,10 @@ class Collaborateur implements UserInterface,EquatableInterface
         $this->setRoleEntreprise(Collaborateur::STATUS[0]);
         $this->setSalt('');
         $this->setProfilePicPath('images/profile_pics/anonym_picture.jpg');
-        $this->setBackgroundPicPath('');
+        $this->setBackgroundPicPath('images/profile_pics/backgroundProfil.png');
+
         $this->notifications = new ArrayCollection();
+        $this->conges = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -354,9 +371,69 @@ class Collaborateur implements UserInterface,EquatableInterface
         return $this->role_entreprise;
     }
 
+    public function getrole_entreprise(): ?string
+    {
+        return $this->role_entreprise;
+    }
+
     public function setRoleEntreprise(string $role_entreprise): self
     {
         $this->role_entreprise = $role_entreprise;
+
+        return $this;
+    }
+
+    public function getRtt(): ?int
+    {
+        return $this->rtt;
+    }
+
+    public function setRtt(int $rtt): self
+    {
+        $this->rtt = $rtt;
+
+        return $this;
+    }
+
+    public function getConge(): ?int
+    {
+        return $this->conge;
+    }
+
+    public function setConge(int $conge): self
+    {
+        $this->conge = $conge;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Conge[]
+     */
+    public function getConges(): Collection
+    {
+        return $this->conges;
+    }
+
+    public function addConge(Conge $conge): self
+    {
+        if (!$this->conges->contains($conge)) {
+            $this->conges[] = $conge;
+            $conge->setCollabo($this);
+        }
+
+        return $this;
+    }
+
+    public function removeConge(Conge $conge): self
+    {
+        if ($this->conges->contains($conge)) {
+            $this->conges->removeElement($conge);
+            // set the owning side to null (unless already changed)
+            if ($conge->getCollabo() === $this) {
+                $conge->setCollabo(null);
+            }
+        }
 
         return $this;
     }

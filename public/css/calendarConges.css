@@ -1,5 +1,6 @@
+/* ------------- PARTIE GENERALE ------------- */
 body {
-    background-image: url("/images/background_login.png");
+    background-image: url("/images/background_calendar.png");
 }
 table, th, td {
   border: 1px solid white;
@@ -11,22 +12,53 @@ table, th, td {
     max-width: 100% !important;
     width: 98%;
 }
-
+#content .container .row {
+    margin-bottom: 0;
+}
+span{
+  margin-bottom : 40px;
+}
+.space{
+  margin-bottom : 40px;
+}
+.space2{
+  margin-bottom : 60px;
+}
+/* ------------- PARTIE FULL CALENDAR ------------- */
 #mainCalendar{
   color : white;
+}
+.fc-time{
+   display : none;
+}
+.dayConge {
+  /* background-color: #c12600 !important; */
+  /* display:none; */
+}
+.fc-month-view .fc-event-container{
+    /* display: none; */
+}
+.hideWeekend {
+  /* display:none;  */
+}
+/* ------------- PARTIE CONGES ------------- */
+#divFiltersCalendar{
+  color:white;
 }
 #btnConge{
   margin-bottom: 5% !important;
 }
-#rowTable{
+#rowTable,#tableCongesService{
   margin-top : 4%;
-  background-color: transparent !important;
 }
 #data-table-row-grouping{
   margin-left : 3%;
 }
+#data-table-row-grouping_length{
+  display : block !important;
+}
 #rightPart{
-  color: white;
+  color: white !important;
   text-align: center;
 }
 #calendarBox{
@@ -41,17 +73,6 @@ table, th, td {
 #congePart{
   width : 50%;
 }
-#content .container .row {
-    margin-bottom: 0;
-}
-#external-events .fc-event {
-    color: #fff;
-    text-decoration: none;
-    padding: 5px;
-    margin-bottom: 10px;
-    cursor: all-scroll;
-    border: none;
-}
 #rowCongesBottom{
   background-color: #143a77;
   color : white;
@@ -61,10 +82,38 @@ table, th, td {
   color : white;
 }
 #dataBottom{
-  background-color: #edf3ff;
   color : black;
   border-color : black;
 }
+input[type="date"]::-webkit-input-placeholder{
+    visibility: hidden !important;
+}
+input[type="search"]{
+    color : white;
+}
+table{
+  margin-left : 0!important;
+}
+input::-webkit-calendar-picker-indicator{
+    display: none;
+}
+.modal { max-height: 100%; overflow: visible}
+#marginModal{
+  margin-top : 0;
+  margin-left : 5%;
+  margin-right : 5%;
+}
+/* ------------- PARTIE DATATABLES ------------- */
+.dataTables_info{
+  color : white !important;
+}
+.dataTables_filter{
+  color : white !important;
+}
+#modalRTT,#modalConge{
+  text-align : center;
+}
+/* ------------- PARTIE TEXTE ------------- */
 h4.header {
     font-size: 1.4rem;
     font-weight: 400;
@@ -85,9 +134,27 @@ h6.header {
     line-height: 1.508rem;
     white-space:nowrap;
 }
+h9.header {
+    font-size: 2rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    line-height: 1.508rem;
+}
 h10.header {
     font-size: 3rem;
     font-weight: 600;
     text-transform: uppercase;
     line-height: 1.508rem;
+}
+h11.header {
+    font-size: 1rem;
+    font-weight: 400;
+    text-transform: uppercase;
+    line-height: 1.508rem;
+    white-space:nowrap;
+    margin-top : 5%;
+}
+#verifConge,#validConge,#calculConge{
+  margin-top : 5px;
+  margin-bottom : 5px;
 }

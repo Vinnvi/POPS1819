@@ -29,72 +29,70 @@
         center: 'title',
         right: 'month,basicWeek,basicDay'
       },
+      hiddenDays: [ 0, 6 ],
+      eventRender: function (event, element) {
+          var start = moment(event.start);
+          var end = moment(event.end);
+          end.add(1, 'd');
+          var colorMyConge = '#e2b14d';
+          if($("#displayColorConge").is(':checked')) {
+            $(".dayConge").css("background-color", "#c12600");
+          }
+          element.data('event-id',event.id);
+          while( start.format('YYYY-MM-DD') != end.format('YYYY-MM-DD') ){
+              var checkDay = new Date(start.format('YYYY-MM-DD'));
+              var dataToFind = start.format('YYYY-MM-DD');
+              if(checkDay.getDay() == 0 || checkDay.getDay() == 6){
+                $("td[data-date='"+dataToFind+"']").addClass('hideWeekend');
+                // $(element).css("display", "none");
+              }
+              else{
+
+              }
+              if(event._id == "myConge"){
+                $("td[data-date='"+dataToFind+"']").addClass('dayConge');
+
+                // $("a[style='"+"background-color:#e2b14d;border-color:#e2b14d"+"']").addClass('test');
+              }
+              start.add(1, 'd');
+          }
+
+      },
+      dayClick: function(date, allDay, jsEvent, view) {
+        $('#calendar').fullCalendar('clientEvents', function(event) {
+          // match the event date with clicked date if true render clicked date events
+          if ( moment(date).format('YYYY-MM-DD') >= moment(event._start).format('YYYY-MM-DD') && moment(date).format('YYYY-MM-DD') <= moment(event._end).format('YYYY-MM-DD') ) {
+            console.log("test");
+            console.log(event.title);
+            // if you have subarray i mean array within array then
+            // console.log(event.subarray[0].yoursubarrayKey);
+          }
+        });
+      },
       defaultDate: $('#calendar').fullCalendar('today'),
       editable: true,
       droppable: true, // this allows things to be dropped onto the calendar
       eventLimit: true, // allow "more" link when too many events
-      events: [
-        {
-          title: 'All Day Event',
-          start: '2015-05-01',
-          color: '#9c27b0'
-        },
-        {
-          title: 'Long Event',
-          start: '2015-05-07',
-          end: '2015-05-10',
-          color: '#e91e63'
-        },
-        {
-          id: 999,
-          title: 'Repeating Event',
-          start: '2015-05-09T16:00:00',
-          color: '#ff1744'
-        },
-        {
-          id: 999,
-          title: 'Repeating Event',
-          start: '2015-05-16T16:00:00',
-          color: '#aa00ff'
-        },
-        {
-          title: 'Conference',
-          start: '2015-05-3',
-          end: '2015-05-5',
-          color: '#01579b'
-        },
-        {
-          title: 'Meeting',
-          start: '2015-05-12T10:30:00',
-          end: '2015-05-12T12:30:00',
-          color: '#2196f3'
-        },
-        {
-          title: 'Lunch',
-          start: '2015-05-12T12:00:00',
-          color: '#ff5722'
-        },
-        {
-          title: 'Meeting',
-          start: '2015-05-12T14:30:00',
-          color: '#4caf50'
-        },
-        {
-          title: 'Happy Hour',
-          start: '2015-05-12T17:30:00',
-          color: '#03a9f4'
-        },
-        {
-          title: 'Dinner',
-          start: '2015-05-12T20:00:00',
-          color: '#009688'
-        },
-        {
-          title: 'Birthday Party',
-          start: '2015-05-13T07:00:00',
-          color: '#00bcd4'
+      selectable: true,
+      views: {
+        month: {
+          eventLimit: 2 // adjust to 6 only for agendaWeek/agendaDay
         }
-      ]
+      },
+      businessHours: {
+        // days of week. an array of zero-based day of week integers (0=Sunday)
+        dow: [ 1, 2, 3, 4, 5 ], // Monday - Thursday
+        start: '10:00', // a start time (10am in this example)
+        end: '18:00', // an end time (6pm in this example)
+      }
     });
+
+
+
+
+    // congesService.forEach(function (conge){
+    //   {% if(conge.id_collabo != app.user.id) %}
+    // }
+    // end for
 
   });

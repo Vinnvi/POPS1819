@@ -111,22 +111,19 @@ class gestionMissionsController extends AbstractController
      */
     public function gestionMission(Projet $projet){
         $collaboRepository = $this->getDoctrine()->getEntityManager()->getRepository('App\Entity\Collaborateur');
-
+        
+        $projet->getCollabos()->initialize();
         $collabos = $collaboRepository->findAll();
-        $collabosDuProjet = array();
+        $collabosDuProjet = $projet->getCollabos();
         $collabosPasDuProjet = array();
         foreach ($collabos as $collabo){
-            if($collabo->getProjets()->contains($projet)){
-                array_push($collabosDuProjet,$collabo);
-            }
-            else{
+            if( !($collabosDuProjet->contains($collabo)) ){
                 array_push($collabosPasDuProjet,$collabo);
             }
         }
 
         $ligneRepository = $this->getDoctrine()->getEntityManager()->getRepository('App\Entity\LigneDeFrais');
-        $lignesATraiter = $ligneRepository->findLignesChef($projet->getId());
-
+        $lignesATraiter = $ligneRepository->findLignesChef($projet->getId());        
 
         return new Response($this->twig->render('pages/gestionMissions/gestionMissionsDetails.html.twig',[
             'mission' => $projet,
@@ -258,8 +255,6 @@ class gestionMissionsController extends AbstractController
             }
             if($noteAStatuer){
                 if($noteValidee){
-                    $ligne->getNote()->setStatut(NoteDeFrais::STATUS[2]);
-
                     //Notification au collabo de la validation de la ligne
                     $notification = new Notification();
                     $notification->setCollaborateur($ligne->getNote()->getCollabo());
@@ -273,6 +268,12 @@ class gestionMissionsController extends AbstractController
                     $ligne->getNote()->getCollabo()->addNotification($notification);
                     $this->em->persist($notification);
 
+                    if($ligne->getNote()->getStatut() == NoteDeFrais::STATUS[1]){
+                        $ligne->getNote()->setStatut(NoteDeFrais::STATUS[2]);
+                    }
+                    else{
+                        $ligne->getNote()->setStatut(NoteDeFrais::STATUS[9]);
+                    }
                 }
                 else{
                     $ligne->getNote()->setStatut(NoteDeFrais::STATUS[3]);

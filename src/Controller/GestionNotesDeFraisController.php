@@ -4,8 +4,9 @@ namespace App\Controller;
 
 
 use App\Entity\NoteDeFrais;
-use App\Entity\LigneDeFrais;
 use App\Entity\Service;
+use App\Entity\LigneDeFrais;
+use App\Entity\Collaborateur;
 use PhpParser\Node\Expr\Array_;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Twig\Environment;
@@ -14,17 +15,12 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
 use App\Repository\NoteDeFraisRepository;
 
-class GestionNotesFraisController extends AbstractController
+class GestionNotesDeFraisController extends AbstractController
 {
     /**
      * @var Environment
      **/
     private $twig;
-
-    /**
-     * @var NoteDeFraisRepository
-     */
-    private $repository;
 
     /**
      * @var ObjectManager
@@ -39,23 +35,28 @@ class GestionNotesFraisController extends AbstractController
     }
 
     /**
+     * @param $note1
+     * @param $note2
+     * @return bool
+     */
+    function comparator($note1, $note2){
+        return $note1->getLastModif() < $note2->getLastModif();
+    }
+
+    /**
      * @Route("/gestionNotesDeFrais", name="index")
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function index(): Response
     {
-
         $notesRepository = $this->getDoctrine()->getEntityManager()->getRepository('App\Entity\NoteDeFrais');
-        $notesDeFraisEnAttente = $notesRepository->findByStatus(NoteDeFrais::STATUS[2]);
-        $notesDeFraisPasses = array();
-        $notesDeFraisPasses = array_merge($notesDeFraisPasses,$notesRepository->findByStatus(NoteDeFrais::STATUS[5]));
-        $notesDeFraisPasses = array_merge($notesDeFraisPasses,$notesRepository->findByStatus(NoteDeFrais::STATUS[7]));
+        $notesDeFraisEnAttente = array_merge($notesRepository->findByStatus(NoteDeFrais::STATUS[2]), $notesRepository->findByStatus(NoteDeFrais::STATUS[9]));
+        $notesDeFraisPasses = array_merge($notesRepository->findByStatus(NoteDeFrais::STATUS[5]), $notesRepository->findByStatus(NoteDeFrais::STATUS[7]));
 
-        dump($notesDeFraisPasses);
         return $this->render('pages/gestionNotesFrais.html.twig',
             [
                 'notesDeFraisEnAttente' => $notesDeFraisEnAttente,
-                'notesDeFraisPassees' => $notesDeFraisPasses,
+                'notesValideesRefusees' => $notesDeFraisPasses,
             ]);
     }
 
@@ -68,15 +69,49 @@ class GestionNotesFraisController extends AbstractController
     {
         //Récupération des lignes de frais relatives à la note
         $LigneRepository = $this->getDoctrine()->getEntityManager()->getRepository('App\Entity\LigneDeFrais');
-        $lignesDeFrais =  $LigneRepository->findByNoteId($noteDeFrais->getId());
+        if($noteDeFrais->getStatut() == NoteDeFrais::STATUS[9]){
+            $lignesDeFrais =  $LigneRepository->findByNoteIDAndAvance($noteDeFrais->getId());
+        }else{
+            $lignesDeFrais =  $LigneRepository->findByNoteID($noteDeFrais->getId());
+        }
+
         return $this->render('pages/gestionNotesFraisDetails.html.twig',[
             'noteDeFrais' => $noteDeFrais,
             'ligneDeFrais' => $lignesDeFrais,
+            'statusNotes' => NoteDeFrais::STATUS,
         ]);
     }
 
     /**
-     * @Route("/gestionNotesDeFrais/validationDetails", name="validation.lignes.details.compta")
+     * @Route("/gestionNotesDeFraisChef/Validation", name="validationNotes")
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function validationNotes(){
+        $noteRepository = $this->getDoctrine()->getEntityManager()->getRepository('App\Entity\NoteDeFrais');
+        $LigneDeFraisRepository = $this->getDoctrine()->getEntityManager()->getRepository('App\Entity\LigneDeFrais');
+
+        //Pour chaque id on update le statut de la note
+        foreach ($_POST['choix'] as $value){
+            //La note est validée ...
+            $noteRepository->findOneByID($value)->setStatut(NoteDeFrais::STATUS[2]);
+            $noteRepository->findOneByID($value)->setLastModif(new \DateTime());
+
+            //...ainsi que l'ensemble de ses lignes
+            $lignes = $LigneDeFraisRepository->findByNoteID($value);
+            foreach ($lignes as $ligne){
+                $ligne->setStatutValidation(LigneDeFrais::STATUS[2]);
+                $ligne->setLastModif(new \DateTime());
+            }
+
+        }
+        $this->em->flush();
+
+        return $this->redirectToRoute('app_gestionNotesFrais');
+    }
+
+
+    /**
+     * @Route("/gestionNotesDeFrais/validationDetails/", name="validation.lignes.details")
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      * @throws \Exception
      */
@@ -86,8 +121,6 @@ class GestionNotesFraisController extends AbstractController
         $ok = true;
         //Validation des lignes
         foreach ($_POST as $key => $value){
-            dump($key);
-            dump($value);
             $LigneDeFrais = $LigneRepository->findOneByID($key);
             if($LigneDeFrais != null){
                 if($value == "refus"){
@@ -95,7 +128,12 @@ class GestionNotesFraisController extends AbstractController
                     $ok = false;
                 }
                 else{
-                    $LigneDeFrais->setStatutValidation(LigneDeFrais::STATUS[5]);
+                    if($LigneDeFrais->getNote()->getStatut() == LigneDeFrais::STATUS[2]){
+                        $LigneDeFrais->setStatutValidation(LigneDeFrais::STATUS[5]);
+                    }
+                    else{
+                        $LigneDeFrais->setStatutValidation(LigneDeFrais::STATUS[6]);
+                    }
                 }
                 $LigneDeFrais->setLastModif(new \DateTime());
             }
@@ -105,7 +143,12 @@ class GestionNotesFraisController extends AbstractController
         if(isset($_POST['id'])){
             $notesDeFrais = $noteRepository->findOneByID($_POST['id']);
             if($ok){
-                $notesDeFrais->setStatut(NoteDeFrais::STATUS[5]);
+                if($notesDeFrais->getStatut() == NoteDeFrais::STATUS[2]){
+                    $notesDeFrais->setStatut(NoteDeFrais::STATUS[5]);
+                }
+                else{
+                    $notesDeFrais->setStatut(NoteDeFrais::STATUS[0]);
+                }
             }
             else{
                 $notesDeFrais->setStatut(NoteDeFrais::STATUS[7]);
@@ -116,35 +159,10 @@ class GestionNotesFraisController extends AbstractController
         $this->em->flush();
 
 
-        return $this->redirectToRoute('app_gestionNotesFrais');
-
+        return $this->redirectToRoute('app_gestionNotesDeFrais');
     }
 
-    /**
-     * @Route("/gestionNotesDeFrais/ValidationGlobale", name="validationNotes.compta")
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
-    public function validationNotes(){
-        $noteRepository = $this->getDoctrine()->getEntityManager()->getRepository('App\Entity\NoteDeFrais');
-        $LigneDeFraisRepository = $this->getDoctrine()->getEntityManager()->getRepository('App\Entity\LigneDeFrais');
 
-        //Pour chaque id on update le statut de la note
-        foreach ($_POST['choix'] as $value){
 
-            //La note est validée ...
-            $noteRepository->findOneByID($value)->setStatut(NoteDeFrais::STATUS[5]);
-            $noteRepository->findOneByID($value)->setLastModif(new \DateTime());
 
-            //...ainsi que l'ensemble de ses lignes
-            $lignes = $LigneDeFraisRepository->findByNoteID($value);
-            foreach ($lignes as $ligne){
-                $ligne->setStatutValidation(LigneDeFrais::STATUS[5]);
-                $ligne->setLastModif(new \DateTime());
-            }
-
-        }
-        $this->em->flush();
-
-        return $this->redirectToRoute('app_gestionNotesFrais');
-    }
 }

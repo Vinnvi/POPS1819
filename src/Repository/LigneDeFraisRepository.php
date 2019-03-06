@@ -35,6 +35,19 @@ class LigneDeFraisRepository extends ServiceEntityRepository
         ;
     }
 
+    public function findByNoteIDAndAvance($NoteId)
+    {
+        return $this->createQueryBuilder('l')
+            ->andWhere('l.avance = true')
+            ->andWhere('l.Note = :val')
+            ->setParameter('val', $NoteId)
+            ->orderBy('l.id', 'ASC')
+            ->setMaxResults(100)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
     // /**
     //  * @return LigneDeFrais Returns element of LigneDeFrais objects
     //  */

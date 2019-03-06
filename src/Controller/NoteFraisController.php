@@ -93,6 +93,8 @@ class NoteFraisController extends AbstractController
          'mesLignesDeFrais' => $lignesDeFrais,
          'typesPaiements' => $typesPaiements,
          'projectsAvailables' => $projectsAvailables,
+         'statusValisationLigne' => LigneDeFrais::STATUS,
+         'statusValisationNote' => NoteDeFrais::STATUS,
          ]));
     }
 
@@ -109,6 +111,7 @@ class NoteFraisController extends AbstractController
           $noteRepository = $this->getDoctrine()->getEntityManager()->getRepository('App\Entity\NoteDeFrais');
           $LignedeFraisModifiee->setNote($noteRepository->findByMonthAndYear($_POST['creationMois'],$_POST['creationAnnee'],$this->getUser()->getId())[0]);
           $LignedeFraisModifiee->setAvance(false);
+          $LignedeFraisModifiee->setStatutValidation(LigneDeFrais::STATUS[0]);
         }else{
           $LignedeFraisModifiee = $LigneRepository->findById($_POST['ligneId'])[0];
         }
@@ -191,6 +194,40 @@ class NoteFraisController extends AbstractController
       return $this->redirectToRoute('app_noteFrais');
     }
 
+        /**
+     * @Route("/mesNotesDeFrais/lol", name="envoyer.avance")
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function envoiAvance() : Response {
+      $LigneRepository = $this->getDoctrine()->getEntityManager()->getRepository('App\Entity\LigneDeFrais');
+      $nombre = 0;
+      //Validation des lignes
+      foreach ($_POST as $key => $value){
+        dump($key);
+        if(substr($key, 0, 1) == "m"){
+          $id = substr($key, 14);
+          $LigneDeFrais = $LigneRepository->findOneByID($id);
+          if($LigneDeFrais != null){
+              $LigneDeFrais->setMontantAvance(floatval($value));
+              $LigneDeFrais->setStatutValidation(LigneDeFrais::STATUS[1]);
+              $LigneDeFrais->setAvance(true);
+              $LigneDeFrais->setLastModif(new \DateTime());
+          }
+        }
+      }
+      if(sizeof($_POST) > 1){
+        $noteRepository = $this->getDoctrine()->getEntityManager()->getRepository('App\Entity\NoteDeFrais');
+        if(isset($_POST['noteDmandeAvanceId'])){
+            $notesDeFrais = $noteRepository->findOneByID($_POST['noteDmandeAvanceId']);
+            $notesDeFrais->setStatut(NoteDeFrais::STATUS[8]);
+            $notesDeFrais->setLastModif(new \DateTime());
+        }
+      }
+
+      $this->em->flush();
+      return $this->redirectToRoute('app_noteFrais');
+    }
+
     /**
      * @Route("/mesNotesDeFrais/envoyer/{id}", name="envoyer.note")
      * @param NoteDeFrais $notesDeFrais
@@ -202,9 +239,10 @@ class NoteFraisController extends AbstractController
         $LigneRepository = $this->getDoctrine()->getEntityManager()->getRepository('App\Entity\LigneDeFrais');
         $lignesDeFrais =  $LigneRepository->findByNoteId($noteDeFrais->getId());
         //Validation des lignes
-        foreach ($lignesDeFrais as $key => $value){
-          $LigneDeFrais = $LigneRepository->findOneByID($value->getId());
-          if($LigneDeFrais != null){
+        foreach ($lignesDeFrais as $key => $LigneDeFrais){
+          //$LigneDeFrais = $LigneRepository->findOneByID($value->getId());
+          dump($LigneDeFrais);
+          if($LigneDeFrais->isModifiable()){
               $LigneDeFrais->setStatutValidation(LigneDeFrais::STATUS[1]);
               $LigneDeFrais->setLastModif(new \DateTime());
               $this->em->persist($LigneDeFrais);

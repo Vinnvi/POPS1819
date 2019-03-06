@@ -3,8 +3,10 @@ namespace App\Controller;
 
 use App\Entity\LigneDeFrais;
 use App\Entity\NoteDeFrais;
+use App\Entity\Notification;
 use App\Entity\Projet;
 use App\Repository\ProjetRepository;
+use App\Repository\LigneDeFraisRepository;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -148,6 +150,19 @@ class gestionMissionsController extends AbstractController
                 if($collabo != null){
                     $collabo->addProjet($projet);
                     $projet->addCollabo($collabo);
+
+                    //Notification au collabo
+                    $notification = new Notification();
+                    $notification->setCollaborateur($collabo);
+                    $notification->setStatut(Notification::STATUT[1]);
+                    $notification->setCategorie(Notification::CATEGORIE[3]);
+                    $notification->setDescription("Vous avez été ajouté à la mission ".$projet->getNom()." du service ".$projet->getService()->getNom());
+                    $notification->setDate(new \DateTime());
+                    $notification->setPersonnel(true);
+                    $notification->setCumulable(false);
+                    $notification->setVu(false);
+                    $collabo->addNotification($notification);
+                    $this->em->persist($notification);
                 }
             }
 
@@ -172,6 +187,20 @@ class gestionMissionsController extends AbstractController
                 if($collabo != null){
                     $collabo->removeProjet($projet);
                     $projet->removeCollabo($collabo);
+
+
+                    //Notification au collabo
+                    $notification = new Notification();
+                    $notification->setCollaborateur($collabo);
+                    $notification->setStatut(Notification::STATUT[1]);
+                    $notification->setCategorie(Notification::CATEGORIE[3]);
+                    $notification->setDescription("Vous avez retiré de la mission ".$projet->getNom()." du service ".$projet->getService()->getNom());
+                    $notification->setDate(new \DateTime());
+                    $notification->setPersonnel(true);
+                    $notification->setCumulable(false);
+                    $notification->setVu(false);
+                    $collabo->addNotification($notification);
+                    $this->em->persist($notification);
                 }
             }
 
@@ -189,12 +218,30 @@ class gestionMissionsController extends AbstractController
         if(isset($_POST['ligne'])){
             $ligneRepository = $this->getDoctrine()->getEntityManager()->getRepository('App\Entity\LigneDeFrais');
             $ligne = $ligneRepository->findOneById($_POST['ligne']);
+
+            //Notification au collabo du refus/validation de la ligne
+            $notification = new Notification();
+            $notification->setCollaborateur($ligne->getNote()->getCollabo());
+            $notification->setCategorie(Notification::CATEGORIE[0]);
+            $notification->setDescription("La ligne ".$ligne->getIntitule()." ");
+            $notification->setDate(new \DateTime());
+            $notification->setPersonnel(true);
+            $notification->setCumulable(false);
+            $notification->setVu(false);
+            $ligne->getNote()->getCollabo()->addNotification($notification);
+
+
             if($_POST['decision'] == "refuser"){
                 $ligne->setStatutValidation(LigneDeFrais::STATUS[3]);
+                $notification->setDescription($notification->getDescription()."a été refusée");
+                $notification->setStatut(Notification::STATUT[2]);
             }
             else{
                 $ligne->setStatutValidation(LigneDeFrais::STATUS[2]);
+                $notification->setDescription($notification->getDescription()."a été validée");
+                $notification->setStatut(Notification::STATUT[0]);
             }
+            $this->em->persist($notification);
 
             //vérification si la note est validée en fonction des status des lignes
             $lignes = $ligneRepository->findByNoteID($ligne->getNote()->getId());
@@ -212,9 +259,35 @@ class gestionMissionsController extends AbstractController
             if($noteAStatuer){
                 if($noteValidee){
                     $ligne->getNote()->setStatut(NoteDeFrais::STATUS[2]);
+
+                    //Notification au collabo de la validation de la ligne
+                    $notification = new Notification();
+                    $notification->setCollaborateur($ligne->getNote()->getCollabo());
+                    $notification->setStatut(Notification::STATUT[0]);
+                    $notification->setCategorie(Notification::CATEGORIE[0]);
+                    $notification->setDescription("Votre note de frais de ".$ligne->getNote()->getMois()." ".$ligne->getNote()->getAnnee()." a été validée par le(s) chef(s) de service");
+                    $notification->setDate(new \DateTime());
+                    $notification->setPersonnel(true);
+                    $notification->setCumulable(false);
+                    $notification->setVu(false);
+                    $ligne->getNote()->getCollabo()->addNotification($notification);
+                    $this->em->persist($notification);
+
                 }
                 else{
                     $ligne->getNote()->setStatut(NoteDeFrais::STATUS[3]);
+                    //Notification au collabo de la validation de la ligne
+                    $notification = new Notification();
+                    $notification->setCollaborateur($ligne->getNote()->getCollabo());
+                    $notification->setStatut(Notification::STATUT[2]);
+                    $notification->setCategorie(Notification::CATEGORIE[0]);
+                    $notification->setDescription("Votre note de frais de ".$ligne->getNote()->getMois()." ".$ligne->getNote()->getAnnee()." a été refusée.");
+                    $notification->setDate(new \DateTime());
+                    $notification->setPersonnel(true);
+                    $notification->setCumulable(false);
+                    $notification->setVu(false);
+                    $ligne->getNote()->getCollabo()->addNotification($notification);
+                    $this->em->persist($notification);
                 }
                 $ligne->getNote()->setLastModif(new \DateTime());
             }

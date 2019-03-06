@@ -1,0 +1,71 @@
+{% extends 'Admin/Collaborateur/index.html.twig' %}
+
+{% block title 'Edition service' %}
+
+
+{% block body %}
+    <div class="container mt-4">
+        <h3>Service {{ service.nom }} </h3>
+        {% for message in app.flashes('success') %}
+            <div class="alert alert-success">
+                {{ message }}
+            </div>
+
+        {% endfor %}
+        <script>
+            window.Materialize.toast('I am a toast!', 4000);
+        </script>
+        <div class="row blue lighten-5 m-0 p-1 center-align">Chef : {{chef.nom}} {{chef.prenom}} </div>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>Collaborateurs</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+                {% for collaborateur in collaborateurs %}
+                    {% if collaborateur != chef %}
+                        <tr>
+                            <td> {{ collaborateur.nom}} {{collaborateur.prenom }} </td>
+                            <td>
+                                <a href="{{ path('admin.service.setChef', {id: collaborateur.id}) }}" class="btn btn-secondary" >Nommer chef</a>
+                                <form method="post" action="{{ path('admin.service.removeCollaborateur',{id: collaborateur.id}) }}" style="display: inline-block" onsubmit=" return confirm('Le collaborateur sera retiré du service et n\'aura par conséquent plus de service associé.\nConfirmer ?')">
+                                    <input type="hidden" name="_method" value="DELETE">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ collaborateur.id) }}">
+                                    <button class="btn red">Retirer du service</button>
+                                </form>
+                            
+                            </td>
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+            </tbody>
+        </table>
+        <div class="row" >
+            {{form_start(form)}}
+                <div style="margin-top: 2em; float:left; width: 50%"> {{ form_row(form.chef, { 'attr': {'class': 'browser-default'}}) }} </div>
+                <button class="btn btn-primary" style="margin-top: 4em; margin-left: 2em; float:left">Ajouter</button>
+            {{form_end(form)}}
+        </div>
+        <div class="text-right">
+            <a href="{{ path('admin.service.newCollaborateur', {id: service.id}) }}" class="btn btn-primary">Ajouter un nouveau collaborateur</a>
+        </div>
+        <div class="text-right">
+            <a href="{{ path('admin.service.index') }}" class="btn btn-primary" style="margin-top: 4em">Retour</a>
+        </div>
+    </div>
+
+{%  endblock %}
+{% block javascripts %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script type="text/javascript" src="materialize/js/materialize.min.js"></script>
+<script>
+    $('.dropdown-trigger').dropdown();
+</script>
+    <script>
+        function toast(){
+            M.toast({html: 'I am a toast!'})
+        }
+    </script>
+{% endblock %}

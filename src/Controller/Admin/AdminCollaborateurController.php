@@ -34,7 +34,7 @@ class AdminCollaborateurController extends AbstractController
     }
 
     /**
-     * @Route("/admin", name="admin.collaborateur.index")
+     * @Route("/admin/collaborateurs", name="admin.collaborateur.index")
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function index()
@@ -44,7 +44,7 @@ class AdminCollaborateurController extends AbstractController
     }
 
     /**
-     * @Route("/admin/edit/{id}", name="admin.collaborateur.edit")
+     * @Route("/admin/collaborateurs/edit/{id}", name="admin.collaborateur.edit")
      * @param Collaborateur $collaborateur
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\Response

@@ -7,7 +7,10 @@
     <div class="container mt-4">
         <h3>Editer le collaborateur</h3>
         {{  include('admin/collaborateur/_form.html.twig', {form: form, button: 'Editer'}) }}
-
+        <div class="text-right">
+            <a href="{{ path('admin.collaborateur.index') }}" class="btn btn-primary" style="margin-top: 1em">Retour</a>
+        </div>
     </div>
+    
 
 {%  endblock %}

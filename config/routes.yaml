@@ -59,7 +59,7 @@ app_gestionNotesFraisAdmin:
 
 app_admin:
   path: /admin
-  controller: App\Controller\Admin\AdminCollaborateurController::index
+  controller: App\Controller\Admin\AdminServiceController::index
 
 app_profile:
   path: /profile

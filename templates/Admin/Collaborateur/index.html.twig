@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
@@ -17,15 +17,13 @@
             <li>
                 <!-- search bar -->
             </li>
-            <li><a class='dropdown-trigger btn btn-large' href='#' data-target='dropdown1'><b>Admin</b></a></li>
+            <li><a class='dropdown-trigger btn btn-large' data-target='dropdown1'><b>Admin</b></a></li>
         </ul>
     </div>
 </nav>
 <!-- Dropdown Structure -->
 <ul id='dropdown1' class='dropdown-content'>
-    <li><a href="#!">Edition de profil</a></li>
-    <li><a href="#!">Paramètres</a></li>
-    <li class="divider" tabindex="-1"></li>
+    <li><a href="/">Quitter le mode admin</a></li>
     <li><a href="/logout">Deconnexion</a></li>
 </ul>
 {% block body %}
@@ -33,7 +31,7 @@
 {% endblock %}
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script type="text/javascript" src="materialize/js/materialize.min.js"></script>
+<script type="text/javascript" src="/materialize/js/materialize.min.js"></script>
 <script>
     $('.dropdown-trigger').dropdown();
 </script>

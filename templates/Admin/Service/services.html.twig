@@ -1,11 +1,11 @@
 {% extends 'Admin/Collaborateur/index.html.twig' %}
 
-{% block title 'Gestion des collaborateurs' %}
+{% block title 'Gestion des services' %}
 
 {% block body %}
     <div class="container mt-4">
-        <h3>Gestion des collaborateurs</h3>
-        <a href="{{ path('admin.service.index') }}" class="btn btn-primary blue">Gestion des services</a>
+        <h3>Gestion des services</h3>
+        <a href="{{ path('admin.collaborateur.index') }}" class="btn btn-primary blue">gestion des collaborateurs</a>
         {% for message in app.flashes('success') %}
             <div class="alert alert-success">
                 {{ message }}
@@ -18,30 +18,30 @@
         <table class="table table-striped">
             <thead>
             <tr>
-                <th>Collaborateur</th>
+                <th>Services</th>
                 <th>Actions</th>
             </tr>
             </thead>
             <tbody>
-                {% for collaborateur in collaborateurs %}
+                {% for service in services %}
                     <tr>
-                        <td>{{ collaborateur.username }}</td>
+                        <td>{{ service.nom }}</td>
                         <td>
-                            <a href="{{ path('admin.collaborateur.edit', {id: collaborateur.id}) }}" class="btn btn-secondary">Editer</a>
-                            {% if collaborateur.roleEntreprise != "Chef de service" %}
-                                <form method="post" action="{{ path('admin.collaborateur.remove',{id: collaborateur.id}) }}" style="display: inline-block" onsubmit="return confirm('Confirmer la suppression ?')">
+                            <a href="{{ path('admin.service.edit', {id: service.id}) }}" class="btn btn-secondary">Editer</a>
+                            {% if service.id > 2 %}
+                                <form method="post" action="{{ path('admin.service.remove',{id: service.id}) }}" style="display: inline-block" onsubmit="return confirm('Confirmer la suppression du service?')">
                                     <input type="hidden" name="_method" value="DELETE">
-                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ collaborateur.id) }}">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ service.id) }}">
                                     <button class="btn red">Supprimer</button>
+                                </form>
                             {% endif %}
-                            </form>
                         </td>
                     </tr>
                 {% endfor %}
             </tbody>
         </table>
         <div class="text-right" style="margin-top: 2em; margin-bottom: 2em;">
-            <a href="{{ path('admin.collaborateur.new') }}" class="btn btn-primary">Ajouter un collaborateur</a>
+            <a href="{{ path('admin.service.new') }}" class="btn btn-primary">Ajouter un service</a>
         </div>
     </div>
 

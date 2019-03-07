@@ -36,11 +36,11 @@
                                     <div class="collapsible-body">
                                         Demi-journées restantes : {{ demande.collabo.conge }} <br><br>
                                         <form action="{{ path('valider.conges.chef') }}" method="post">
-                                            <input type="hidden" name="decision" id="decision" value=""/>
+                                            <input type="hidden" name="decision" id="decision{{ demande.id_conge }}" value=""/>
                                             <input type="hidden" name="demande" value="{{ demande.id_conge }}"/>
 
 
-                                            <button type="submit" onclick="$('#decision').val('valider');" class="waves-effect waves-light btn-small green" style="margin:auto;">Valider</button>
+                                            <button type="submit" onclick="$('#decision'+{{ demande.id_conge }}).val('valider');" class="waves-effect waves-light btn-small green" style="margin:auto;">Valider</button>
                                         </form>
                                         <a class="waves-effect waves-light btn modalRefus modal-trigger red" data-id="{{ demande.id_conge }}" href="#modalRefus">Refuser</a>
 
@@ -57,7 +57,7 @@
                 </div>
                 <div id="HistoriqueDemandes" class="col s12">
                     {% if congesPassees == null %}
-                        Historique
+                        Historique vide
                     {% else %}
                         {% for conge in congesPassees %}
                             <ul class="collapsible">

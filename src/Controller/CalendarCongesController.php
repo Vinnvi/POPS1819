@@ -35,7 +35,8 @@ class CalendarCongesController extends AbstractController
     {
       //recuperation des conges du collaborateur
       $mesConges = $this->repository->findByCollaborateurId($this->getUser());
-      $congesService = $this->repository->findByServiceId($this->getUser()->getService());
+      $congesService = $this->repository->findByServiceId($this->getUser()->getService()->getId());
+      dump($congesService);
       return new Response($this->twig->render('pages/calendarConges.html.twig',
         ['mesConges' => $mesConges,
         'congesService' => $congesService]));
@@ -64,7 +65,7 @@ class CalendarCongesController extends AbstractController
         $newConge->setDate_fin($_POST['endDate']);
         if($_POST['timeCongeFin'] == "true"){$newConge->setFin_matin(true);}
         else {$newConge->setFin_matin(false);}
-        $newConge->setStatut('En Attente');
+        $newConge->setStatut('En attente chef');
         $newConge->setDuree((int)$_POST['inputDuree']);
 
         if($_POST['typeConge']=="Conge"){

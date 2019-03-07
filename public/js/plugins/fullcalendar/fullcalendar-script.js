@@ -72,8 +72,8 @@
         console.log("test ici");
       },
       defaultDate: $('#calendar').fullCalendar('today'),
-      editable: true,
-      droppable: true, // this allows things to be dropped onto the calendar
+      editable: false,
+      droppable: false, // this allows things to be dropped onto the calendar
       eventLimit: true, // allow "more" link when too many events
       selectable: true,
       views: {

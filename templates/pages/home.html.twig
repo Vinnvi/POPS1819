@@ -27,7 +27,7 @@
                             <tr class="
                                     {% if notification.getStatut() == "OK" %}
                                         green lighten-4
-                                    {% elseif notification.getStatut() == "ACTION_NECESSAIRE" %}
+                                    {% elseif notification.getStatut() == "ACTION_NECESSAIRE" or notification.getStatut() == "REFUS" %}
                                         red lighten-4
                                     {% endif %}
                                     {% if not notification.getPersonnel() %}red-text{% endif %}"

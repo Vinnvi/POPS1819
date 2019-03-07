@@ -3,8 +3,10 @@ namespace App\Controller;
 
 use App\Entity\LigneDeFrais;
 use App\Entity\NoteDeFrais;
+use App\Entity\Notification;
 use App\Entity\Projet;
 use App\Repository\ProjetRepository;
+use App\Repository\LigneDeFraisRepository;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -103,33 +105,43 @@ class gestionMissionsController extends AbstractController
     }
 
     /**
-     * @Route("/gestionMissions/details/{id}", name="gestion.Mission")
+     * @Route("/gestionMissions/details/collabos/{id}", name="gestion.mission.collabos")
      * @param Projet $projet
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function gestionMission(Projet $projet){
+    public function gestionMissionCollabos(Projet $projet){
         $collaboRepository = $this->getDoctrine()->getEntityManager()->getRepository('App\Entity\Collaborateur');
-
+        
+        $projet->getCollabos()->initialize();
         $collabos = $collaboRepository->findAll();
-        $collabosDuProjet = array();
+        $collabosDuProjet = $projet->getCollabos();
         $collabosPasDuProjet = array();
         foreach ($collabos as $collabo){
-            if($collabo->getProjets()->contains($projet)){
-                array_push($collabosDuProjet,$collabo);
-            }
-            else{
+            if( !($collabosDuProjet->contains($collabo)) ){
                 array_push($collabosPasDuProjet,$collabo);
             }
-        }
+        }    
 
-        $ligneRepository = $this->getDoctrine()->getEntityManager()->getRepository('App\Entity\LigneDeFrais');
-        $lignesATraiter = $ligneRepository->findLignesChef($projet->getId());
-
-
-        return new Response($this->twig->render('pages/gestionMissions/gestionMissionsDetails.html.twig',[
+        return new Response($this->twig->render('pages/gestionMissions/gestionMissionsDetailsCollabos.html.twig',[
             'mission' => $projet,
             'collabosProjet' => $collabosDuProjet,
             'collabosPasProjet' => $collabosPasDuProjet,
+        ]));
+    }
+
+    /**
+     * @Route("/gestionMissions/details/lignes/{id}", name="gestion.mission.lignes")
+     * @param Projet $projet
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function gestionMissionLignes(Projet $projet){
+        $projet->getCollabos()->initialize();
+
+        $ligneRepository = $this->getDoctrine()->getEntityManager()->getRepository('App\Entity\LigneDeFrais');
+        $lignesATraiter = $ligneRepository->findLignesChef($projet->getId());        
+
+        return new Response($this->twig->render('pages/gestionMissions/gestionMissionsDetailsLignes.html.twig',[
+            'mission' => $projet,
             'lignesATraiter' => $lignesATraiter,
         ]));
     }
@@ -148,13 +160,26 @@ class gestionMissionsController extends AbstractController
                 if($collabo != null){
                     $collabo->addProjet($projet);
                     $projet->addCollabo($collabo);
+
+                    //Notification au collabo
+                    $notification = new Notification();
+                    $notification->setCollaborateur($collabo);
+                    $notification->setStatut(Notification::STATUT[1]);
+                    $notification->setCategorie(Notification::CATEGORIE[3]);
+                    $notification->setDescription("Vous avez été ajouté à la mission ".$projet->getNom()." du service ".$projet->getService()->getNom());
+                    $notification->setDate(new \DateTime());
+                    $notification->setPersonnel(true);
+                    $notification->setCumulable(false);
+                    $notification->setVu(false);
+                    $collabo->addNotification($notification);
+                    $this->em->persist($notification);
                 }
             }
 
             $this->em->flush();
         }
 
-        return $this->redirectToRoute('gestion.Mission',array('id' => $projet->getId()));
+        return $this->redirectToRoute('gestion.mission.collabos',array('id' => $projet->getId()));
 
     }
 
@@ -172,13 +197,27 @@ class gestionMissionsController extends AbstractController
                 if($collabo != null){
                     $collabo->removeProjet($projet);
                     $projet->removeCollabo($collabo);
+
+
+                    //Notification au collabo
+                    $notification = new Notification();
+                    $notification->setCollaborateur($collabo);
+                    $notification->setStatut(Notification::STATUT[1]);
+                    $notification->setCategorie(Notification::CATEGORIE[3]);
+                    $notification->setDescription("Vous avez retiré de la mission ".$projet->getNom()." du service ".$projet->getService()->getNom());
+                    $notification->setDate(new \DateTime());
+                    $notification->setPersonnel(true);
+                    $notification->setCumulable(false);
+                    $notification->setVu(false);
+                    $collabo->addNotification($notification);
+                    $this->em->persist($notification);
                 }
             }
 
             $this->em->flush();
         }
 
-        return $this->redirectToRoute('gestion.Mission',array('id' => $projet->getId()));
+        return $this->redirectToRoute('gestion.mission.collabos',array('id' => $projet->getId()));
 
     }
 
@@ -189,12 +228,30 @@ class gestionMissionsController extends AbstractController
         if(isset($_POST['ligne'])){
             $ligneRepository = $this->getDoctrine()->getEntityManager()->getRepository('App\Entity\LigneDeFrais');
             $ligne = $ligneRepository->findOneById($_POST['ligne']);
+
+            //Notification au collabo du refus/validation de la ligne
+            $notification = new Notification();
+            $notification->setCollaborateur($ligne->getNote()->getCollabo());
+            $notification->setCategorie(Notification::CATEGORIE[0]);
+            $notification->setDescription("La ligne ".$ligne->getIntitule()." ");
+            $notification->setDate(new \DateTime());
+            $notification->setPersonnel(true);
+            $notification->setCumulable(false);
+            $notification->setVu(false);
+            $ligne->getNote()->getCollabo()->addNotification($notification);
+
+
             if($_POST['decision'] == "refuser"){
                 $ligne->setStatutValidation(LigneDeFrais::STATUS[3]);
+                $notification->setDescription($notification->getDescription()."a été refusée");
+                $notification->setStatut(Notification::STATUT[2]);
             }
             else{
                 $ligne->setStatutValidation(LigneDeFrais::STATUS[2]);
+                $notification->setDescription($notification->getDescription()."a été validée");
+                $notification->setStatut(Notification::STATUT[0]);
             }
+            $this->em->persist($notification);
 
             //vérification si la note est validée en fonction des status des lignes
             $lignes = $ligneRepository->findByNoteID($ligne->getNote()->getId());
@@ -211,10 +268,40 @@ class gestionMissionsController extends AbstractController
             }
             if($noteAStatuer){
                 if($noteValidee){
-                    $ligne->getNote()->setStatut(NoteDeFrais::STATUS[2]);
+                    //Notification au collabo de la validation de la ligne
+                    $notification = new Notification();
+                    $notification->setCollaborateur($ligne->getNote()->getCollabo());
+                    $notification->setStatut(Notification::STATUT[0]);
+                    $notification->setCategorie(Notification::CATEGORIE[0]);
+                    $notification->setDescription("Votre note de frais de ".$ligne->getNote()->getMois()." ".$ligne->getNote()->getAnnee()." a été validée par le(s) chef(s) de service");
+                    $notification->setDate(new \DateTime());
+                    $notification->setPersonnel(true);
+                    $notification->setCumulable(false);
+                    $notification->setVu(false);
+                    $ligne->getNote()->getCollabo()->addNotification($notification);
+                    $this->em->persist($notification);
+
+                    if($ligne->getNote()->getStatut() == NoteDeFrais::STATUS[1]){
+                        $ligne->getNote()->setStatut(NoteDeFrais::STATUS[2]);
+                    }
+                    else{
+                        $ligne->getNote()->setStatut(NoteDeFrais::STATUS[9]);
+                    }
                 }
                 else{
                     $ligne->getNote()->setStatut(NoteDeFrais::STATUS[3]);
+                    //Notification au collabo de la validation de la ligne
+                    $notification = new Notification();
+                    $notification->setCollaborateur($ligne->getNote()->getCollabo());
+                    $notification->setStatut(Notification::STATUT[2]);
+                    $notification->setCategorie(Notification::CATEGORIE[0]);
+                    $notification->setDescription("Votre note de frais de ".$ligne->getNote()->getMois()." ".$ligne->getNote()->getAnnee()." a été refusée.");
+                    $notification->setDate(new \DateTime());
+                    $notification->setPersonnel(true);
+                    $notification->setCumulable(false);
+                    $notification->setVu(false);
+                    $ligne->getNote()->getCollabo()->addNotification($notification);
+                    $this->em->persist($notification);
                 }
                 $ligne->getNote()->setLastModif(new \DateTime());
             }
@@ -224,7 +311,7 @@ class gestionMissionsController extends AbstractController
         }
 
         $projet = $this->repository->findOneById($_POST['mission']);
-        return $this->redirectToRoute('gestion.Mission',array('id' => $projet->getId()));
+        return $this->redirectToRoute('gestion.mission.lignes',array('id' => $projet->getId()));
 
     }
 

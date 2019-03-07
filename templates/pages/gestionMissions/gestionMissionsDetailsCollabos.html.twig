@@ -4,64 +4,65 @@
     <div class="container">
         <div class="row">
             <ul class="collection with-header">
-                <li class="collection-header">
+                <li class="collection-header blue lighten-3">
                     <h4 class="center-align">{{ mission.nom }}</h4>
-                    Description : {{ mission.description }} <br>
-                    Du {{ mission.dateDebut|date("d-m-Y") }} au {{ mission.dateFin|date("d-m-Y") }}.
                 </li>
-                {% if lignesATraiter == null  %}
-                    <li class="collection-item">
-                        Vous n'avez aucune ligne à traiter pour cette mission.
-                    </li>
-                {% else %}
-                    {% for ligne in lignesATraiter %}
-                        <li class="collection-item">
-                            <div class="secondary-content">
-                                Collaborateur : {{ ligne.note.collabo.nom }} {{ ligne.note.collabo.prenom }}
-                            </div>
-                            {{ ligne.intitule }} <br>
-                            Montant : {{ ligne.montant }} <br>
-                            Type : {{ ligne.type }}<br>
-                            {% if ligne.justificatif is empty %}
-                                <span> Il n'y a pas de justificatif associé à cette ligne</span>
-                            {% else %}
-                                {% for justi in ligne.justificatif %}
-                                    {% if justi == "Perdu" %}
-                                        <div class="card orange">
-                                            <div class="card-content white-text">
-                                                <span>Justificatif perdu</span>
-                                            </div>
-                                        </div>
-                                    {% else %}
-                                        <div class="card" style="margin-right:5px;">
-                                            <div class="card-image p-1">
-                                                <img id="imageProfil" src="{{ justi }}" class="responsive-img" style="width:100px; margin:auto;"/>
-                                            </div>
-                                            <div class="card-content p-1">
-                                                <span>{{ justi|split('/')|last }}</span>
-                                            </div>
-                                        </div>
-                                    {% endif %}
-                                {% endfor %}
-                            {% endif %}
+                <li class="collection-header blue lighten-5 row m-0">
+                    <div class="col s5">
+                        <b>Dates:</b>
+                        <span class="center-align">{{ mission.DateDebut|date('d/m/Y') }} - {{ mission.DateFin|date('d/m/Y') }}</span>
+                    </div>
+                    <div class="col s5">
+                        <b>Status:</b>
+                        <span class="center-align">{{ mission.status }}</span>
+                    </div>
+                    <div class="col s2">
+                        <b>ID:</b>
+                        <span class="center-align">{{ mission.id }}</span>
+                    </div>
 
+                    <div class="col s12">
+                        <b>Service:</b>
+                        <span class="center-align">{{ mission.Service }}</span>
+                    </div>
+                    
+                    <div class="col s12 m-2">
+                        <b>Description</b>
+                        <p>{{ mission.Description }}</p>
+                    </div>
+                </li>
+                <li class="collection-header blue lighten-3">
+                    <h5 class="center-align">Liste collaborateurs</h5>
+                </li>
+                <li>
+                    <table class="centered striped">
+                        <thead>
+                            <tr class="">
+                                <th><b>Nom Prénom</b></th>
+                                <th><b>Service</b></th>
+                                <!--<th><b>Montant de frais associé</b></th>-->
+                            </tr>
+                        </thead>
 
-                            <div class="secondary-content">
-                                <form action="{{ path('valider.ligne') }}" method="post">
-                                    <input type="hidden" name="ligne" value="{{ ligne.id }}"/>
-                                    <input type="hidden" name="mission" value="{{ mission.id }}"/>
-                                    <input type="hidden" name="decision" id="decision" value=""/>
-                                    <button type="submit" onclick="$('#decision').val('refuser');" class="waves-effect waves-light btn-small red" style="margin:auto;">Refuser</button>
-                                    <button type="submit" onclick="$('#decision').val('valider');" class="waves-effect waves-light btn-small green" style="margin:auto;">Valider</button>
-                                </form>
-                            </div>
-                        </li>
-
-                    {% endfor %}
-                {% endif %}
-                <li class="collection-item">
-                    <a class="waves-effect waves-light btn modal-trigger green" href="#ajoutCollaborateur" >Ajouter un collaborateur</a>
-                    <a class="waves-effect waves-light btn modal-trigger red" href="#supprimerCollaborateur" >Supprimer un collaborateur</a>
+                        <tbody>
+                            {% for collaborateur in collabosProjet %}
+                                <tr>
+                                    <td>{{ collaborateur.nom }} {{ collaborateur.prenom }}</td>
+                                    <td>{{ collaborateur.service.nom }}</td>
+                                    <!--<td>{{ collaborateur.roleEntreprise }}</td>-->
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </li>
+                <li class="collection-item row center-align">
+                    <div class="col s6">
+                        <a class="waves-effect waves-light btn modal-trigger orange" href="{{ path('app_gestionMissions')}}" >Retour</a>
+                    </div>
+                    <div class="col s6">
+                        <a class="waves-effect waves-light btn modal-trigger green" href="#ajoutCollaborateur" >Ajouter un collaborateur</a>
+                        <a class="waves-effect waves-light btn modal-trigger red" href="#supprimerCollaborateur" >Supprimer un collaborateur</a>
+                    </div>
                 </li>
             </ul>
         </div>

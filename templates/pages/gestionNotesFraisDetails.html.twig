@@ -1,11 +1,9 @@
 {% extends 'topBar.html.twig' %}
 {% block title %}Detail Note de Frais{% endblock %}
 {% block body %}
-<<<<<<< HEAD
     <div class="row p-2">
         <h5 class="p-1 center-align">Détails de la note de frais <b>{{ noteDeFrais.collabo.nom }} {{ noteDeFrais.collabo.prenom }}</b> du <b>{{ noteDeFrais.mois }}-{{ noteDeFrais.annee }}</b></h5>
-        {% dump statusNotes %}
-        {%  if  noteDeFrais.statut == statusNotes[2] %}
+        {%  if  noteDeFrais.statut == statusNotes[2] or noteDeFrais.statut == statusNotes[9] %}
         <form method="post" action="{{ path('validation.lignes.details') }}">
         {% endif %}
             {% set montantTotal = 0 %}
@@ -20,23 +18,6 @@
             </div>
             <div class="row col s1 red lighten-4 center-align m-0"><b>Refuser</b></div>
             <div class="row col s1 green lighten-4 center-align m-0"><b>Accepter</b></div>
-=======
-    <div class="container">
-        <div class="col l8 m12 s12 push-l2">
-            <h5>Détails de la note de frais {{ noteDeFrais.collabo.nom }} {{ noteDeFrais.collabo.prenom }} du {{ noteDeFrais.mois }} {{ noteDeFrais.annee }}</h5>
-            <form method="POST" action="{{ path('validation.lignes.details.compta') }}">
-            <table class="responsive-table striped">
-                <thead>
-                <tr>
-                    <th>Intitule</th>
-                    <th>date</th>
-                    <th>Statut</th>
-                    <th>Montant</th>
-                    <th>Refus</th>
-                    <th>Acceptation</th>
-                </tr>
-                </thead>
->>>>>>> 3ad57cd96882a7fac218267e144a476680701dbd
 
             {% if ligneDeFrais is empty %}
                 <h5 class="center-align p-2">Cette note n'a pas de lignes associées</h5>
@@ -89,14 +70,14 @@
                 </ul>
                 <label class="collapsible col s1 center-align z-depth-0" style="border-color:transparent;">
                     <input name="{{ligne.id}}"  value="refus" type="radio" required="required" 
-                            {% if noteDeFrais.statut != statusNotes[2] %}
+                            {% if ligne.statutValidation != statusNotes[2] %}
                                 disabled="disabled"
                             {% endif %}
                             /><span></span>
                 </label>
                 <label class="collapsible col s1 center-align z-depth-0" style="border-color:transparent;">
                     <input name="{{ ligne.id }}" value="accept" type="radio" required="required"
-                            {% if noteDeFrais.statut != statusNotes[2] %}
+                            {% if ligne.statutValidation != statusNotes[2] %}
                                 disabled="disabled"
                             {% endif %}
                             /><span></span>
@@ -105,7 +86,7 @@
 
             <div class="secondary-content col s12 m-2">
                 <a href="{{ path('app_gestionNotesDeFrais') }}" class="waves-effect waves-light btn red left"><i class="material-icons left">clear</i>Annuler</a>
-                {%  if  noteDeFrais.statut == statusNotes[2] %}
+                {%  if  noteDeFrais.statut == statusNotes[2] or noteDeFrais.statut == statusNotes[9] %}
                     <input type="hidden" id="id" name="id" value="{{ noteDeFrais.id }}"/>
                     <button id="id1" class="btn green waves-effect waves-light right">Confirmer</button>
                 {% endif %}

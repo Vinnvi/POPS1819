@@ -56,6 +56,9 @@ class NoteDeFrais
         5 => 'validee compta',
         6 => 'valideeExceptJustificatif',
         7 => 'refusee compta',
+        8 => 'En attente chef pour avance',
+        9 => 'validee chef pour avance',
+        10 => 'validee compta pour avance',
     ];
 
     public function __construct($mois, $annee, $collabo)

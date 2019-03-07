@@ -50,35 +50,8 @@ class GestionNotesDeFraisController extends AbstractController
     public function index(): Response
     {
         $notesRepository = $this->getDoctrine()->getEntityManager()->getRepository('App\Entity\NoteDeFrais');
-        $notesDeFraisEnAttente = $notesRepository->findByStatus(NoteDeFrais::STATUS[2]);
+        $notesDeFraisEnAttente = array_merge($notesRepository->findByStatus(NoteDeFrais::STATUS[2]), $notesRepository->findByStatus(NoteDeFrais::STATUS[9]));
         $notesDeFraisPasses = array_merge($notesRepository->findByStatus(NoteDeFrais::STATUS[5]), $notesRepository->findByStatus(NoteDeFrais::STATUS[7]));
-
-        /*$serviceRepository = $this->getDoctrine()->getEntityManager()->getRepository('App\Entity\Service');
-        //On recupere le(s) service(s) du chef
-        $servicesIds = $serviceRepository->findByChefId($this->getUser()->getId());
-
-
-        $collaborateurRepository = $this->getDoctrine()->getEntityManager()->getRepository('App\Entity\Collaborateur');
-
-        //On recupere la liste des collaborateurs qu'on gere
-        $collaborateurs =  array();
-        foreach ($servicesIds as $servicesId){
-            $collaborateurs = array_merge($collaborateurs, $collaborateurRepository->findByService($servicesId));
-        }
-
-        $noteRepository = $this->getDoctrine()->getEntityManager()->getRepository('App\Entity\NoteDeFrais');
-
-
-        $notesEnAttente = array();
-        $notesValideesRefusees = array();
-
-        //On prend toutes les notes de frais en attente de validation de ces employes
-        foreach ($collaborateurs as $collaborateur){
-            $notesEnAttente = array_merge($notesEnAttente, $noteRepository->findByStatusAndCollabo(NoteDeFrais::STATUS[1],$collaborateur->getId()));
-            $notesValideesRefusees = array_merge($notesValideesRefusees, $noteRepository->findByStatusAndCollabo(NoteDeFrais::STATUS[2],$collaborateur->getId()));
-            $notesValideesRefusees = array_merge($notesValideesRefusees, $noteRepository->findByStatusAndCollabo(NoteDeFrais::STATUS[3],$collaborateur->getId()));
-        }
-        usort($notesValideesRefusees,array($this,"comparator"));*/
 
         return $this->render('pages/gestionNotesFrais.html.twig',
             [
@@ -96,7 +69,11 @@ class GestionNotesDeFraisController extends AbstractController
     {
         //Récupération des lignes de frais relatives à la note
         $LigneRepository = $this->getDoctrine()->getEntityManager()->getRepository('App\Entity\LigneDeFrais');
-        $lignesDeFrais =  $LigneRepository->findByNoteId($noteDeFrais->getId());
+        if($noteDeFrais->getStatut() == NoteDeFrais::STATUS[9]){
+            $lignesDeFrais =  $LigneRepository->findByNoteIDAndAvance($noteDeFrais->getId());
+        }else{
+            $lignesDeFrais =  $LigneRepository->findByNoteID($noteDeFrais->getId());
+        }
 
         return $this->render('pages/gestionNotesFraisDetails.html.twig',[
             'noteDeFrais' => $noteDeFrais,
@@ -151,7 +128,12 @@ class GestionNotesDeFraisController extends AbstractController
                     $ok = false;
                 }
                 else{
-                    $LigneDeFrais->setStatutValidation(LigneDeFrais::STATUS[5]);
+                    if($LigneDeFrais->getNote()->getStatut() == LigneDeFrais::STATUS[2]){
+                        $LigneDeFrais->setStatutValidation(LigneDeFrais::STATUS[5]);
+                    }
+                    else{
+                        $LigneDeFrais->setStatutValidation(LigneDeFrais::STATUS[6]);
+                    }
                 }
                 $LigneDeFrais->setLastModif(new \DateTime());
             }
@@ -161,7 +143,12 @@ class GestionNotesDeFraisController extends AbstractController
         if(isset($_POST['id'])){
             $notesDeFrais = $noteRepository->findOneByID($_POST['id']);
             if($ok){
-                $notesDeFrais->setStatut(NoteDeFrais::STATUS[5]);
+                if($notesDeFrais->getStatut() == NoteDeFrais::STATUS[2]){
+                    $notesDeFrais->setStatut(NoteDeFrais::STATUS[5]);
+                }
+                else{
+                    $notesDeFrais->setStatut(NoteDeFrais::STATUS[0]);
+                }
             }
             else{
                 $notesDeFrais->setStatut(NoteDeFrais::STATUS[7]);

@@ -50,7 +50,9 @@ class GestionCongesChefController extends AbstractController
 
         $congesRepository = $this->getDoctrine()->getEntityManager()->getRepository('App\Entity\Conge');
         $congesEnAttente = $congesRepository->findByServiceAndStatut($this->getUser()->getService()->getId(),Conge::STATUS[1]);
-        $congesPassees = array_merge($congesRepository->findByServiceAndStatut($this->getUser()->getService()->getId(),Conge::STATUS[2],$congesRepository->findByServiceAndStatut($this->getUser()->getService()->getId(),Conge::STATUS[3])));
+        $congesPassees = array_merge($congesRepository->findByServiceAndStatut($this->getUser()->getService()->getId(),Conge::STATUS[2]),$congesRepository->findByServiceAndStatut($this->getUser()->getService()->getId(),Conge::STATUS[3]));
+
+
         return $this->render('pages/gestionCongesChef.html.twig',
             [
                 'congesEnAttente' => $congesEnAttente,
@@ -83,6 +85,12 @@ class GestionCongesChefController extends AbstractController
             }
             else{
                 $conge->setStatut(Conge::STATUS[3]);
+                if($conge->getType() == "RTT"){
+                    $conge->getCollabo()->setConge($conge->getCollabo()->getRtt()+$conge->getDuree());
+                }
+                else{
+                    $conge->getCollabo()->setConge($conge->getCollabo()->getConge()+$conge->getDuree());
+                }
                 if(isset($_POST['motif'])){
                     $conge->setCommentaire($_POST['motif']);
                 }

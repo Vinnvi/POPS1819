@@ -105,6 +105,12 @@ class GestionCongesRHController extends AbstractController
                 $notification->setDescription("ACCEPTATION ".$notification->getDescription());
             }
             else{
+                if($conge->getType() == "RTT"){
+                    $conge->getCollabo()->setConge($conge->getCollabo()->getRtt()+$conge->getDuree());
+                }
+                else{
+                    $conge->getCollabo()->setConge($conge->getCollabo()->getConge()+$conge->getDuree());
+                }
                 $conge->setStatut(Conge::STATUS[5]);
                 if(isset($_POST['motif'])){
                     $conge->setCommentaire($_POST['motif']);

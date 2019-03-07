@@ -8,6 +8,7 @@ use App\Repository\CongeRepository;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\Request;
 
 class CalendarCongesController extends AbstractController
 {
@@ -31,11 +32,12 @@ class CalendarCongesController extends AbstractController
       $this->em = $em;
     }
 
-    public function index(): Response
+    public function index(Request $request): Response
     {
       //recuperation des conges du collaborateur
       $mesConges = $this->repository->findByCollaborateurId($this->getUser());
       $congesService = $this->repository->findByServiceId($this->getUser()->getService());
+
       return new Response($this->twig->render('pages/calendarConges.html.twig',
         ['mesConges' => $mesConges,
         'congesService' => $congesService]));

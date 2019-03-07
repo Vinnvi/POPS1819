@@ -94,26 +94,42 @@
         var displayFin = ('0' + dateFin.getDate()).slice(-2) + "-" + ('0' + (dateFin.getMonth() + 1)).slice(-2) + "-" + dateFin.getFullYear() + " " + ('0' + dateFin.getHours()).slice(-2)+":00";
         var displayStatut="";
         if(listConges[i].collabo.id == ('{{app.user.id}}')){
-          if(listConges[i].statut == "En Attente")
+          if(listConges[i].statut == "En cours" || listConges[i].statut == "En attente chef")
           {
             var color = '#e2b14d';
             displayStatut = " en attente";
           }
-          else{
-            var color = '#3ebc4d';
-            displayStatut = " validé";
+          else
+          {
+            if(listConges[i].statut == "validee chef"){
+              var color = '#c5e8bb';
+              displayStatut = " validé par votre chef mais en attente du service RH";
+            }
+            else {
+              if (listConges[i].statut == "validee RH"){
+                var color = '#3ebc4d';
+                displayStatut = " validé";
+              }
+              else {
+                if(listConges[i].statut == 'refusee RH' || listConges[i].statut == 'refusee chef'){
+                  var color = '#7c2916';
+                  displayStatut = " refusé";
+                }
+              }
+            }
           }
-          var description = "Votre "+ type + displayStatut +" du "+displayDebut+" au "+displayFin;
-          var newEvent = {
-              id : 'myConge',
-              title: type,
-              start : dateDebut,
-              end : dateFin,
-              description : description,
-              color: color
-          };
-          $('#calendar').fullCalendar( 'renderEvent', newEvent , true);
         }
+        var description = "Votre "+ type + displayStatut +" du "+displayDebut+" au "+displayFin;
+        var newEvent = {
+            id : 'myConge',
+            title: type,
+            start : dateDebut,
+            end : dateFin,
+            description : description,
+            statut : listConges[i].statut,
+            color: color
+        };
+        $('#calendar').fullCalendar( 'renderEvent', newEvent , true);
       }
     }
     function render_congesService(){
@@ -233,8 +249,12 @@
     $("#displayColorConge").change(function(){
       if($(this).is(':checked')) {
         $(".dayConge").css("background-color", "#c12600");
+        $(".maybeDayConge").css("background-color", "#f7c342");
+
       } else {
         $(".dayConge").css("background-color", "initial");
+        $(".maybeDayConge").css("background-color", "initial");
+
       }
     });
     $("#typeConge").change(function(){
@@ -327,14 +347,17 @@ checkDateDemandeConge
                       <thead>
                           <tr id="rowCongesRight" role="row">
                             <th>Nom</th>
-                            <th>Date Début</th>
-                            <th>Date Fin</th>
+                            <th>Début</th>
+                            <th>Fin</th>
                             <th>Statut</th>
                           </tr>
                       </thead>
                       <tbody>
                         {% for conge in congesService %}
+                          {% dump("heeeeeere") %}
+                          {% dump(conge.collabo.getId() ) %}
                           {% if(conge.collabo.getId() != app.user.id) %}
+                            {% dump("id diff") %}
                             {% if(conge.debut_matin) %}
                               {% set timeDebut = 'matin' %}
                             {% else %}
@@ -351,7 +374,6 @@ checkDateDemandeConge
                               <td>{{conge.date_fin|date("d-m-y")}} {{timeFin}}</td>
                               <td>{{conge.statut}}</td>
                             </tr>
-                          {% else %}
                           {% endif %}
                         {% endfor %}
                       </tbody>
@@ -384,8 +406,8 @@ checkDateDemandeConge
                       <thead>
                           <tr id="rowCongesRight" role="row">
                             <th>Type</th>
-                            <th>Du-</th>
-                            <th>Au-</th>
+                            <th>Début</th>
+                            <th>Fin</th>
                             <th>Statut</th>
                           </tr>
                       </thead>

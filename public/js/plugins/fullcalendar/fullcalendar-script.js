@@ -31,29 +31,28 @@
       },
       allDaySlot: false,
       minTime: "08:00:00",
-      maxTime: "17:00:00",
+      maxTime: "18:00:00",
       displayEventTime: false,
       hiddenDays: [ 0, 6 ],
       eventRender: function (event, element) {
         element.attr("title",event.description);
         var start = moment(event.start);
         var end = moment(event.end);
-        end.add(1, 'd');
         var colorMyConge = '#e2b14d';
         if($("#displayColorConge").is(':checked')) {
           $(".dayConge").css("background-color", "#c12600");
+          $(".maybeDayConge").css("background-color", "#f7c342");
         }
         element.data('event-id',event.id);
         while( start.format('YYYY-MM-DD') != end.format('YYYY-MM-DD') ){
-            var checkDay = new Date(start.format('YYYY-MM-DD'));
             var dataToFind = start.format('YYYY-MM-DD');
-            if(checkDay.getDay() == 0 || checkDay.getDay() == 6){
-              $("td[data-date='"+dataToFind+"']").addClass('hideWeekend');
-            }
-            else{
-            }
-            if(event._id == "myConge"){
+            if(event._id == "myConge" && (event.statut == "validee chef" || event.statut == "validee RH")){
               $("td[data-date='"+dataToFind+"']").addClass('dayConge');
+            }
+            else {
+              if(event._id == "myConge" && (event.statut == "En cours" || event.statut == "En attente chef")){
+                $("td[data-date='"+dataToFind+"']").addClass('maybeDayConge');
+              }
             }
             start.add(1, 'd');
         }

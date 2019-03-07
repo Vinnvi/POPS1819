@@ -39,19 +39,28 @@
         var start = moment(event.start);
         var end = moment(event.end);
         var colorMyConge = '#e2b14d';
+        if(moment(end).format("HH") == 12){
+          end.add(1,'days');
+        }
         if($("#displayColorConge").is(':checked')) {
-          $(".dayConge").css("background-color", "#c12600");
-          $(".maybeDayConge").css("background-color", "#f7c342");
+          $(".dayConge").css("background-color", "#1f752c");
+          $(".maybeDayConge").css("background-color", "#d88d24");
+          $(".maybeValidChef").css("background-color", "#f7c342");
         }
         element.data('event-id',event.id);
         while( start.format('YYYY-MM-DD') != end.format('YYYY-MM-DD') ){
             var dataToFind = start.format('YYYY-MM-DD');
-            if(event._id == "myConge" && (event.statut == "validee chef" || event.statut == "validee RH")){
+            if(event._id == "myConge" && (event.statut == "validee RH")){
               $("td[data-date='"+dataToFind+"']").addClass('dayConge');
             }
             else {
-              if(event._id == "myConge" && (event.statut == "En cours" || event.statut == "En attente chef")){
-                $("td[data-date='"+dataToFind+"']").addClass('maybeDayConge');
+              if(event._id == "myConge" && (event.statut == "validee chef")){
+                $("td[data-date='"+dataToFind+"']").addClass('maybeValidChef');
+              }
+              else{
+                if(event._id == "myConge" && (event.statut == "En cours" || event.statut == "En attente chef")){
+                  $("td[data-date='"+dataToFind+"']").addClass('maybeDayConge');
+                }
               }
             }
             start.add(1, 'd');

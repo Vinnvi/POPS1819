@@ -1,5 +1,6 @@
 {% extends 'topBar.html.twig' %}
 {% block title %} Calendrier de Congés {% endblock %}
+
 {% block head %}
   {% block javascripts %}
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js" type="text/javascript"></script>
@@ -427,9 +428,10 @@
     $("#timeCongeFin").change(function(){checkDateDemandeConge();});
 checkDateDemandeConge
   </script>
+
+
   {% endblock %}
   {% block stylesheets %}
-    <link rel="stylesheet" type="text/css" href="/css/topBar.css">
     <link rel="stylesheet" type="text/css" href="/css/calendarConges.css">
     <link rel="stylesheet" type="text/css" href="/css/loader.css">
     <link rel="stylesheet" type="text/css" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">

@@ -4,16 +4,14 @@ namespace App\Controller;
 
 
 use App\Entity\NoteDeFrais;
-use App\Entity\Service;
+use App\Entity\Notification;
 use App\Entity\LigneDeFrais;
-use App\Entity\Collaborateur;
 use PhpParser\Node\Expr\Array_;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Twig\Environment;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
-use App\Repository\NoteDeFraisRepository;
 
 class GestionNotesDeFraisController extends AbstractController
 {
@@ -145,6 +143,18 @@ class GestionNotesDeFraisController extends AbstractController
             if($ok){
                 if($notesDeFrais->getStatut() == NoteDeFrais::STATUS[2]){
                     $notesDeFrais->setStatut(NoteDeFrais::STATUS[5]);
+                    //Notification au collabo de la validation de la ligne
+                    $notification = new Notification();
+                    $notification->setCollaborateur($notesDeFrais->getCollabo());
+                    $notification->setStatut(Notification::STATUT[0]);
+                    $notification->setCategorie(Notification::CATEGORIE[0]);
+                    $notification->setDescription("Votre note de frais de ".$notesDeFrais->getMois()." ".$notesDeFrais->getAnnee()." a été validée par la comptabilité.");
+                    $notification->setDate(new \DateTime());
+                    $notification->setPersonnel(true);
+                    $notification->setCumulable(false);
+                    $notification->setVu(false);
+                    $notesDeFrais->getCollabo()->addNotification($notification);
+                    $this->em->persist($notification);
                 }
                 else{
                     $notesDeFrais->setStatut(NoteDeFrais::STATUS[0]);
@@ -152,6 +162,18 @@ class GestionNotesDeFraisController extends AbstractController
             }
             else{
                 $notesDeFrais->setStatut(NoteDeFrais::STATUS[7]);
+                //Notification au collabo de la validation de la ligne
+                $notification = new Notification();
+                $notification->setCollaborateur($notesDeFrais->getCollabo());
+                $notification->setStatut(Notification::STATUT[2]);
+                $notification->setCategorie(Notification::CATEGORIE[0]);
+                $notification->setDescription("Votre note de frais de ".$notesDeFrais->getMois()." ".$notesDeFrais->getAnnee()." a été refusée par la comptabilité.");
+                $notification->setDate(new \DateTime());
+                $notification->setPersonnel(true);
+                $notification->setCumulable(false);
+                $notification->setVu(false);
+                $notesDeFrais->getCollabo()->addNotification($notification);
+                $this->em->persist($notification);
             }
             $notesDeFrais->setLastModif(new \DateTime());
         }

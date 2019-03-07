@@ -7,6 +7,7 @@
         <link type="text/css" rel="stylesheet" href="/css/content.css"/>
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
         <link rel="icon" type="image/png" href="/images/logo_sans_texte.png" />
+        <link rel="stylesheet" type="text/css" href="/css/topBar.css">
         {% block stylesheets %}
             <link rel='stylesheet' href='fullcalendar/fullcalendar.css' />
         {% endblock %}
@@ -58,7 +59,7 @@
                 </a>
             {% endif %}
             {% if app.user.service.id == 2 %}
-              <a class="btn-flat waves-effect waves-light btn-large" href="{{ path('app_gestionNotesFrais') }}"  name="action">Gestion des notes de frais
+              <a class="btn-flat waves-effect waves-light btn-large" href="{{ path('app_gestionNotesDeFrais') }}"  name="action">Gestion des notes de frais
                 <i class="material-icons right">local_atm</i>
               </a>
             {% endif %}

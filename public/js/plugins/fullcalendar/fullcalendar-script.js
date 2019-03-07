@@ -78,7 +78,7 @@
       selectable: true,
       views: {
         month: {
-          eventLimit: 2 // adjust to 6 only for agendaWeek/agendaDay
+          eventLimit: 4 // adjust to 6 only for agendaWeek/agendaDay
         }
       },
       businessHours: {

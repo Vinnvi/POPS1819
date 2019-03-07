@@ -155,3 +155,6 @@ h11.header {
   margin-top : 5px;
   margin-bottom : 5px;
 }
+#rowEndDate, #rowDebutDate, #modalRTT{
+  margin-bottom : 0;
+}

@@ -20,14 +20,16 @@ app_logout:
 app_calendarConges:
   path: /mesConges
   controller: App\Controller\CalendarCongesController::index
+  defaults:
+    fromHome: "0"
 
 app_noteFrais:
   path: /mesNotesDeFrais
   controller: App\Controller\NoteFraisController::index
 
-app_gestionNotesFrais:
+app_gestionNotesDeFrais:
   path: /gestionNotesDeFrais
-  controller: App\Controller\GestionNotesFraisController::index
+  controller: App\Controller\GestionNotesDeFraisController::index
 
 app_demandesDeConges:
   path: /mesDemandesDeConges
@@ -64,7 +66,7 @@ app_gestionNotesFraisAdmin:
 
 app_admin:
   path: /admin
-  controller: App\Controller\Admin\AdminCollaborateurController::index
+  controller: App\Controller\Admin\AdminServiceController::index
 
 app_profile:
   path: /profile

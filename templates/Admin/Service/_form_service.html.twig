@@ -1,0 +1,6 @@
+{{ form_start(form) }}
+            {{ form_row(form.nom) }}
+            {#{{ form_row(form.roles, { 'attr': {'class': 'browser-default'} }) }}  #}
+            {{ form_row(form.chef, { 'attr': {'class': 'browser-default'} }) }}
+<button class="btn btn-primary" style="margin-top: 5px">{{ button|default('Enregistrer') }}</button>
+{{ form_end(form) }}

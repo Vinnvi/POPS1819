@@ -55,7 +55,7 @@
                 </div>
                 <div class="modal-footer">
                     <div class="col s6 center-align">
-                        <a href="#!" class="modal-close waves-effect waves-light btn red" style="margin:auto;">Annuler</a>
+                        <a href="#!" class="modal-close waves-effect waves-light btn red" onclick="remove()" style="margin:auto;">Annuler</a>
                     </div>
                     <div class="col s6 center-align">
                         <button type="submit" class="waves-effect waves-light btn green" style="margin:auto;">Valider</button>
@@ -75,13 +75,24 @@
     <script>
         var time = $('.js-user-rating').data('time');
 
+        function remove() {
+            $(".modal-content #id").val( null );
+            $(".modal-content #nom").val( null );
+            $(".modal-content #description").val( null );
+            $(".modal-content #dateDebut").val( null );
+            $(".modal-content #dateFin").val( null );
+        }
+
         $(document).ready(function(){
-            $('.modal').modal();
+            $('.modal').modal({
+                onCloseEnd: remove(),
+                onCloseStart: remove(),
+            });
             $('.datepicker').datepicker({
                 format: 'yyyy-mm-dd',
                 container: document.getElementById("modalAjout"),
                 autoClose: true,
-                minDate: new Date(2019, 10 - 1, 25),
+                //minDate: new Date(2019, 10 - 1, 25),
             });
         });
     </script>
@@ -96,6 +107,7 @@
             $(".modal-content #dateFin").val( data[4] );
 
         });
+
     </script>
 
 {% endblock %}

@@ -2,8 +2,10 @@ security:
     encoders:
       App\Entity\Collaborateur: bcrypt
     # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
+    role_hierarchy:
+        ROLE_ADMIN: ROLE_USER
     providers:
-        my_provider:
+        my_provider: 
           entity:
             class: App\Entity\Collaborateur
             property: username
@@ -38,5 +40,6 @@ security:
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
+         - { path: ^/admin, roles: ROLE_ADMIN }
          - { path: ^/$, roles: ROLE_USER }
          - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY, allow_if: "not has_role('ROLE_USER')" }

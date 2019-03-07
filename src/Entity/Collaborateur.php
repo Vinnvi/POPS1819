@@ -180,7 +180,7 @@ class Collaborateur implements UserInterface,EquatableInterface
     public function getRoles()
     {
         return [
-            'ROLE_USER'
+            $this->roles
         ];
     }
 

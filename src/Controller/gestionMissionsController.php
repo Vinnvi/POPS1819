@@ -67,7 +67,7 @@ class gestionMissionsController extends AbstractController
      */
     public function ajoutMission(){
 
-        if(!isset($_POST['id'])){
+        if(!isset($_POST['id']) or $_POST['id'] == null){
             $projet = new Projet();
             if(isset($_POST['nom']) and isset($_POST['dateDebut']) and isset($_POST['dateFin'])){
                 $projet->setNom($_POST['nom']);
@@ -84,6 +84,7 @@ class gestionMissionsController extends AbstractController
 
             $this->getDoctrine()->getEntityManager()->persist($projet);
             $this->getDoctrine()->getEntityManager()->flush();
+
         }
 
         else{

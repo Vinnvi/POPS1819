@@ -205,9 +205,9 @@
                         <div class="input-field col s6 row valign-wrapper">
                             <span class="col s3 center-align" style="margin-left:0;"><b>Projet</b></span>
                             <select name="projet" id="projet">
-                                {% for project in projectsAvailables %}
+                                {% for project in projectsAvailables[0] %}
                                     {% if project != null %}
-                                    <option value="{{project[0].id}}">{{project[0].nom}}</option>
+                                    <option value="{{project.id}}">{{project.nom}}</option>
                                     {% endif %}
                                 {% endfor %}
                             </select>

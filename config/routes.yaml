@@ -33,7 +33,7 @@ app_gestionNotesDeFrais:
 
 app_demandesDeConges:
   path: /mesDemandesDeConges
-  controller: App\Controller\GestionNotesFraisController::index
+  controller: App\Controller\CalendarCongesController::index
 
 app_gestionDemandesDeCongesRH:
   path: /gestionDemandesDeCongesRH

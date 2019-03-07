@@ -84,7 +84,7 @@
         }
         else{
           dateDebut = new Date(dateDebut.getFullYear(), dateDebut.getMonth(), dateDebut.getDate(),12,0,0);
-          var displayMomentDebut = "12";
+          var displayMomentDebut = "13";
         }
         if(listConges[i].fin_matin){
           dateFin = new Date(dateFin.getFullYear(), dateFin.getMonth(), dateFin.getDate(),12,0,0);
@@ -95,7 +95,13 @@
           var displayMomentFin = "18";
         }
         var displayDebut = ('0' + dateDebut.getDate()).slice(-2) + "-" + ('0' + (dateDebut.getMonth() + 1)).slice(-2) + "-" + dateDebut.getFullYear() + " " + ('0' + displayMomentDebut).slice(-2)+":00";
-        var displayFin = ('0' + dateFin.getDate()).slice(-2) + "-" + ('0' + (dateFin.getMonth() + 1)).slice(-2) + "-" + dateFin.getFullYear() + " " + ('0' + displayMomentFin).slice(-2)+":00";
+        if(listConges[i].fin_matin){
+          var displayFin = ('0' + dateFin.getDate()).slice(-2) + "-" + ('0' + (dateFin.getMonth() + 1)).slice(-2) + "-" + dateFin.getFullYear() + " " + ('0' + displayMomentFin).slice(-2)+":00";
+        }
+        else{
+          var number = dateFin.getDate()-1;
+          var displayFin = ('0' + number).slice(-2) + "-" + ('0' + (dateFin.getMonth() + 1)).slice(-2) + "-" + dateFin.getFullYear() + " " + ('0' + displayMomentFin).slice(-2)+":00";
+        }
         var displayStatut="";
         if(listConges[i].collabo.id == ('{{app.user.id}}')){
           if(listConges[i].statut == "En cours" || listConges[i].statut == "En attente chef")
@@ -149,18 +155,28 @@
           dateFin.setDate(dateFin.getDate());
           if(listConges[i].debut_matin){
             dateDebut = new Date(dateDebut.getFullYear(), dateDebut.getMonth(), dateDebut.getDate(),0,0,0);
+            var displayMomentDebut = "08";
           }
           else{
             dateDebut = new Date(dateDebut.getFullYear(), dateDebut.getMonth(), dateDebut.getDate(),12,0,0);
+            var displayMomentDebut = "13";
           }
           if(listConges[i].fin_matin){
             dateFin = new Date(dateFin.getFullYear(), dateFin.getMonth(), dateFin.getDate(),12,0,0);
+            var displayMomentFin = "12";
           }
           else{
             dateFin = new Date(dateFin.getFullYear(), dateFin.getMonth(), dateFin.getDate()+1,0,0,0);
+            var displayMomentFin = "18";
           }
-          var displayDebut = ('0' + dateDebut.getDate()).slice(-2) + "-" + ('0' + (dateDebut.getMonth() + 1)).slice(-2) + "-" + dateDebut.getFullYear() + " " + ('0' + dateDebut.getHours()).slice(-2)+":00";
-          var displayFin = ('0' + dateFin.getDate()).slice(-2) + "-" + ('0' + (dateFin.getMonth() + 1)).slice(-2) + "-" + dateFin.getFullYear() + " " + ('0' + dateFin.getHours()).slice(-2)+":00";
+          var displayDebut = ('0' + dateDebut.getDate()).slice(-2) + "-" + ('0' + (dateDebut.getMonth() + 1)).slice(-2) + "-" + dateDebut.getFullYear() + " " + ('0' + displayMomentDebut).slice(-2)+":00";
+          if(listConges[i].fin_matin){
+            var displayFin = ('0' + dateFin.getDate()).slice(-2) + "-" + ('0' + (dateFin.getMonth() + 1)).slice(-2) + "-" + dateFin.getFullYear() + " " + ('0' + displayMomentFin).slice(-2)+":00";
+          }
+          else{
+            var number = dateFin.getDate()-1;
+            var displayFin = ('0' + number).slice(-2) + "-" + ('0' + (dateFin.getMonth() + 1)).slice(-2) + "-" + dateFin.getFullYear() + " " + ('0' + displayMomentFin).slice(-2)+":00";
+          }
           var displayStatut="";
           var color = '#7c2916';
           displayStatut = " refusé";
@@ -189,18 +205,28 @@
         dateFin.setDate(dateFin.getDate());
         if(listConges[i].debut_matin){
           dateDebut = new Date(dateDebut.getFullYear(), dateDebut.getMonth(), dateDebut.getDate(),0,0,0);
+          var displayMomentDebut = "08";
         }
         else{
           dateDebut = new Date(dateDebut.getFullYear(), dateDebut.getMonth(), dateDebut.getDate(),12,0,0);
+          var displayMomentDebut = "13";
         }
         if(listConges[i].fin_matin){
           dateFin = new Date(dateFin.getFullYear(), dateFin.getMonth(), dateFin.getDate(),12,0,0);
+          var displayMomentFin = "12";
         }
         else{
           dateFin = new Date(dateFin.getFullYear(), dateFin.getMonth(), dateFin.getDate()+1,0,0,0);
+          var displayMomentFin = "18";
         }
-        var displayDebut = ('0' + dateDebut.getDate()).slice(-2) + "-" + ('0' + (dateDebut.getMonth() + 1)).slice(-2) + "-" + dateDebut.getFullYear() + " " + ('0' + dateDebut.getHours()).slice(-2)+":00";
-        var displayFin = ('0' + dateFin.getDate()).slice(-2) + "-" + ('0' + (dateFin.getMonth() + 1)).slice(-2) + "-" + dateFin.getFullYear() + " " + ('0' + dateFin.getHours()).slice(-2)+":00";
+        var displayDebut = ('0' + dateDebut.getDate()).slice(-2) + "-" + ('0' + (dateDebut.getMonth() + 1)).slice(-2) + "-" + dateDebut.getFullYear() + " " + ('0' + displayMomentDebut).slice(-2)+":00";
+        if(listConges[i].fin_matin){
+          var displayFin = ('0' + dateFin.getDate()).slice(-2) + "-" + ('0' + (dateFin.getMonth() + 1)).slice(-2) + "-" + dateFin.getFullYear() + " " + ('0' + displayMomentFin).slice(-2)+":00";
+        }
+        else{
+          var number = dateFin.getDate()-1;
+          var displayFin = ('0' + number).slice(-2) + "-" + ('0' + (dateFin.getMonth() + 1)).slice(-2) + "-" + dateFin.getFullYear() + " " + ('0' + displayMomentFin).slice(-2)+":00";
+        }
         if(listConges[i].collabo.id != ('{{app.user.id}}')){
           if(listConges[i].statut == "En attente chef" || listConges[i].statut == "En cours" || listConges[i].statut == "validee chef")
           {
@@ -247,19 +273,28 @@
           dateFin.setDate(dateFin.getDate());
           if(listConges[i].debut_matin){
             dateDebut = new Date(dateDebut.getFullYear(), dateDebut.getMonth(), dateDebut.getDate(),0,0,0);
+            var displayMomentDebut = "08";
           }
           else{
             dateDebut = new Date(dateDebut.getFullYear(), dateDebut.getMonth(), dateDebut.getDate(),12,0,0);
+            var displayMomentDebut = "13";
           }
           if(listConges[i].fin_matin){
             dateFin = new Date(dateFin.getFullYear(), dateFin.getMonth(), dateFin.getDate(),12,0,0);
+            var displayMomentFin = "12";
           }
           else{
             dateFin = new Date(dateFin.getFullYear(), dateFin.getMonth(), dateFin.getDate()+1,0,0,0);
+            var displayMomentFin = "18";
           }
-          var displayDebut = ('0' + dateDebut.getDate()).slice(-2) + "-" + ('0' + (dateDebut.getMonth() + 1)).slice(-2) + "-" + dateDebut.getFullYear() + " " + ('0' + dateDebut.getHours()).slice(-2)+":00";
-          var displayFin = ('0' + dateFin.getDate()).slice(-2) + "-" + ('0' + (dateFin.getMonth() + 1)).slice(-2) + "-" + dateFin.getFullYear() + " " + ('0' + dateFin.getHours()).slice(-2)+":00";
-          var color = '#4d4f4a';
+          var displayDebut = ('0' + dateDebut.getDate()).slice(-2) + "-" + ('0' + (dateDebut.getMonth() + 1)).slice(-2) + "-" + dateDebut.getFullYear() + " " + ('0' + displayMomentDebut).slice(-2)+":00";
+          if(listConges[i].fin_matin){
+            var displayFin = ('0' + dateFin.getDate()).slice(-2) + "-" + ('0' + (dateFin.getMonth() + 1)).slice(-2) + "-" + dateFin.getFullYear() + " " + ('0' + displayMomentFin).slice(-2)+":00";
+          }
+          else{
+            var number = dateFin.getDate()-1;
+            var displayFin = ('0' + number).slice(-2) + "-" + ('0' + (dateFin.getMonth() + 1)).slice(-2) + "-" + dateFin.getFullYear() + " " + ('0' + displayMomentFin).slice(-2)+":00";
+          }          var color = '#4d4f4a';
           displayStatut = " refusé";
           description = "Congé refusé pour un collaborateur de votre service du "+displayDebut +" au "+displayFin;
           var newEvent = {

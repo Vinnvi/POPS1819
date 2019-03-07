@@ -99,7 +99,7 @@
                                                         <img id="imageProfil" src="{{ justi }}" class="responsive-img" style="width:100px; margin:auto;"/>
                                                     </div>
                                                     <div class="card-content p-1">
-                                                        <span>{{ justi|split('/')|last }}</span>
+                                                        <span>{{ justi|split('/')|last|truncate(15) }}</span>
                                                     </div>
                                                 </div>
                                                 {% if ligne.isModifiable() %}

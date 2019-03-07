@@ -27,36 +27,35 @@
       header: {
         left: 'prev,next today',
         center: 'title',
-        right: 'month,basicWeek,basicDay'
+        right: 'month,basicWeek,basicDay, agendaWeek'
       },
+      allDaySlot: false,
+      minTime: "08:00:00",
+      maxTime: "18:00:00",
+      displayEventTime: false,
       hiddenDays: [ 0, 6 ],
       eventRender: function (event, element) {
-          var start = moment(event.start);
-          var end = moment(event.end);
-          end.add(1, 'd');
-          var colorMyConge = '#e2b14d';
-          if($("#displayColorConge").is(':checked')) {
-            $(".dayConge").css("background-color", "#c12600");
-          }
-          element.data('event-id',event.id);
-          while( start.format('YYYY-MM-DD') != end.format('YYYY-MM-DD') ){
-              var checkDay = new Date(start.format('YYYY-MM-DD'));
-              var dataToFind = start.format('YYYY-MM-DD');
-              if(checkDay.getDay() == 0 || checkDay.getDay() == 6){
-                $("td[data-date='"+dataToFind+"']").addClass('hideWeekend');
-                // $(element).css("display", "none");
+        element.attr("title",event.description);
+        var start = moment(event.start);
+        var end = moment(event.end);
+        var colorMyConge = '#e2b14d';
+        if($("#displayColorConge").is(':checked')) {
+          $(".dayConge").css("background-color", "#c12600");
+          $(".maybeDayConge").css("background-color", "#f7c342");
+        }
+        element.data('event-id',event.id);
+        while( start.format('YYYY-MM-DD') != end.format('YYYY-MM-DD') ){
+            var dataToFind = start.format('YYYY-MM-DD');
+            if(event._id == "myConge" && (event.statut == "validee chef" || event.statut == "validee RH")){
+              $("td[data-date='"+dataToFind+"']").addClass('dayConge');
+            }
+            else {
+              if(event._id == "myConge" && (event.statut == "En cours" || event.statut == "En attente chef")){
+                $("td[data-date='"+dataToFind+"']").addClass('maybeDayConge');
               }
-              else{
-
-              }
-              if(event._id == "myConge"){
-                $("td[data-date='"+dataToFind+"']").addClass('dayConge');
-
-                // $("a[style='"+"background-color:#e2b14d;border-color:#e2b14d"+"']").addClass('test');
-              }
-              start.add(1, 'd');
-          }
-
+            }
+            start.add(1, 'd');
+        }
       },
       dayClick: function(date, allDay, jsEvent, view) {
         $('#calendar').fullCalendar('clientEvents', function(event) {
@@ -69,6 +68,9 @@
           }
         });
       },
+      eventClick: function(calEvent, jsEvent, view) {
+        console.log("test ici");
+      },
       defaultDate: $('#calendar').fullCalendar('today'),
       editable: true,
       droppable: true, // this allows things to be dropped onto the calendar
@@ -76,7 +78,7 @@
       selectable: true,
       views: {
         month: {
-          eventLimit: 2 // adjust to 6 only for agendaWeek/agendaDay
+          eventLimit: 4 // adjust to 6 only for agendaWeek/agendaDay
         }
       },
       businessHours: {

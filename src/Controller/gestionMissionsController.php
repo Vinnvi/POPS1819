@@ -105,11 +105,11 @@ class gestionMissionsController extends AbstractController
     }
 
     /**
-     * @Route("/gestionMissions/details/{id}", name="gestion.Mission")
+     * @Route("/gestionMissions/details/collabos/{id}", name="gestion.mission.collabos")
      * @param Projet $projet
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function gestionMission(Projet $projet){
+    public function gestionMissionCollabos(Projet $projet){
         $collaboRepository = $this->getDoctrine()->getEntityManager()->getRepository('App\Entity\Collaborateur');
         
         $projet->getCollabos()->initialize();
@@ -120,15 +120,28 @@ class gestionMissionsController extends AbstractController
             if( !($collabosDuProjet->contains($collabo)) ){
                 array_push($collabosPasDuProjet,$collabo);
             }
-        }
+        }    
+
+        return new Response($this->twig->render('pages/gestionMissions/gestionMissionsDetailsCollabos.html.twig',[
+            'mission' => $projet,
+            'collabosProjet' => $collabosDuProjet,
+            'collabosPasProjet' => $collabosPasDuProjet,
+        ]));
+    }
+
+    /**
+     * @Route("/gestionMissions/details/lignes/{id}", name="gestion.mission.lignes")
+     * @param Projet $projet
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function gestionMissionLignes(Projet $projet){
+        $projet->getCollabos()->initialize();
 
         $ligneRepository = $this->getDoctrine()->getEntityManager()->getRepository('App\Entity\LigneDeFrais');
         $lignesATraiter = $ligneRepository->findLignesChef($projet->getId());        
 
-        return new Response($this->twig->render('pages/gestionMissions/gestionMissionsDetails.html.twig',[
+        return new Response($this->twig->render('pages/gestionMissions/gestionMissionsDetailsLignes.html.twig',[
             'mission' => $projet,
-            'collabosProjet' => $collabosDuProjet,
-            'collabosPasProjet' => $collabosPasDuProjet,
             'lignesATraiter' => $lignesATraiter,
         ]));
     }
@@ -166,7 +179,7 @@ class gestionMissionsController extends AbstractController
             $this->em->flush();
         }
 
-        return $this->redirectToRoute('gestion.Mission',array('id' => $projet->getId()));
+        return $this->redirectToRoute('gestion.mission.collabos',array('id' => $projet->getId()));
 
     }
 
@@ -204,7 +217,7 @@ class gestionMissionsController extends AbstractController
             $this->em->flush();
         }
 
-        return $this->redirectToRoute('gestion.Mission',array('id' => $projet->getId()));
+        return $this->redirectToRoute('gestion.mission.collabos',array('id' => $projet->getId()));
 
     }
 
@@ -298,7 +311,7 @@ class gestionMissionsController extends AbstractController
         }
 
         $projet = $this->repository->findOneById($_POST['mission']);
-        return $this->redirectToRoute('gestion.Mission',array('id' => $projet->getId()));
+        return $this->redirectToRoute('gestion.mission.lignes',array('id' => $projet->getId()));
 
     }
 

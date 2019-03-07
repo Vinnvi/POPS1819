@@ -1,0 +1,126 @@
+{% extends 'topBar.html.twig' %}
+{% block title %} {{ mission.nom }} {% endblock %}
+{% block body %}
+    <div class="container">
+        <div class="row">
+            <ul class="collection with-header">
+                <li class="collection-header blue lighten-3">
+                    <h4 class="center-align">{{ mission.nom }}</h4>
+                </li>
+                <li class="collection-header blue lighten-5 row m-0">
+                    <div class="col s5">
+                        <b>Dates:</b>
+                        <span class="center-align">{{ mission.DateDebut|date('d/m/Y') }} - {{ mission.DateFin|date('d/m/Y') }}</span>
+                    </div>
+                    <div class="col s5">
+                        <b>Status:</b>
+                        <span class="center-align">{{ mission.status }}</span>
+                    </div>
+                    <div class="col s2">
+                        <b>ID:</b>
+                        <span class="center-align">{{ mission.id }}</span>
+                    </div>
+
+                    <div class="col s12">
+                        <b>Service:</b>
+                        <span class="center-align">{{ mission.Service }}</span>
+                    </div>
+                    
+                    <div class="col s12 m-2">
+                        <b>Description</b>
+                        <p>{{ mission.Description }}</p>
+                    </div>
+                </li>
+                <li class="collection-header blue lighten-3">
+                    <h5 class="center-align">Lignes à traités</h5>
+                </li>
+
+                {% if lignesATraiter == null  %}
+                    <li class="collection-item center-align">
+                        Vous n'avez aucune ligne à traiter pour cette mission.
+                    </li>
+                {% else %}
+                    <li>
+                        <div class="row col s10 blue lighten-4 m-0 p-2 center-align ">
+                            <div class="col s2"><b>Collaborateur</b></div>
+                            <div class="col s2"><b>Intitulé</b></div>
+                            <div class="col s2"><b>Montant</b></div>
+                            <div class="col s2"><b>Type</b></div>
+                            <div class="col s2"><b>Date</b></div>
+                            <div class="col s2">Avance</div>
+                        </div>
+                        <div class="col s2"></div>
+                        {% for ligne in lignesATraiter %}
+                            <ul class="collapsible col s10 row m-0">
+                                <li>
+                                    <div class="collapsible-header row m-0 center-align">
+                                        <div class="col s2">{{ ligne.note.collabo.nom }} {{ ligne.note.collabo.prenom }}</div>
+                                        <div class="col s2">{{ ligne.intitule }}</div>
+                                        <div class="col s2">{{ ligne.montant }}€</div>
+                                        <div class="col s2">{{ ligne.type }}</div>
+                                        <div class="col s2">{{ ligne.date|date("Y-m-d") }}</div>
+                                        <div class="col s2">
+                                            {% if ligne.avance %}
+                                                A
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    <div class="collapsible-body row m-0">
+                                        <div class="col s8 valign-wrapper">
+                                            <p style="margin-right:5%;"><b>Justificatif:</b></p>
+                                            {% if ligne.justificatif is empty %}
+                                                <span> Il n'y a pas de justificatif associé à cette ligne</span>
+                                            {% else %}
+                                                {% for justi in ligne.justificatif %}
+                                                    {% if justi == "Perdu" %}
+                                                        <div class="card orange">
+                                                            <div class="card-content white-text">
+                                                                <span>Justificatif perdu</span>
+                                                            </div>
+                                                        </div>
+                                                    {% else %}
+                                                        <div class="card" style="margin-right:20px;">
+                                                            <div class="card-image p-1">
+                                                                <img id="imageProfil" src="/{{ justi }}" class="responsive-img" style="width:100px; margin:auto;"/>
+                                                            </div>
+                                                            <div class="card-content p-1">
+                                                                <span>{{ justi|split('/')|last }}</span>
+                                                            </div>
+                                                        </div>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                            <form action="{{ path('valider.ligne') }}" method="post" class="col s2 valign-wrapper">
+                                <input type="hidden" name="ligne" value="{{ ligne.id }}"/>
+                                <input type="hidden" name="mission" value="{{ mission.id }}"/>
+                                <input type="hidden" name="decision" id="decision" value=""/>
+                                <button type="submit" onclick="$('#decision').val('refuser');" class="waves-effect waves-light btn-small red" style="margin:auto;">Refuser</button>
+                                <button type="submit" onclick="$('#decision').val('valider');" class="waves-effect waves-light btn-small green" style="margin:auto;">Valider</button>
+                            </form>
+                        {% endfor %}
+                    </li>
+                {% endif %}
+                <div class="row center-align">
+                    <div class="col s12 m-2">
+                        <a class="waves-effect waves-light btn modal-trigger orange" href="{{ path('app_gestionMissions')}}" >Retour</a>
+                    </div>
+                </div>
+            </ul>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        $(document).ready(function() {
+            $('.modal').modal();
+        });
+        $(document).ready(function(){
+            $('.collapsible').collapsible();
+        });
+    </script>
+{% endblock %}

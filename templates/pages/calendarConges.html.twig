@@ -2,10 +2,7 @@
 {% block title %} Calendrier de Congés {% endblock %}
 {% block head %}
   {% block javascripts %}
-    <!-- <script src="js/vendor/modernizr-2.6.2.min.js"></script> -->
-    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js" type="text/javascript"></script> -->
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js" type="text/javascript"></script>
-    <!-- <script src="js/plugins/chartist-js/chartist.min.js" type="text/javascript" ></script> -->
     <script src='js/plugins/fullcalendar/lib/moment.min.js' type="text/javascript"></script>
     <script src='js/plugins/fullcalendar/js/fullcalendar.min.js' type="text/javascript"></script>
     <script src="js/plugins/fullcalendar/fullcalendar-script.js" type="text/javascript"></script>
@@ -30,8 +27,8 @@
         document.getElementById("calculConge").style.display = "none";
         document.getElementById("impossibleConge").style.display = "none";
         document.getElementById("validConge").style.display = "none";
-        document.getElementById("valueValidDemande").innerHTML = PrcA;
-        document.getElementById("PrcA").value = PrcA;
+        // $('.tooltipped').tooltip();
+        $( document ).tooltip();
       });
     </script>
     <!-- ------------- Script for DatePickers ------------- -->
@@ -83,32 +80,117 @@
         dateFin.setDate(dateFin.getDate());
         if(listConges[i].debut_matin){
           dateDebut = new Date(dateDebut.getFullYear(), dateDebut.getMonth(), dateDebut.getDate(),0,0,0);
+          var displayMomentDebut = "08";
         }
         else{
           dateDebut = new Date(dateDebut.getFullYear(), dateDebut.getMonth(), dateDebut.getDate(),12,0,0);
+          var displayMomentDebut = "13";
         }
         if(listConges[i].fin_matin){
           dateFin = new Date(dateFin.getFullYear(), dateFin.getMonth(), dateFin.getDate(),12,0,0);
+          var displayMomentFin = "12";
         }
         else{
           dateFin = new Date(dateFin.getFullYear(), dateFin.getMonth(), dateFin.getDate()+1,0,0,0);
+          var displayMomentFin = "18";
         }
+        var displayDebut = ('0' + dateDebut.getDate()).slice(-2) + "-" + ('0' + (dateDebut.getMonth() + 1)).slice(-2) + "-" + dateDebut.getFullYear() + " " + ('0' + displayMomentDebut).slice(-2)+":00";
+        if(listConges[i].fin_matin){
+          var displayFin = ('0' + dateFin.getDate()).slice(-2) + "-" + ('0' + (dateFin.getMonth() + 1)).slice(-2) + "-" + dateFin.getFullYear() + " " + ('0' + displayMomentFin).slice(-2)+":00";
+        }
+        else{
+          var number = dateFin.getDate()-1;
+          var displayFin = ('0' + number).slice(-2) + "-" + ('0' + (dateFin.getMonth() + 1)).slice(-2) + "-" + dateFin.getFullYear() + " " + ('0' + displayMomentFin).slice(-2)+":00";
+        }
+        var displayStatut="";
         if(listConges[i].collabo.id == ('{{app.user.id}}')){
-          if(listConges[i].statut == "En Attente")
+          if(listConges[i].statut == "En cours" || listConges[i].statut == "En attente chef")
           {
             var color = '#e2b14d';
+            displayStatut = " en attente";
           }
-          else{
-            var color = '#3ebc4d';
+          else
+          {
+            if(listConges[i].statut == "validee chef"){
+              var color = '#c5e8bb';
+              displayStatut = " validé par votre chef mais en attente du service RH";
+            }
+            else {
+              if (listConges[i].statut == "validee RH"){
+                var color = '#3ebc4d';
+                displayStatut = " validé";
+              }
+              else {
+                if(listConges[i].statut == 'refusee RH' || listConges[i].statut == 'refusee chef'){
+                  var color = '#7c2916';
+                  displayStatut = " refusé";
+                }
+              }
+            }
           }
-          var newEvent = {
+        }
+        var description = "Votre "+ type + displayStatut +" du "+displayDebut+" au "+displayFin;
+        if(listConges[i].statut != 'refusee RH' && listConges[i].statut != 'refusee chef'){
+            var newEvent = {
               id : 'myConge',
               title: type,
               start : dateDebut,
               end : dateFin,
+              description : description,
+              statut : listConges[i].statut,
               color: color
           };
           $('#calendar').fullCalendar( 'renderEvent', newEvent , true);
+        }
+      }
+    }
+    function render_congesSelfRefuse(){
+      var listConges = JSON.parse('{{mesConges | json_encode() | raw}}');
+      var arrayLength = listConges.length;
+      for (var i = 0; i < arrayLength; i++) {
+        if( (listConges[i].statut == 'refusee RH' || listConges[i].statut == 'refusee chef') && listConges[i].collabo.id == ('{{app.user.id}}') ){
+          var type = listConges[i].type;
+          var dateDebut = new Date(listConges[i].date_debut.date);
+          var dateFin = new Date(listConges[i].date_fin.date);
+          dateFin.setDate(dateFin.getDate());
+          if(listConges[i].debut_matin){
+            dateDebut = new Date(dateDebut.getFullYear(), dateDebut.getMonth(), dateDebut.getDate(),0,0,0);
+            var displayMomentDebut = "08";
+          }
+          else{
+            dateDebut = new Date(dateDebut.getFullYear(), dateDebut.getMonth(), dateDebut.getDate(),12,0,0);
+            var displayMomentDebut = "13";
+          }
+          if(listConges[i].fin_matin){
+            dateFin = new Date(dateFin.getFullYear(), dateFin.getMonth(), dateFin.getDate(),12,0,0);
+            var displayMomentFin = "12";
+          }
+          else{
+            dateFin = new Date(dateFin.getFullYear(), dateFin.getMonth(), dateFin.getDate()+1,0,0,0);
+            var displayMomentFin = "18";
+          }
+          var displayDebut = ('0' + dateDebut.getDate()).slice(-2) + "-" + ('0' + (dateDebut.getMonth() + 1)).slice(-2) + "-" + dateDebut.getFullYear() + " " + ('0' + displayMomentDebut).slice(-2)+":00";
+          if(listConges[i].fin_matin){
+            var displayFin = ('0' + dateFin.getDate()).slice(-2) + "-" + ('0' + (dateFin.getMonth() + 1)).slice(-2) + "-" + dateFin.getFullYear() + " " + ('0' + displayMomentFin).slice(-2)+":00";
+          }
+          else{
+            var number = dateFin.getDate()-1;
+            var displayFin = ('0' + number).slice(-2) + "-" + ('0' + (dateFin.getMonth() + 1)).slice(-2) + "-" + dateFin.getFullYear() + " " + ('0' + displayMomentFin).slice(-2)+":00";
+          }
+          var displayStatut="";
+          var color = '#7c2916';
+          displayStatut = " refusé";
+          var description = "Votre "+ type + displayStatut +" du "+displayDebut+" au "+displayFin;
+              var newEvent = {
+                id : 'myCongeRefuse',
+                title: type,
+                start : dateDebut,
+                end : dateFin,
+                description : description,
+                statut : listConges[i].statut,
+                color: color
+            };
+            $('#calendar').fullCalendar( 'renderEvent', newEvent , true);
         }
       }
     }
@@ -119,34 +201,108 @@
         var type = listConges[i].type;
         var dateDebut = new Date(listConges[i].date_debut.date);
         var dateFin = new Date(listConges[i].date_fin.date);
+        var description = "";
         dateFin.setDate(dateFin.getDate());
         if(listConges[i].debut_matin){
           dateDebut = new Date(dateDebut.getFullYear(), dateDebut.getMonth(), dateDebut.getDate(),0,0,0);
+          var displayMomentDebut = "08";
         }
         else{
           dateDebut = new Date(dateDebut.getFullYear(), dateDebut.getMonth(), dateDebut.getDate(),12,0,0);
+          var displayMomentDebut = "13";
         }
         if(listConges[i].fin_matin){
           dateFin = new Date(dateFin.getFullYear(), dateFin.getMonth(), dateFin.getDate(),12,0,0);
+          var displayMomentFin = "12";
         }
         else{
           dateFin = new Date(dateFin.getFullYear(), dateFin.getMonth(), dateFin.getDate()+1,0,0,0);
+          var displayMomentFin = "18";
+        }
+        var displayDebut = ('0' + dateDebut.getDate()).slice(-2) + "-" + ('0' + (dateDebut.getMonth() + 1)).slice(-2) + "-" + dateDebut.getFullYear() + " " + ('0' + displayMomentDebut).slice(-2)+":00";
+        if(listConges[i].fin_matin){
+          var displayFin = ('0' + dateFin.getDate()).slice(-2) + "-" + ('0' + (dateFin.getMonth() + 1)).slice(-2) + "-" + dateFin.getFullYear() + " " + ('0' + displayMomentFin).slice(-2)+":00";
+        }
+        else{
+          var number = dateFin.getDate()-1;
+          var displayFin = ('0' + number).slice(-2) + "-" + ('0' + (dateFin.getMonth() + 1)).slice(-2) + "-" + dateFin.getFullYear() + " " + ('0' + displayMomentFin).slice(-2)+":00";
         }
         if(listConges[i].collabo.id != ('{{app.user.id}}')){
-          if(listConges[i].statut == "En Attente")
+          if(listConges[i].statut == "En attente chef" || listConges[i].statut == "En cours" || listConges[i].statut == "validee chef")
           {
             type = type + " " + "(demande)";
-            var color = '#dbc12e';
+            var color = '#c4c6ba';
+            description = "Demande en attente de validation par un membre de votre service du "+displayDebut+" au "+displayFin;
           }
           else{
-            type = type + " " + listConges[i].collabo.Nom+" "+listConges[i].collabo.Prenom;
-            var color = '#d7f7db';
+            if(listConges[i].statut == 'validee RH'){
+              type = type + " " + listConges[i].collabo.Nom+" "+listConges[i].collabo.Prenom;
+              var color = '#a9b78f';
+              description = "Congé validé pour " + listConges[i].collabo.Nom + " "+ listConges[i].collabo.Prenom+" du "+displayDebut+" au "+displayFin;;
+            }
+            else {
+              if(listConges[i].statut == 'refusee RH' || listConges[i].statut == 'refusee chef'){
+                var color = '#4d4f4a';
+                displayStatut = " refusé";
+              }
+            }
           }
+          if(listConges[i].statut != 'refusee RH' && listConges[i].statut != 'refusee chef'){
+            var newEvent = {
+                id : 'congeService',
+                title: type,
+                start : dateDebut,
+                end : dateFin,
+                description: description,
+                color: color
+            };
+            $('#calendar').fullCalendar( 'renderEvent', newEvent , true);
+          }
+        }
+      }
+    }
+    function render_congesServiceRefuse(){
+      var listConges = JSON.parse('{{congesService | json_encode() | raw}}');
+      var arrayLength = listConges.length;
+      for (var i = 0; i < arrayLength; i++) {
+        if( (listConges[i].statut == 'refusee RH' || listConges[i].statut == 'refusee chef')&&(listConges[i].collabo.id != ('{{app.user.id}}'))) {
+          var type = listConges[i].type;
+          var dateDebut = new Date(listConges[i].date_debut.date);
+          var dateFin = new Date(listConges[i].date_fin.date);
+          var description = "";
+          dateFin.setDate(dateFin.getDate());
+          if(listConges[i].debut_matin){
+            dateDebut = new Date(dateDebut.getFullYear(), dateDebut.getMonth(), dateDebut.getDate(),0,0,0);
+            var displayMomentDebut = "08";
+          }
+          else{
+            dateDebut = new Date(dateDebut.getFullYear(), dateDebut.getMonth(), dateDebut.getDate(),12,0,0);
+            var displayMomentDebut = "13";
+          }
+          if(listConges[i].fin_matin){
+            dateFin = new Date(dateFin.getFullYear(), dateFin.getMonth(), dateFin.getDate(),12,0,0);
+            var displayMomentFin = "12";
+          }
+          else{
+            dateFin = new Date(dateFin.getFullYear(), dateFin.getMonth(), dateFin.getDate()+1,0,0,0);
+            var displayMomentFin = "18";
+          }
+          var displayDebut = ('0' + dateDebut.getDate()).slice(-2) + "-" + ('0' + (dateDebut.getMonth() + 1)).slice(-2) + "-" + dateDebut.getFullYear() + " " + ('0' + displayMomentDebut).slice(-2)+":00";
+          if(listConges[i].fin_matin){
+            var displayFin = ('0' + dateFin.getDate()).slice(-2) + "-" + ('0' + (dateFin.getMonth() + 1)).slice(-2) + "-" + dateFin.getFullYear() + " " + ('0' + displayMomentFin).slice(-2)+":00";
+          }
+          else{
+            var number = dateFin.getDate()-1;
+            var displayFin = ('0' + number).slice(-2) + "-" + ('0' + (dateFin.getMonth() + 1)).slice(-2) + "-" + dateFin.getFullYear() + " " + ('0' + displayMomentFin).slice(-2)+":00";
+          }          var color = '#4d4f4a';
+          displayStatut = " refusé";
+          description = "Congé refusé pour un collaborateur de votre service du "+displayDebut +" au "+displayFin;
           var newEvent = {
-              id : 'congeService',
+              id : 'congeServiceRefuse',
               title: type,
               start : dateDebut,
               end : dateFin,
+              description: description,
               color: color
           };
           $('#calendar').fullCalendar( 'renderEvent', newEvent , true);
@@ -206,11 +362,19 @@
         document.getElementById("buttonDemandeConge").disabled = true;
       }
 
-    }$("#displaySelf").change(function(){
+    }
+    $("#displaySelf").change(function(){
       if($(this).is(':checked')) {
         render_congesSelf()
       } else {
         $("#calendar").fullCalendar('removeEvents', 'myConge');
+      }
+    });
+    $("#displaySelfRefuse").change(function(){
+      if($(this).is(':checked')) {
+        render_congesSelfRefuse()
+      } else {
+        $("#calendar").fullCalendar('removeEvents', 'myCongeRefuse');
       }
     });
     $("#displayService").change(function(){
@@ -220,11 +384,22 @@
       $("#calendar").fullCalendar('removeEvents', 'congeService');
      }
     });
+    $("#displayServiceRefuse").change(function(){
+     if($(this).is(':checked')) {
+      render_congesServiceRefuse()
+     } else {
+      $("#calendar").fullCalendar('removeEvents', 'congeServiceRefuse');
+     }
+    });
     $("#displayColorConge").change(function(){
       if($(this).is(':checked')) {
         $(".dayConge").css("background-color", "#c12600");
+        $(".maybeDayConge").css("background-color", "#f7c342");
+
       } else {
         $(".dayConge").css("background-color", "initial");
+        $(".maybeDayConge").css("background-color", "initial");
+
       }
     });
     $("#typeConge").change(function(){
@@ -307,6 +482,22 @@ checkDateDemandeConge
                       </form>
                     </div>
                   </div>
+                  <h4 class="header">Refus</h4>
+                  <div class="row">
+                    <div class="col s12 m8 l9">
+                      <form action="#">
+                        <label>
+                            <input type="checkbox" class="checkbox-white" type="checkbox" id = "displayServiceRefuse"/>
+                            <span style="color:white">Congés Service</span>
+                        </label>
+                        <div class="row"></div>
+                        <label>
+                            <input type="checkbox" id = "displaySelfRefuse"/>
+                            <span style="color:white">Mes Congés</span>
+                        </label>
+                      </form>
+                    </div>
+                  </div>
                 </div>
                 </div>
                 <!-- Calendrier -->
@@ -319,8 +510,8 @@ checkDateDemandeConge
                       <thead>
                           <tr id="rowCongesRight" role="row">
                             <th>Nom</th>
-                            <th>Date Début</th>
-                            <th>Date Fin</th>
+                            <th>Début</th>
+                            <th>Fin</th>
                             <th>Statut</th>
                           </tr>
                       </thead>
@@ -337,13 +528,17 @@ checkDateDemandeConge
                             {% else %}
                               {% set timeFin = 'après-midi' %}
                             {% endif %}
+                            {% if(conge.statut == "En cours" or conge.statut == "validee chef" or conge.statut == "En attente chef" or conge.statut == "refusee chef" or conge.statut == "refusee RH")%}
+                              {% set displayName = 'Collaborateur' %}
+                            {% else %}
+                              {% set displayName = conge.collabo.getNom() ~ " " ~ conge.collabo.getPrenom() %}
+                            {% endif %}
                             <tr id="dataBottom" role="row">
-                              <td>{{conge.collabo.getNom()}} {{conge.collabo.getPrenom()}}</td>
+                              <td> {{displayName}} </td>
                               <td>{{conge.date_debut|date("d-m-y")}} {{timeDebut}}</td>
                               <td>{{conge.date_fin|date("d-m-y")}} {{timeFin}}</td>
                               <td>{{conge.statut}}</td>
                             </tr>
-                          {% else %}
                           {% endif %}
                         {% endfor %}
                       </tbody>
@@ -376,8 +571,8 @@ checkDateDemandeConge
                       <thead>
                           <tr id="rowCongesRight" role="row">
                             <th>Type</th>
-                            <th>Du-</th>
-                            <th>Au-</th>
+                            <th>Début</th>
+                            <th>Fin</th>
                             <th>Statut</th>
                           </tr>
                       </thead>
